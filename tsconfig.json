@@ -10,7 +10,9 @@
             "@": ["./src"],
             "@/*": ["./src/*"],
             "utilities/": ["./src/utilities"],
-            "utilities/*": ["./src/utilities/*"]
+            "utilities/*": ["./src/utilities/*"],
+            "markData/": ["./src/markData"],
+            "markData/*": ["./src/markData/*"]
         },
 
         /* Bundler mode */
