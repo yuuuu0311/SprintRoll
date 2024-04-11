@@ -32,6 +32,7 @@ function App() {
         const arrCopy = [...arr];
 
         const [removed] = arrCopy.splice(sourceIndex, 1);
+        // console.log(removed);
 
         arrCopy.splice(destIndex, 0, removed);
 
@@ -68,8 +69,6 @@ function App() {
                 })
             );
         } else {
-            console.log(3);
-
             setItems((prev) =>
                 rearangeArr(prev, source.index, destination.index)
             );
@@ -86,43 +85,51 @@ function App() {
         ]);
     };
 
+    useEffect(() => {
+        console.log(items);
+    }, [items]);
+
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="Categories" type="droppableItem">
-                {({ innerRef, placeholder }) => (
-                    <div
-                        className="flex gap-2 p-6 border-2 border-solid border-white"
-                        ref={innerRef}
-                    >
-                        {categories.map((cateInfo, index) => (
-                            <TicketList
-                                cateInfo={cateInfo}
-                                key={`category-${cateInfo.id}`}
-                                index={index}
-                                setItems={setItems}
-                            >
-                                {items
-                                    .filter(
-                                        (itemInfo) =>
-                                            itemInfo.category === cateInfo.id
-                                    )
-                                    .map((itemInfo, index) => (
-                                        <Ticket
-                                            key={itemInfo.id}
-                                            itemInfo={itemInfo}
-                                            index={index}
-                                        />
-                                    ))}
-                            </TicketList>
-                        ))}
-                        <button type="button" onClick={handleAddCate}>
-                            + add category
-                        </button>
-                        {placeholder}
-                    </div>
-                )}
-            </Droppable>
-        </DragDropContext>
+        <div>
+            {/* <TabNavigation></TabNavigation> */}
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="Categories" type="droppableItem">
+                    {({ innerRef, placeholder }) => (
+                        <div
+                            className="flex gap-2 p-6 border-2 border-solid border-white"
+                            ref={innerRef}
+                        >
+                            {categories.map((cateInfo, index) => (
+                                <TicketList
+                                    cateInfo={cateInfo}
+                                    key={`category-${cateInfo.id}`}
+                                    index={index}
+                                    setItems={setItems}
+                                >
+                                    {items
+                                        .filter(
+                                            (itemInfo) =>
+                                                itemInfo.category ===
+                                                cateInfo.id
+                                        )
+                                        .map((itemInfo, index) => (
+                                            <Ticket
+                                                key={itemInfo.id}
+                                                itemInfo={itemInfo}
+                                                index={index}
+                                            />
+                                        ))}
+                                </TicketList>
+                            ))}
+                            <button type="button" onClick={handleAddCate}>
+                                + add category
+                            </button>
+                            {placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
+        </div>
     );
 }
 

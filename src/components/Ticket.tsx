@@ -13,13 +13,13 @@ export const Ticket: React.FC<TicketProps> = ({ itemInfo, index }) => {
     return (
         <Draggable
             key={itemInfo.id}
-            draggableId={itemInfo.id.toString()}
             index={index}
+            draggableId={itemInfo.id.toString()}
         >
             {({ innerRef, draggableProps, dragHandleProps }) => (
                 <div
                     ref={innerRef}
-                    className="flex flex-col bg-red-500 border-2 border-dashed border-white"
+                    className="flex flex-col bg-gray-700 border-2 border-dashed border-white"
                     style={{
                         ...draggableProps.style,
                         display: "block",
@@ -29,9 +29,9 @@ export const Ticket: React.FC<TicketProps> = ({ itemInfo, index }) => {
                     {...draggableProps}
                     {...dragHandleProps}
                 >
-                    <h3 className="font-bold">arr index : {index}</h3>
+                    <h3 className="font-bold">filter index : {index}</h3>
                     <h3 className="font-bold">
-                        itemInfo.id : {itemInfo.id - 1}
+                        real index : {itemInfo.id - 1}
                     </h3>
                     <div>{itemInfo.name}</div>
                 </div>
