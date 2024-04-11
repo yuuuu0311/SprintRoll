@@ -1,65 +1,53 @@
 // dependency
 
-import { Dispatch, SetStateAction } from "react";
+// import { Dispatch, SetStateAction, useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-import { TicketFace } from "@/interface";
+import { CollectionFace } from "@/interface";
 
-interface TicketListProps {
-    cateInfo: {
-        id: number;
-        name: string;
-    };
+export const TicketList: React.FC<{
+    collectionInfo: CollectionFace;
     index: number;
     children: React.ReactNode;
-    setItems: Dispatch<SetStateAction<TicketFace[]>>;
-}
-
-export const TicketList: React.FC<TicketListProps> = ({
-    cateInfo,
-    index,
-    children,
-    setItems,
-}) => {
-    const handleAddTicket = (cate: number) => {
-        setItems((prev) => [
-            ...prev,
-            {
-                id: prev.length + 1,
-                name: `item${prev.length + 1}`,
-                category: cate,
-            },
-        ]);
-    };
+}> = ({ collectionInfo, index, children }) => {
+    // const handleAddTicket = (cate: number) => {
+    //     setItems((prev) => [
+    //         ...prev,
+    //         {
+    //             id: prev.length + 1,
+    //             name: `item${prev.length + 1}`,
+    //             category: cate,
+    //         },
+    //     ]);
+    // };
 
     return (
         <Draggable
-            draggableId={`category-${cateInfo.id}`}
-            key={`category-${cateInfo.id}`}
+            draggableId={`collection-${collectionInfo.id}`}
             index={index}
         >
             {({ innerRef, draggableProps, dragHandleProps }) => (
                 <div ref={innerRef} {...draggableProps} {...dragHandleProps}>
-                    <Droppable droppableId={cateInfo.id.toString()}>
+                    <Droppable droppableId={collectionInfo.id.toString()}>
                         {({ innerRef, droppableProps, placeholder }) => (
                             <div
                                 className="flex flex-col"
                                 ref={innerRef}
                                 {...droppableProps}
                             >
-                                <h3 className="mb-3">{cateInfo.name}</h3>
+                                <h3 className="mb-3">{collectionInfo.name}</h3>
 
                                 <div className="border-2 border-solid border-white w-48">
                                     <div>{children}</div>
                                     {placeholder}
                                 </div>
 
-                                <button
+                                {/* <button
                                     type="button"
                                     onClick={() => handleAddTicket(cateInfo.id)}
                                 >
                                     + add ticket
-                                </button>
+                                </button> */}
                             </div>
                         )}
                     </Droppable>

@@ -1,17 +1,8 @@
-// export type TicketType = {
-//     itemInfo: {
-//         id: number;
-//         name: string;
-//         category: number;
-//     };
-//     index: number;
-// };
-
-export interface TicketListFace {
+export interface TicketFace {
     id: number;
     name: string;
 }
 
-export interface TicketFace extends TicketListFace {
-    category?: number;
+export interface CollectionFace extends TicketFace {
+    tickets: TicketFace[];
 }

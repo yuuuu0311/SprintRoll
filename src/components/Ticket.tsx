@@ -2,20 +2,12 @@ import { Draggable } from "react-beautiful-dnd";
 
 import { TicketFace } from "@/interface";
 
-type TicketProps = {
-    itemInfo: TicketFace;
-    index: number;
-};
-
-export const Ticket: React.FC<TicketProps> = ({ itemInfo, index }) => {
-    // console.log(index);
-
+export const Ticket: React.FC<{ ticketInfo: TicketFace; index: number }> = ({
+    ticketInfo,
+    index,
+}) => {
     return (
-        <Draggable
-            key={itemInfo.id}
-            index={index}
-            draggableId={itemInfo.id.toString()}
-        >
+        <Draggable index={index} draggableId={ticketInfo.id.toString()}>
             {({ innerRef, draggableProps, dragHandleProps }) => (
                 <div
                     ref={innerRef}
@@ -31,9 +23,9 @@ export const Ticket: React.FC<TicketProps> = ({ itemInfo, index }) => {
                 >
                     <h3 className="font-bold">filter index : {index}</h3>
                     <h3 className="font-bold">
-                        real index : {itemInfo.id - 1}
+                        real index : {ticketInfo.id - 1}
                     </h3>
-                    <div>{itemInfo.name}</div>
+                    <div>{ticketInfo.name}</div>
                 </div>
             )}
         </Draggable>

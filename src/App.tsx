@@ -14,15 +14,22 @@ import { TicketList } from "@/components/TicketList";
 import { Ticket } from "@/components/Ticket";
 
 // interface
-import { TicketListFace, TicketFace } from "./interface";
+import { TicketFace, CollectionFace } from "./interface";
 
 // markData
-import { markCategories, markItems } from "@/markData";
+import { markItems, markFrontEndData } from "@/markData";
 
 function App() {
-    const [categories, setCategories] =
-        useState<TicketListFace[]>(markCategories);
-    const [items, setItems] = useState<TicketFace[]>(markItems);
+    const [collection, setCollection] = useState<CollectionFace[]>(
+        () => markFrontEndData.collection
+    );
+
+    console.log(collection);
+
+    // const [categories, setCategories] = useState<TicketListFace[]>(
+    //     () => markFrontEndData.collection
+    // );
+    // const [items, setItems] = useState<TicketFace[]>(markItems);
 
     const rearangeArr: (
         arr: TicketFace[],
@@ -75,19 +82,16 @@ function App() {
         }
     };
 
-    const handleAddCate = () => {
-        setCategories((prev) => [
+    const handleAddCollection = () => {
+        setCollection((prev) => [
             ...prev,
             {
-                id: prev.length + 1,
-                name: `Category ${prev.length + 1}`,
+                id: prev.length,
+                name: `Collection ${prev.length + 1}`,
+                tickets: [],
             },
         ]);
     };
-
-    useEffect(() => {
-        console.log(items);
-    }, [items]);
 
     return (
         <div>
@@ -99,29 +103,22 @@ function App() {
                             className="flex gap-2 p-6 border-2 border-solid border-white"
                             ref={innerRef}
                         >
-                            {categories.map((cateInfo, index) => (
+                            {collection.map((collection, index) => (
                                 <TicketList
-                                    cateInfo={cateInfo}
-                                    key={`category-${cateInfo.id}`}
+                                    collectionInfo={collection}
                                     index={index}
-                                    setItems={setItems}
+                                    key={`collection-${collection.id}`}
                                 >
-                                    {items
-                                        .filter(
-                                            (itemInfo) =>
-                                                itemInfo.category ===
-                                                cateInfo.id
-                                        )
-                                        .map((itemInfo, index) => (
-                                            <Ticket
-                                                key={itemInfo.id}
-                                                itemInfo={itemInfo}
-                                                index={index}
-                                            />
-                                        ))}
+                                    {collection.tickets.map((ticket, index) => (
+                                        <Ticket
+                                            key={ticket.id}
+                                            ticketInfo={ticket}
+                                            index={index}
+                                        />
+                                    ))}
                                 </TicketList>
                             ))}
-                            <button type="button" onClick={handleAddCate}>
+                            <button type="button" onClick={handleAddCollection}>
                                 + add category
                             </button>
                             {placeholder}
