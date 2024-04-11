@@ -6,25 +6,24 @@ import "./App.css";
 import {
     DragDropContext,
     Droppable,
-    Draggable,
     OnDragEndResponder,
 } from "react-beautiful-dnd";
 
 // markData
-import { getCards, getCols } from "@/markData";
+// import { getCards, getCols } from "@/markData";
 
 import { TicketList } from "@/components/TicketList";
 import { Ticket } from "@/components/Ticket";
 
-function App() {
-    // const [cols, setCols] = useState(getCols(2));
-    // const [cards, setCards] = useState(getCards(10));
+// interface
+import { TicketListFace, TicketFace } from "./interface";
 
-    const [categories, setCategories] = useState([
+function App() {
+    const [categories, setCategories] = useState<TicketListFace[]>([
         { id: 1, name: "Category 1" },
         { id: 2, name: "Category 2" },
     ]);
-    const [items, setItems] = useState([
+    const [items, setItems] = useState<TicketFace[]>([
         { id: 1, name: "item1", category: 1 },
         { id: 2, name: "item2", category: 1 },
         { id: 3, name: "item3", category: 1 },
@@ -33,17 +32,13 @@ function App() {
         { id: 6, name: "item6", category: 2 },
     ]);
 
-    // const onDragEnd: OnDragEndResponder = ({ source, destination }) => {
-    //     if (!destination) return;
-    //     const copiedCards = [...cards];
-    //     const [draggedCard] = copiedCards.splice(source.index, 1);
-    //     copiedCards.splice(destination.index, 0, draggedCard);
-    //     setCards(
-    //         copiedCards.map((card, index) => ({ ...card, sortOrder: index }))
-    //     );
-    // };
+    const rearangeArr: (
+        arr: TicketFace[],
+        sourceIndex: number,
+        destIndex: number
+    ) => TicketFace[] = (arr, sourceIndex, destIndex) => {
+        console.log(arr);
 
-    const rearangeArr = (arr, sourceIndex, destIndex) => {
         const arrCopy = [...arr];
         const [removed] = arrCopy.splice(sourceIndex, 1);
         arrCopy.splice(destIndex, 0, removed);
@@ -53,18 +48,22 @@ function App() {
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
-        console.log(result, source, destination);
+        // console.log(result, source, destination);
 
         if (!destination) {
             return;
         }
 
         if (destination.droppableId === "Categories") {
+            console.log(1);
+
             // a category was moved
             setCategories(
                 rearangeArr(categories, source.index, destination.index)
             );
         } else if (destination.droppableId !== source.droppableId) {
+            console.log(2);
+
             // find the source in items array and change with destination droppable id
             setItems((prev) =>
                 prev.map((item) => {
@@ -72,15 +71,16 @@ function App() {
                         ? {
                               ...item,
                               category: parseInt(
-                                  result.destination.droppableId
+                                  result.destination?.droppableId || "0"
                               ),
                           }
                         : item;
                 })
             );
         } else {
-            // rearange the array if it is in the same category
+            console.log(3);
 
+            // rearange the array if it is in the same category
             setItems(rearangeArr(items, source.index, destination.index));
         }
     };
@@ -91,27 +91,36 @@ function App() {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-2">
-                {categories.map((cateInfo, index) => (
-                    <TicketList
-                        cateInfo={cateInfo}
-                        key={`category-${cateInfo.id}`}
-                        index={index}
+            <Droppable droppableId="Categories" type="droppableItem">
+                {({ innerRef, placeholder }) => (
+                    <div
+                        // className="flex gap-2 p-6 border-2 border-solid border-white"
+                        ref={innerRef}
                     >
-                        {items
-                            .filter(
-                                (itemInfo) => itemInfo.category === cateInfo.id
-                            )
-                            .map((itemInfo, index) => (
-                                <Ticket
-                                    key={itemInfo.id}
-                                    itemInfo={itemInfo}
-                                    index={index}
-                                />
-                            ))}
-                    </TicketList>
-                ))}
-            </div>
+                        {categories.map((cateInfo, index) => (
+                            <TicketList
+                                cateInfo={cateInfo}
+                                key={`category-${cateInfo.id}`}
+                                index={index}
+                            >
+                                {items
+                                    .filter(
+                                        (itemInfo) =>
+                                            itemInfo.category === cateInfo.id
+                                    )
+                                    .map((itemInfo, index) => (
+                                        <Ticket
+                                            key={itemInfo.id}
+                                            itemInfo={itemInfo}
+                                            index={index}
+                                        />
+                                    ))}
+                            </TicketList>
+                        ))}
+                        {placeholder}
+                    </div>
+                )}
+            </Droppable>
         </DragDropContext>
     );
 }

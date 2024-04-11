@@ -1,11 +1,9 @@
 import { Draggable } from "react-beautiful-dnd";
 
+import { TicketFace } from "@/interface";
+
 type TicketProps = {
-    itemInfo: {
-        id: number;
-        name: string;
-        category: number;
-    };
+    itemInfo: TicketFace;
     index: number;
 };
 
