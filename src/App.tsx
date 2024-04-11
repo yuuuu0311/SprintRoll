@@ -11,11 +11,11 @@ import {
 } from "react-beautiful-dnd";
 
 // markData
-import { getCards } from "@/markData";
+import { getCards, getCols } from "@/markData";
 
-const Section = ({ children }) => {
+const Section = ({ children, col }) => {
     return (
-        <Droppable droppableId="list-1" type="CARD">
+        <Droppable droppableId={col.id} type="droppableItem">
             {({ innerRef, droppableProps, placeholder }) => (
                 <section
                     ref={innerRef}
@@ -35,6 +35,7 @@ const Cube = ({ children }) => {
 };
 
 function App() {
+    const [cols, setCols] = useState(getCols(2));
     const [cards, setCards] = useState(getCards(10));
 
     const onDragEnd: OnDragEndResponder = ({ source, destination }) => {
@@ -49,32 +50,40 @@ function App() {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <Section>
-                {cards.map((card) => (
-                    <Draggable
-                        key={card.id}
-                        draggableId={`${card.id}`}
-                        index={card.sortOrder}
-                    >
-                        {({ innerRef, draggableProps, dragHandleProps }) => (
-                            <div
-                                ref={innerRef}
-                                className="h-12 bg-red-500 border-2 border-dashed border-white"
-                                style={{
-                                    ...draggableProps.style,
-                                    display: "block",
-                                    margin: "0 8px 8px",
-                                    userSelect: "none",
-                                }}
-                                {...draggableProps}
-                                {...dragHandleProps}
+            <div className="flex gap-2">
+                {cols.map((col, index) => (
+                    <Section col={col}>
+                        {cards.map((card) => (
+                            <Draggable
+                                key={card.id}
+                                draggableId={`${card.id}`}
+                                index={card.sortOrder}
                             >
-                                <Cube>{card.title}</Cube>
-                            </div>
-                        )}
-                    </Draggable>
+                                {({
+                                    innerRef,
+                                    draggableProps,
+                                    dragHandleProps,
+                                }) => (
+                                    <div
+                                        ref={innerRef}
+                                        className="h-12 bg-red-500 border-2 border-dashed border-white"
+                                        style={{
+                                            ...draggableProps.style,
+                                            display: "block",
+                                            margin: "0 8px 8px",
+                                            userSelect: "none",
+                                        }}
+                                        {...draggableProps}
+                                        {...dragHandleProps}
+                                    >
+                                        <Cube>{card.title}</Cube>
+                                    </div>
+                                )}
+                            </Draggable>
+                        ))}
+                    </Section>
                 ))}
-            </Section>
+            </div>
         </DragDropContext>
     );
 }
