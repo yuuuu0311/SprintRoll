@@ -108,8 +108,8 @@ export const KanbanPage: React.FC<{}> = ({}) => {
     // style
     const wrapperClass = classNames(
         twMerge("flex gap-3 p-12 overflow-auto")
-        // "w-full overflow-x-auto"
-        // isDarkMode && "bg-blue-500"
+
+        //
     );
 
     return (

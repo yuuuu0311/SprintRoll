@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
@@ -8,12 +8,18 @@ import classNames from "classnames";
 // interface
 import { CollectionFace } from "@/interface";
 
+// components
+import { Dialog } from "@/components/Dailog";
+import { Button } from "@/components/Button";
+
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
     index: number;
     setCollection: Dispatch<SetStateAction<CollectionFace[]>>;
     children: React.ReactNode;
 }> = ({ collectionInfo, children, setCollection }) => {
+    const [dialogActive, setDialogActive] = useState(false);
+
     const handleAddTicket = () => {
         setCollection((prev) => {
             const collectionsCopy = [...prev];
@@ -32,6 +38,8 @@ export const TicketList: React.FC<{
 
             return collectionsCopy;
         });
+
+        setDialogActive(false);
     };
 
     // style
@@ -44,39 +52,61 @@ export const TicketList: React.FC<{
     );
 
     return (
-        <Draggable
-            draggableId={`collection-${collectionInfo.id}`}
-            index={collectionInfo.id}
-        >
-            {({ innerRef, draggableProps, dragHandleProps }) => (
-                <div ref={innerRef} {...draggableProps} {...dragHandleProps}>
-                    <Droppable droppableId={collectionInfo.id.toString()}>
-                        {({ innerRef, droppableProps, placeholder }) => (
-                            <div
-                                className={ticketListClass}
-                                ref={innerRef}
-                                {...droppableProps}
-                                {...dragHandleProps}
-                            >
-                                <h3>{collectionInfo.name}</h3>
-
-                                <div className={ticketsClass}>
-                                    {children}
-                                    {placeholder}
-                                </div>
-
-                                <button
-                                    type="button"
-                                    className={btnClass}
-                                    onClick={handleAddTicket}
+        <>
+            <Draggable
+                draggableId={`collection-${collectionInfo.id}`}
+                index={collectionInfo.id}
+            >
+                {({ innerRef, draggableProps, dragHandleProps }) => (
+                    <div
+                        ref={innerRef}
+                        {...draggableProps}
+                        {...dragHandleProps}
+                    >
+                        <Droppable droppableId={collectionInfo.id.toString()}>
+                            {({ innerRef, droppableProps, placeholder }) => (
+                                <div
+                                    className={ticketListClass}
+                                    ref={innerRef}
+                                    {...droppableProps}
+                                    {...dragHandleProps}
                                 >
-                                    + add ticket
-                                </button>
-                            </div>
-                        )}
-                    </Droppable>
-                </div>
+                                    <h3>{collectionInfo.name}</h3>
+
+                                    <div className={ticketsClass}>
+                                        {children}
+                                        {placeholder}
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        className={btnClass}
+                                        onClick={() => {
+                                            setDialogActive((prev) =>
+                                                prev ? false : true
+                                            );
+                                        }}
+                                    >
+                                        + add ticket
+                                    </button>
+                                </div>
+                            )}
+                        </Droppable>
+                    </div>
+                )}
+            </Draggable>
+
+            {dialogActive && (
+                <Dialog>
+                    dialog content
+                    <div>
+                        <Button link>close</Button>
+                        <Button link primary onClickFun={handleAddTicket}>
+                            add
+                        </Button>
+                    </div>
+                </Dialog>
             )}
-        </Draggable>
+        </>
     );
 };
