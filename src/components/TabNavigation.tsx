@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 // dependency
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
@@ -11,24 +13,28 @@ enum NavigationLabel {
     IOS = "ios",
 }
 
+const NavigationLabelArray = [
+    NavigationLabel.PERSON,
+    NavigationLabel.All,
+    NavigationLabel.FE,
+    NavigationLabel.BE,
+    NavigationLabel.DATA,
+    NavigationLabel.IOS,
+];
+
 export const TabNavigation = () => {
-    const wrapperClass = classNames(
-        twMerge(
-            "flex flex-col p-6 bg-blue-200"
-            // isDarkMode && "bg-blue-500"
-        )
-    );
+    const wrapperClass = classNames(twMerge("flex flex-col p-6 bg-blue-200"));
+    const navigationLabelClass = classNames(twMerge("flex flex-col"));
 
     return (
         <div className={wrapperClass}>
-            <ul>
-                <li>{NavigationLabel.PERSON}</li>
-                <li>{NavigationLabel.All}</li>
-                <li>{NavigationLabel.FE}</li>
-                <li>{NavigationLabel.BE}</li>
-                <li>{NavigationLabel.DATA}</li>
-                <li>{NavigationLabel.IOS}</li>
-            </ul>
+            <div className={navigationLabelClass}>
+                {NavigationLabelArray.map((label) => (
+                    <Link key={label} to={`/${label}`}>
+                        {label}
+                    </Link>
+                ))}
+            </div>
         </div>
     );
 };
