@@ -9,7 +9,7 @@ import classNames from "classnames";
 import { CollectionFace } from "@/interface";
 
 // components
-import { Dialog } from "@/components/Dailog";
+import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 
 export const TicketList: React.FC<{
@@ -19,6 +19,10 @@ export const TicketList: React.FC<{
     children: React.ReactNode;
 }> = ({ collectionInfo, children, setCollection }) => {
     const [dialogActive, setDialogActive] = useState(false);
+    const [newTickInfo, setNewTickInfo] = useState(() => ({
+        title: "",
+        description: "",
+    }));
 
     const handleAddTicket = () => {
         setCollection((prev) => {
@@ -40,6 +44,10 @@ export const TicketList: React.FC<{
         });
 
         setDialogActive(false);
+    };
+
+    const handleDialogToggle = () => {
+        setDialogActive((prev) => (prev ? false : true));
     };
 
     // style
@@ -81,11 +89,7 @@ export const TicketList: React.FC<{
                                     <button
                                         type="button"
                                         className={btnClass}
-                                        onClick={() => {
-                                            setDialogActive((prev) =>
-                                                prev ? false : true
-                                            );
-                                        }}
+                                        onClick={handleDialogToggle}
                                     >
                                         + add ticket
                                     </button>
@@ -97,10 +101,12 @@ export const TicketList: React.FC<{
             </Draggable>
 
             {dialogActive && (
-                <Dialog>
+                <Dialog handleDialogToggle={handleDialogToggle}>
                     dialog content
                     <div>
-                        <Button link>close</Button>
+                        <Button link onClickFun={handleDialogToggle}>
+                            close
+                        </Button>
                         <Button link primary onClickFun={handleAddTicket}>
                             add
                         </Button>
