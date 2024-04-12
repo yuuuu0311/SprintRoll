@@ -1,10 +1,7 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import "./index.css";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
-import { Layout } from "@/components/Layout.tsx";
 
 import { KanbanPage } from "./pages/KanbanPage.tsx";
 
