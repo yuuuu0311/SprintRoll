@@ -1,15 +1,38 @@
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-// import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import { CollectionFace } from "@/interface";
 
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
     index: number;
+    setCollection: Dispatch<SetStateAction<CollectionFace[]>>;
     children: React.ReactNode;
-}> = ({ collectionInfo, index, children }) => {
+}> = ({ collectionInfo, index, children, setCollection }) => {
+    const handleAddTicket = () => {
+        setCollection((prev) => {
+            const collectionsCopy = [...prev];
+            const collectionInfoCopy = {
+                ...collectionInfo,
+                tickets: [
+                    ...collectionInfo.tickets,
+                    {
+                        id: collectionInfo.tickets.length + 1,
+                        name: `item${collectionInfo.tickets.length + 1}`,
+                    },
+                ],
+            };
+
+            collectionsCopy.splice(collectionInfo.id, 1, collectionInfoCopy);
+
+            return collectionsCopy;
+        });
+
+        // setCollection();
+    };
+
     return (
         <Draggable
             draggableId={`collection-${collectionInfo.id}`}
@@ -32,12 +55,13 @@ export const TicketList: React.FC<{
                                     {placeholder}
                                 </div>
 
-                                {/* <button
+                                <button
                                     type="button"
-                                    onClick={() => handleAddTicket(cateInfo.id)}
+                                    // onClick={() => handleAddTicket(cateInfo.id)}
+                                    onClick={handleAddTicket}
                                 >
                                     + add ticket
-                                </button> */}
+                                </button>
                             </div>
                         )}
                     </Droppable>

@@ -53,25 +53,20 @@ function App() {
             const collectionIndex = parseInt(source.droppableId);
 
             setCollection((prev) => {
-                const collectionCopy = [...prev];
-
-                const [targetCollection] = collectionCopy.splice(
-                    collectionIndex,
-                    1
-                );
-
-                const copy = {
-                    ...targetCollection,
+                const collectionsCopy = [...prev];
+                const collectionInfoCopy = { ...prev[collectionIndex] };
+                const edited = {
+                    ...collectionInfoCopy,
                     tickets: rearange(
-                        targetCollection.tickets,
+                        collectionInfoCopy.tickets,
                         source.index,
                         destination.index
                     ),
                 };
 
-                collectionCopy.splice(collectionIndex, 0, copy);
+                collectionsCopy.splice(collectionIndex, 1, edited);
 
-                return collectionCopy;
+                return collectionsCopy;
             });
         }
     };
@@ -86,6 +81,39 @@ function App() {
             },
         ]);
     };
+
+    // const handleAddTicket = (collectionIndex, source, destination) => {
+    //     setCollection((prev) => {
+    //         const collectionCopy = [...prev];
+
+    //         const [targetCollection] = collectionCopy.splice(
+    //             collectionIndex,
+    //             1
+    //         );
+
+    //         const copy = {
+    //             ...targetCollection,
+    //             tickets: rearange(
+    //                 targetCollection.tickets,
+    //                 source.index,
+    //                 destination.index
+    //             ),
+    //         };
+
+    //         collectionCopy.splice(collectionIndex, 0, copy);
+
+    //         return collectionCopy;
+    //     });
+
+    // setCollection((prev) => [
+    //     ...prev,
+    //     {
+    //         id: prev.length,
+    //         name: `Collection ${prev.length + 1}`,
+    //         tickets: [],
+    //     },
+    // ]);
+    // };
 
     useEffect(() => {
         console.log(collection);
@@ -104,6 +132,7 @@ function App() {
                             {collection.map((collection, index) => (
                                 <TicketList
                                     collectionInfo={collection}
+                                    setCollection={setCollection}
                                     index={index}
                                     key={`collection-${collection.id}`}
                                 >
