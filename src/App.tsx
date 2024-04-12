@@ -14,33 +14,23 @@ import { TicketList } from "@/components/TicketList";
 import { Ticket } from "@/components/Ticket";
 
 // interface
-import { TicketFace, CollectionFace } from "./interface";
+import { CollectionFace, TicketFace } from "./interface";
 
 // markData
-import { markItems, markFrontEndData } from "@/markData";
+import { markFrontEndData } from "@/markData";
 
 function App() {
     const [collection, setCollection] = useState<CollectionFace[]>(
         () => markFrontEndData.collection
     );
 
-    console.log(collection);
-
-    // const [categories, setCategories] = useState<TicketListFace[]>(
-    //     () => markFrontEndData.collection
-    // );
-    // const [items, setItems] = useState<TicketFace[]>(markItems);
-
-    const rearangeArr: (
-        arr: TicketFace[],
+    const rearange: (
+        arr: (CollectionFace | TicketFace)[],
         sourceIndex: number,
         destIndex: number
-    ) => TicketFace[] = (arr, sourceIndex, destIndex) => {
+    ) => (CollectionFace | TicketFace)[] = (arr, sourceIndex, destIndex) => {
         const arrCopy = [...arr];
-
         const [removed] = arrCopy.splice(sourceIndex, 1);
-        // console.log(removed);
-
         arrCopy.splice(destIndex, 0, removed);
 
         return arrCopy;
@@ -49,36 +39,40 @@ function App() {
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
 
-        if (!destination) {
-            return;
-        }
+        if (!destination) return;
 
-        if (destination.droppableId === "Categories") {
-            console.log(1);
+        const isDroppingCollection = destination.droppableId === "collections";
+        const isInSameCollection =
+            destination.droppableId == source.droppableId;
 
-            setCategories(
-                rearangeArr(categories, source.index, destination.index)
+        if (isDroppingCollection) {
+            setCollection((prev) =>
+                rearange(prev, source.index, destination.index)
             );
-        } else if (destination.droppableId !== source.droppableId) {
-            console.log(2);
+        } else if (isInSameCollection) {
+            const collectionIndex = parseInt(source.droppableId);
 
-            // find the source in items array and change with destination droppable id
-            setItems((prev) =>
-                prev.map((item) => {
-                    return item.id === parseInt(result.draggableId)
-                        ? {
-                              ...item,
-                              category: parseInt(
-                                  result.destination?.droppableId || "0"
-                              ),
-                          }
-                        : item;
-                })
-            );
-        } else {
-            setItems((prev) =>
-                rearangeArr(prev, source.index, destination.index)
-            );
+            setCollection((prev) => {
+                const collectionCopy = [...prev];
+
+                const [targetCollection] = collectionCopy.splice(
+                    collectionIndex,
+                    1
+                );
+
+                const copy = {
+                    ...targetCollection,
+                    tickets: rearange(
+                        targetCollection.tickets,
+                        source.index,
+                        destination.index
+                    ),
+                };
+
+                collectionCopy.splice(collectionIndex, 0, copy);
+
+                return collectionCopy;
+            });
         }
     };
 
@@ -93,11 +87,15 @@ function App() {
         ]);
     };
 
+    useEffect(() => {
+        console.log(collection);
+    }, [collection]);
+
     return (
         <div>
             {/* <TabNavigation></TabNavigation> */}
             <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="Categories" type="droppableItem">
+                <Droppable droppableId="collections" type="droppableItem">
                     {({ innerRef, placeholder }) => (
                         <div
                             className="flex gap-2 p-6 border-2 border-solid border-white"
@@ -111,8 +109,9 @@ function App() {
                                 >
                                     {collection.tickets.map((ticket, index) => (
                                         <Ticket
-                                            key={ticket.id}
+                                            key={`ticket-${ticket.id}`}
                                             ticketInfo={ticket}
+                                            collectionId={collection.id}
                                             index={index}
                                         />
                                     ))}

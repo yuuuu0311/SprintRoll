@@ -1,7 +1,7 @@
 // dependency
+import { Droppable, Draggable } from "react-beautiful-dnd";
 
 // import { Dispatch, SetStateAction, useState } from "react";
-import { Droppable, Draggable } from "react-beautiful-dnd";
 
 import { CollectionFace } from "@/interface";
 
@@ -10,17 +10,6 @@ export const TicketList: React.FC<{
     index: number;
     children: React.ReactNode;
 }> = ({ collectionInfo, index, children }) => {
-    // const handleAddTicket = (cate: number) => {
-    //     setItems((prev) => [
-    //         ...prev,
-    //         {
-    //             id: prev.length + 1,
-    //             name: `item${prev.length + 1}`,
-    //             category: cate,
-    //         },
-    //     ]);
-    // };
-
     return (
         <Draggable
             draggableId={`collection-${collectionInfo.id}`}
@@ -34,6 +23,7 @@ export const TicketList: React.FC<{
                                 className="flex flex-col"
                                 ref={innerRef}
                                 {...droppableProps}
+                                {...dragHandleProps}
                             >
                                 <h3 className="mb-3">{collectionInfo.name}</h3>
 
