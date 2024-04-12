@@ -10,7 +10,7 @@ export const TicketList: React.FC<{
     index: number;
     setCollection: Dispatch<SetStateAction<CollectionFace[]>>;
     children: React.ReactNode;
-}> = ({ collectionInfo, index, children, setCollection }) => {
+}> = ({ collectionInfo, children, setCollection }) => {
     const handleAddTicket = () => {
         setCollection((prev) => {
             const collectionsCopy = [...prev];
@@ -29,8 +29,6 @@ export const TicketList: React.FC<{
 
             return collectionsCopy;
         });
-
-        // setCollection();
     };
 
     return (

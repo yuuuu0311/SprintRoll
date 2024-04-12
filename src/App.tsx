@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import "./App.css";
 
@@ -37,8 +37,13 @@ function App() {
             destination.droppableId == source.droppableId;
 
         if (isDroppingCollection) {
-            setCollection((prev) =>
-                rearange(prev, source.index, destination.index)
+            setCollection(
+                (prev) =>
+                    rearange(
+                        prev,
+                        source.index,
+                        destination.index
+                    ) as CollectionFace[]
             );
         } else if (isInSameCollection) {
             setCollection((prev) => {
@@ -86,7 +91,7 @@ function App() {
         }
     };
 
-    const handleAddCollection = () => {
+    const handleAddCollection: () => void = () => {
         setCollection((prev) => [
             ...prev,
             {
