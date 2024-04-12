@@ -1,6 +1,5 @@
 import { useState } from "react";
-
-import "./App.css";
+import { useParams } from "react-router-dom";
 
 // dependency
 import {
@@ -24,7 +23,9 @@ import { rearange, getCollectionIndex } from "@/utilities";
 // interface
 import { CollectionFace } from "@/interface";
 
-function App() {
+export const KanbanPage: React.FC<{}> = ({}) => {
+    const { domain } = useParams();
+
     const [collection, setCollection] = useState<CollectionFace[]>(
         () => markFrontEndData.collection
     );
@@ -113,37 +114,43 @@ function App() {
 
     return (
         <div>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="collections" type="droppableItem">
-                    {({ innerRef, placeholder }) => (
-                        <div className={wrapperClass} ref={innerRef}>
-                            {collection.map((collection, index) => (
-                                <TicketList
-                                    collectionInfo={collection}
-                                    setCollection={setCollection}
-                                    index={index}
-                                    key={`collection-${collection.id}`}
+            {domain}'s KanbanPage
+            <div>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId="collections" type="droppableItem">
+                        {({ innerRef, placeholder }) => (
+                            <div className={wrapperClass} ref={innerRef}>
+                                {collection.map((collection, index) => (
+                                    <TicketList
+                                        collectionInfo={collection}
+                                        setCollection={setCollection}
+                                        index={index}
+                                        key={`collection-${collection.id}`}
+                                    >
+                                        {collection.tickets.map(
+                                            (ticket, index) => (
+                                                <Ticket
+                                                    key={`ticket-${index}`}
+                                                    ticketInfo={ticket}
+                                                    collectionId={collection.id}
+                                                    index={index}
+                                                />
+                                            )
+                                        )}
+                                    </TicketList>
+                                ))}
+                                <button
+                                    type="button"
+                                    onClick={handleAddCollection}
                                 >
-                                    {collection.tickets.map((ticket, index) => (
-                                        <Ticket
-                                            key={`ticket-${index}`}
-                                            ticketInfo={ticket}
-                                            collectionId={collection.id}
-                                            index={index}
-                                        />
-                                    ))}
-                                </TicketList>
-                            ))}
-                            <button type="button" onClick={handleAddCollection}>
-                                + add category
-                            </button>
-                            {placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            </DragDropContext>
+                                    + add category
+                                </button>
+                                {placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
+            </div>
         </div>
     );
-}
-
-export default App;
+};

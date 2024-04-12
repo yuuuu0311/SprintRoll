@@ -1,4 +1,5 @@
 export const markFrontEndData = {
+    name: "FrontEnd",
     collection: [
         {
             id: 0,

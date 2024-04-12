@@ -1,8 +1,11 @@
-// dependency
-import { Droppable, Draggable } from "react-beautiful-dnd";
-
 import { Dispatch, SetStateAction } from "react";
 
+// dependency
+import { Droppable, Draggable } from "react-beautiful-dnd";
+import { twMerge } from "tailwind-merge";
+import classNames from "classnames";
+
+// interface
 import { CollectionFace } from "@/interface";
 
 export const TicketList: React.FC<{
@@ -31,6 +34,15 @@ export const TicketList: React.FC<{
         });
     };
 
+    // style
+    const ticketListClass = classNames(
+        twMerge("flex flex-col bg-blue-300 p-4")
+    );
+    const ticketsClass = classNames(twMerge("w-48 flex flex-col gap-2"));
+    const btnClass = classNames(
+        twMerge("bg-blue-400 mt-2 p-2 active:bg-blue-500 transition")
+    );
+
     return (
         <Draggable
             draggableId={`collection-${collectionInfo.id}`}
@@ -41,21 +53,21 @@ export const TicketList: React.FC<{
                     <Droppable droppableId={collectionInfo.id.toString()}>
                         {({ innerRef, droppableProps, placeholder }) => (
                             <div
-                                className="flex flex-col"
+                                className={ticketListClass}
                                 ref={innerRef}
                                 {...droppableProps}
                                 {...dragHandleProps}
                             >
-                                <h3 className="mb-3">{collectionInfo.name}</h3>
+                                <h3>{collectionInfo.name}</h3>
 
-                                <div className="border-2 border-solid border-white w-48">
-                                    <div>{children}</div>
+                                <div className={ticketsClass}>
+                                    {children}
                                     {placeholder}
                                 </div>
 
                                 <button
                                     type="button"
-                                    // onClick={() => handleAddTicket(cateInfo.id)}
+                                    className={btnClass}
                                     onClick={handleAddTicket}
                                 >
                                     + add ticket
