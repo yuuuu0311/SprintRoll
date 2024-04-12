@@ -13,41 +13,19 @@ import {
 import { TicketList } from "@/components/TicketList";
 import { Ticket } from "@/components/Ticket";
 
-// interface
-import { CollectionFace, TicketFace } from "./interface";
-
 // markData
 import { markFrontEndData } from "@/markData";
+
+// utilities
+import { rearange, getCollectionIndex } from "@/utilities";
+
+// interface
+import { CollectionFace } from "@/interface";
 
 function App() {
     const [collection, setCollection] = useState<CollectionFace[]>(
         () => markFrontEndData.collection
     );
-
-    const rearange: (
-        arr: (CollectionFace | TicketFace)[],
-        sourceIndex: number,
-        destIndex: number
-    ) => (CollectionFace | TicketFace)[] = (arr, sourceIndex, destIndex) => {
-        const arrCopy = [...arr];
-        const [removed] = arrCopy.splice(sourceIndex, 1);
-        arrCopy.splice(destIndex, 0, removed);
-
-        return arrCopy;
-    };
-
-    const getCollectionIndex: (
-        collections: CollectionFace[],
-        id: string
-    ) => number = (collections, id) => {
-        let collectionIndex = -1;
-
-        collections.forEach((collection, index) => {
-            if (collection.id === parseInt(id)) collectionIndex = index;
-        });
-
-        return collectionIndex;
-    };
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
@@ -91,6 +69,20 @@ function App() {
 
                 return collectionsCopy;
             });
+        } else {
+            setCollection((prev) => {
+                const collectionCopy = [...prev];
+
+                const [isShifting] = collectionCopy[
+                    parseInt(source.droppableId)
+                ].tickets.splice(source.index, 1);
+
+                collectionCopy[
+                    parseInt(destination.droppableId)
+                ].tickets.splice(destination.index, 0, isShifting);
+
+                return collectionCopy;
+            });
         }
     };
 
@@ -104,10 +96,6 @@ function App() {
             },
         ]);
     };
-
-    // useEffect(() => {
-    //     console.log(collection);
-    // }, [collection]);
 
     return (
         <div>
@@ -128,7 +116,7 @@ function App() {
                                 >
                                     {collection.tickets.map((ticket, index) => (
                                         <Ticket
-                                            key={`ticket-${ticket.id}`}
+                                            key={`ticket-${index}`}
                                             ticketInfo={ticket}
                                             collectionId={collection.id}
                                             index={index}

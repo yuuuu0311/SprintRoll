@@ -14,7 +14,9 @@
             "components/": ["./src/components"],
             "components/*": ["./src/components/*"],
             "markData/": ["./src/markData"],
-            "markData/*": ["./src/markData/*"]
+            "markData/*": ["./src/markData/*"],
+            "interface/": ["./src/interface"],
+            "interface/*": ["./src/interface/*"]
         },
 
         /* Bundler mode */

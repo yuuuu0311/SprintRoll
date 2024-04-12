@@ -10,7 +10,7 @@ export const Ticket: React.FC<{
     return (
         <Draggable
             index={index}
-            draggableId={`ticket-${ticketInfo.id}-in-collection-${collectionId}`}
+            draggableId={`ticket-${index}-in-collection-${collectionId}`}
         >
             {({ innerRef, draggableProps, dragHandleProps }) => (
                 <div
