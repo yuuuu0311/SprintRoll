@@ -36,6 +36,19 @@ function App() {
         return arrCopy;
     };
 
+    const getCollectionIndex: (
+        collections: CollectionFace[],
+        id: string
+    ) => number = (collections, id) => {
+        let collectionIndex = -1;
+
+        collections.forEach((collection, index) => {
+            if (collection.id === parseInt(id)) collectionIndex = index;
+        });
+
+        return collectionIndex;
+    };
+
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
 
@@ -50,11 +63,14 @@ function App() {
                 rearange(prev, source.index, destination.index)
             );
         } else if (isInSameCollection) {
-            const collectionIndex = parseInt(source.droppableId);
-
             setCollection((prev) => {
                 const collectionsCopy = [...prev];
-                const collectionInfoCopy = { ...prev[collectionIndex] };
+
+                const [collectionInfoCopy] = collectionsCopy.filter(
+                    (collection) =>
+                        collection.id === parseInt(destination.droppableId)
+                );
+
                 const edited = {
                     ...collectionInfoCopy,
                     tickets: rearange(
@@ -64,7 +80,14 @@ function App() {
                     ),
                 };
 
-                collectionsCopy.splice(collectionIndex, 1, edited);
+                collectionsCopy.splice(
+                    getCollectionIndex(
+                        collectionsCopy,
+                        destination.droppableId
+                    ),
+                    1,
+                    edited
+                );
 
                 return collectionsCopy;
             });
@@ -82,42 +105,9 @@ function App() {
         ]);
     };
 
-    // const handleAddTicket = (collectionIndex, source, destination) => {
-    //     setCollection((prev) => {
-    //         const collectionCopy = [...prev];
-
-    //         const [targetCollection] = collectionCopy.splice(
-    //             collectionIndex,
-    //             1
-    //         );
-
-    //         const copy = {
-    //             ...targetCollection,
-    //             tickets: rearange(
-    //                 targetCollection.tickets,
-    //                 source.index,
-    //                 destination.index
-    //             ),
-    //         };
-
-    //         collectionCopy.splice(collectionIndex, 0, copy);
-
-    //         return collectionCopy;
-    //     });
-
-    // setCollection((prev) => [
-    //     ...prev,
-    //     {
-    //         id: prev.length,
-    //         name: `Collection ${prev.length + 1}`,
-    //         tickets: [],
-    //     },
-    // ]);
-    // };
-
-    useEffect(() => {
-        console.log(collection);
-    }, [collection]);
+    // useEffect(() => {
+    //     console.log(collection);
+    // }, [collection]);
 
     return (
         <div>

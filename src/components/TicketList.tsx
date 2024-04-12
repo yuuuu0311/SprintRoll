@@ -36,7 +36,7 @@ export const TicketList: React.FC<{
     return (
         <Draggable
             draggableId={`collection-${collectionInfo.id}`}
-            index={index}
+            index={collectionInfo.id}
         >
             {({ innerRef, draggableProps, dragHandleProps }) => (
                 <div ref={innerRef} {...draggableProps} {...dragHandleProps}>
