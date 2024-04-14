@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -15,7 +15,7 @@ import { TicketList } from "@/components/TicketList";
 import { Ticket } from "@/components/Ticket";
 
 // markData
-import { markFrontEndData } from "@/markData";
+import { markFrontEndData, markBackEndData } from "@/markData";
 
 // utilities
 import { rearange, getCollectionIndex } from "@/utilities";
@@ -23,11 +23,22 @@ import { rearange, getCollectionIndex } from "@/utilities";
 // interface
 import { CollectionFace } from "@/interface";
 
-export const KanbanPage: React.FC<{}> = ({}) => {
+enum DomainLabel {
+    PERSON = "Personal",
+    All = "All",
+    FE = "FrontEnd",
+    BE = "BackEnd",
+    DATA = "Data",
+    IOS = "ios",
+}
+
+export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
 
-    const [collection, setCollection] = useState<CollectionFace[]>(
-        () => markFrontEndData.collection
+    const [collection, setCollection] = useState<CollectionFace[]>(() =>
+        domain === DomainLabel.FE
+            ? markFrontEndData.collection
+            : markBackEndData.collection
     );
 
     const onDragEnd: OnDragEndResponder = (result) => {
@@ -104,6 +115,14 @@ export const KanbanPage: React.FC<{}> = ({}) => {
             },
         ]);
     };
+
+    useEffect(() => {
+        setCollection(() =>
+            domain === DomainLabel.FE
+                ? markFrontEndData.collection
+                : markBackEndData.collection
+        );
+    }, [domain]);
 
     // style
     const wrapperClass = classNames(
