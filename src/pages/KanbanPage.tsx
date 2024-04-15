@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -12,12 +12,11 @@ import classNames from "classnames";
 
 // components
 import { TicketList } from "@/components/TicketList";
-import { Ticket } from "@/components/Ticket";
 import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 
 // utilities
-import { rearange, getCollectionIndex } from "@/utilities";
+import { rearange } from "@/utilities";
 import { useCollections } from "@/utilities/hook";
 
 // interface
@@ -37,57 +36,59 @@ export const KanbanPage: React.FC = () => {
         if (!destination) return;
 
         const isDroppingCollection = destination.droppableId === "collections";
-        const isInSameCollection =
-            destination.droppableId == source.droppableId;
+        // const isInSameCollection =
+        //     destination.droppableId == source.droppableId;
 
         if (isDroppingCollection) {
-            setCollectionsData((prev) =>
+            setCollectionsData((prev: CollectionFace[]) =>
                 rearange(prev, source.index, destination.index)
             );
-        } else if (isInSameCollection) {
-            setCollectionsData((prev) => {
-                const collectionsCopy = prev !== undefined ? [...prev] : [];
-
-                const [collectionInfoCopy] = collectionsCopy.filter(
-                    (collection) =>
-                        collection.id === parseInt(destination.droppableId)
-                );
-
-                const edited = {
-                    ...collectionInfoCopy,
-                    tickets: rearange(
-                        collectionInfoCopy.tickets,
-                        source.index,
-                        destination.index
-                    ),
-                };
-
-                collectionsCopy.splice(
-                    getCollectionIndex(
-                        collectionsCopy,
-                        destination.droppableId
-                    ),
-                    1,
-                    edited
-                );
-
-                return collectionsCopy;
-            });
-        } else {
-            setCollectionsData((prev) => {
-                const collectionCopy = prev !== undefined ? [...prev] : [];
-
-                const [isShifting] = collectionCopy[
-                    parseInt(source.droppableId)
-                ].tickets.splice(source.index, 1);
-
-                collectionCopy[
-                    parseInt(destination.droppableId)
-                ].tickets.splice(destination.index, 0, isShifting);
-
-                return collectionCopy;
-            });
         }
+
+        // else if (isInSameCollection) {
+        //     setCollectionsData((prev) => {
+        //         const collectionsCopy = prev !== undefined ? [...prev] : [];
+
+        //         const [collectionInfoCopy] = collectionsCopy.filter(
+        //             (collection) =>
+        //                 collection.id === parseInt(destination.droppableId)
+        //         );
+
+        //         const edited = {
+        //             ...collectionInfoCopy,
+        //             tickets: rearange(
+        //                 collectionInfoCopy.tickets,
+        //                 source.index,
+        //                 destination.index
+        //             ),
+        //         };
+
+        //         collectionsCopy.splice(
+        //             getCollectionIndex(
+        //                 collectionsCopy,
+        //                 destination.droppableId
+        //             ),
+        //             1,
+        //             edited
+        //         );
+
+        //         return collectionsCopy;
+        //     });
+        // } else {
+        //     setCollectionsData((prev) => {
+        //         const collectionCopy = prev !== undefined ? [...prev] : [];
+
+        //         const [isShifting] = collectionCopy[
+        //             parseInt(source.droppableId)
+        //         ].tickets.splice(source.index, 1);
+
+        //         collectionCopy[
+        //             parseInt(destination.droppableId)
+        //         ].tickets.splice(destination.index, 0, isShifting);
+
+        //         return collectionCopy;
+        //     });
+        // }
     };
 
     const handleAddCollection: () => void = () => {
@@ -103,7 +104,7 @@ export const KanbanPage: React.FC = () => {
 
         // postCollection(domain, collectionsDataCopy);
 
-        setCollectionsData((prev) =>
+        setCollectionsData((prev: CollectionFace[]) =>
             prev !== undefined
                 ? [
                       ...prev,
@@ -120,7 +121,7 @@ export const KanbanPage: React.FC = () => {
         setCollectionName("");
     };
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setCollectionName(() => e.target.value);
     };
 
@@ -144,10 +145,7 @@ export const KanbanPage: React.FC = () => {
                 <div>
                     {domain}'s KanbanPage
                     <div>
-                        <DragDropContext
-                            onDragEnd={() => console.log("onDragEnd")}
-                        >
-                            {/* <DragDropContext onDragEnd={onDragEnd}> */}
+                        <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable
                                 droppableId="collections"
                                 type="droppableItem"
@@ -157,8 +155,13 @@ export const KanbanPage: React.FC = () => {
                                         className={wrapperClass}
                                         ref={innerRef}
                                     >
-                                        {collectionsData.map(
-                                            (collection, index) => (
+                                        {(
+                                            collectionsData as CollectionFace[]
+                                        )?.map(
+                                            (
+                                                collection: CollectionFace,
+                                                index: number
+                                            ) => (
                                                 <TicketList
                                                     collectionInfo={collection}
                                                     setCollectionsData={
@@ -166,24 +169,7 @@ export const KanbanPage: React.FC = () => {
                                                     }
                                                     index={index}
                                                     key={`collection-${collection.id}`}
-                                                >
-                                                    {<div>1</div>}
-
-                                                    {/* {collection.tickets.map(
-                                                        (ticket, index) => (
-                                                            <Ticket
-                                                                key={`ticket-${index}`}
-                                                                ticketInfo={
-                                                                    ticket
-                                                                }
-                                                                collectionId={
-                                                                    collection.id
-                                                                }
-                                                                index={index}
-                                                            />
-                                                        )
-                                                    )} */}
-                                                </TicketList>
+                                                />
                                             )
                                         )}
                                         <button

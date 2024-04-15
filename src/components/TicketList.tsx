@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
@@ -6,18 +6,26 @@ import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
 // interface
-import { CollectionFace } from "@/interface";
+import { CollectionFace, TicketFace } from "@/interface";
 
 // components
 import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
+import { Ticket } from "@/components/Ticket";
+
+//
+import { useTickets } from "@/utilities/hook";
 
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
     index: number;
-    setDomainCollection: Dispatch<SetStateAction<CollectionFace[] | undefined>>;
-    children: React.ReactNode;
-}> = ({ collectionInfo, children, setDomainCollection }) => {
+    setCollectionsData: Dispatch<SetStateAction<CollectionFace[] | undefined>>;
+    // children: React.ReactNode;
+}> = ({ collectionInfo, setCollectionsData }) => {
+    const { isLoading, isError, ticketsData, setTicketsData } = useTickets(
+        collectionInfo.collectionID
+    );
+
     const [dialogActive, setDialogActive] = useState(false);
     const [newTickInfo, setNewTickInfo] = useState(() => ({
         name: "",
@@ -25,29 +33,29 @@ export const TicketList: React.FC<{
         assignDevelopL: [],
     }));
 
-    const handleAddTicket = () => {
-        setDomainCollection((prev) => {
-            if (prev === undefined) return;
+    // const handleAddTicket = () => {
+    //     setCollectionsData((prev) => {
+    //         if (prev === undefined) return;
 
-            const collectionsCopy = [...prev];
-            const collectionInfoCopy = {
-                ...collectionInfo,
-                tickets: [
-                    ...collectionInfo.tickets,
-                    {
-                        id: collectionInfo.tickets.length + 1,
-                        name: `item${collectionInfo.tickets.length + 1}`,
-                    },
-                ],
-            };
+    //         const collectionsCopy = [...prev];
+    //         const collectionInfoCopy = {
+    //             ...collectionInfo,
+    //             tickets: [
+    //                 ...collectionInfo.tickets,
+    //                 {
+    //                     id: collectionInfo.tickets.length + 1,
+    //                     name: `item${collectionInfo.tickets.length + 1}`,
+    //                 },
+    //             ],
+    //         };
 
-            collectionsCopy.splice(collectionInfo.id, 1, collectionInfoCopy);
+    //         collectionsCopy.splice(collectionInfo.id, 1, collectionInfoCopy);
 
-            return collectionsCopy;
-        });
+    //         return collectionsCopy;
+    //     });
 
-        setDialogActive(false);
-    };
+    //     setDialogActive(false);
+    // };
 
     const handleDialogToggle = () => {
         setDialogActive((prev) => (prev ? false : true));
@@ -63,7 +71,9 @@ export const TicketList: React.FC<{
     );
     const inputRowClass = twMerge(classNames(`flex gap-2 `));
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log(e);
+
         setNewTickInfo((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
@@ -93,7 +103,24 @@ export const TicketList: React.FC<{
                                     <h3>{collectionInfo.name}</h3>
 
                                     <div className={ticketsClass}>
-                                        {children}
+                                        {isLoading && <div>is loading</div>}
+                                        {isError && <div>error !!</div>}
+                                        {(ticketsData as CollectionFace[])?.map(
+                                            (
+                                                ticket: TicketFace,
+                                                index: number
+                                            ) => (
+                                                <Ticket
+                                                    key={`ticket-${index}`}
+                                                    ticketInfo={ticket}
+                                                    collectionId={
+                                                        collectionInfo.id
+                                                    }
+                                                    index={index}
+                                                />
+                                            )
+                                        )}
+
                                         {placeholder}
                                     </div>
 
@@ -147,7 +174,7 @@ export const TicketList: React.FC<{
                             link
                             primary
                             rounded
-                            onClickFun={handleAddTicket}
+                            // onClickFun={handleAddTicket}
                         >
                             add
                         </Button>
