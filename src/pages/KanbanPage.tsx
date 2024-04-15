@@ -17,13 +17,14 @@ import { Ticket } from "@/components/Ticket";
 import { rearange, getCollectionIndex } from "@/utilities";
 import { useDomainCollection } from "@/utilities/hook";
 
+// interface
+import { CollectionFace } from "@/interface";
+
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
 
     const { loading, error, domainCollection, setDomainCollection } =
         useDomainCollection(domain);
-
-    // const [collection, setDomainCollection] = useState<CollectionFace[]>();
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
@@ -35,17 +36,18 @@ export const KanbanPage: React.FC = () => {
             destination.droppableId == source.droppableId;
 
         if (isDroppingCollection) {
-            setDomainCollection(
-                (prev) =>
-                    rearange(
-                        prev,
-                        source.index,
-                        destination.index
-                    ) as CollectionFace[]
+            setDomainCollection((prev) =>
+                prev !== undefined
+                    ? (rearange(
+                          prev,
+                          source.index,
+                          destination.index
+                      ) as CollectionFace[])
+                    : []
             );
         } else if (isInSameCollection) {
             setDomainCollection((prev) => {
-                const collectionsCopy = [...prev];
+                const collectionsCopy = prev !== undefined ? [...prev] : [];
 
                 const [collectionInfoCopy] = collectionsCopy.filter(
                     (collection) =>
@@ -74,7 +76,7 @@ export const KanbanPage: React.FC = () => {
             });
         } else {
             setDomainCollection((prev) => {
-                const collectionCopy = [...prev];
+                const collectionCopy = prev !== undefined ? [...prev] : [];
 
                 const [isShifting] = collectionCopy[
                     parseInt(source.droppableId)
@@ -90,14 +92,18 @@ export const KanbanPage: React.FC = () => {
     };
 
     const handleAddCollection: () => void = () => {
-        setDomainCollection((prev) => [
-            ...prev,
-            {
-                id: prev?.length,
-                name: `Collection ${prev?.length ? +1 : da}`,
-                tickets: [],
-            },
-        ]);
+        setDomainCollection((prev) =>
+            prev !== undefined
+                ? [
+                      ...prev,
+                      {
+                          id: prev?.length,
+                          name: `Collection ${prev.length + 1}`,
+                          tickets: [],
+                      },
+                  ]
+                : []
+        );
     };
 
     // style

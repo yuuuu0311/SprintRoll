@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
@@ -15,17 +15,18 @@ import { Button } from "@/components/Button";
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
     index: number;
-    setCollection: Dispatch<SetStateAction<CollectionFace[]>>;
+    setDomainCollection: Dispatch<SetStateAction<CollectionFace[]>>;
     children: React.ReactNode;
-}> = ({ collectionInfo, children, setCollection }) => {
-    const [dialogActive, setDialogActive] = useState(false);
+}> = ({ collectionInfo, children, setDomainCollection }) => {
+    const [dialogActive, setDialogActive] = useState(true);
     const [newTickInfo, setNewTickInfo] = useState(() => ({
-        title: "",
+        name: "",
         description: "",
+        assignDevelopL: [],
     }));
 
     const handleAddTicket = () => {
-        setCollection((prev) => {
+        setDomainCollection((prev) => {
             const collectionsCopy = [...prev];
             const collectionInfoCopy = {
                 ...collectionInfo,
@@ -51,13 +52,25 @@ export const TicketList: React.FC<{
     };
 
     // style
-    const ticketListClass = classNames(
-        twMerge("flex flex-col bg-blue-300 p-4")
+    const ticketListClass = twMerge(
+        classNames("flex flex-col bg-blue-300 p-4")
     );
-    const ticketsClass = classNames(twMerge("w-48 flex flex-col gap-2"));
-    const btnClass = classNames(
-        twMerge("bg-blue-400 mt-2 p-2 active:bg-blue-500 transition")
+    const ticketsClass = twMerge(classNames("w-48 flex flex-col gap-2"));
+    const btnClass = twMerge(
+        classNames("bg-blue-400 mt-2 p-2 active:bg-blue-500 transition")
     );
+    const inputRowClass = twMerge(classNames(`flex gap-2 `));
+
+    const handleChange = (e) => {
+        setNewTickInfo((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    useEffect(() => {
+        console.log(newTickInfo);
+    }, [newTickInfo]);
 
     return (
         <>
@@ -86,13 +99,12 @@ export const TicketList: React.FC<{
                                         {placeholder}
                                     </div>
 
-                                    <button
-                                        type="button"
-                                        className={btnClass}
-                                        onClick={handleDialogToggle}
+                                    <Button
+                                        onClickFun={handleDialogToggle}
+                                        addonStyle={btnClass}
                                     >
                                         + add ticket
-                                    </button>
+                                    </Button>
                                 </div>
                             )}
                         </Droppable>
@@ -101,12 +113,32 @@ export const TicketList: React.FC<{
             </Draggable>
 
             {dialogActive && (
-                <Dialog handleDialogToggle={handleDialogToggle}>
-                    dialog content
+                <Dialog
+                    handleDialogToggle={handleDialogToggle}
+                    title="add Ticket"
+                >
                     <div>
-                        <div>
-                            <label htmlFor=""></label>
-                            <input type="text" name="" id="" />
+                        <div className={inputRowClass}>
+                            <label htmlFor="name">title</label>
+                            <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                placeholder="title goes here"
+                                value={newTickInfo.name}
+                                onChange={(e) => handleChange(e)}
+                            />
+                        </div>
+                        <div className={inputRowClass}>
+                            <label htmlFor="description">description</label>
+                            <input
+                                type="text"
+                                name="description"
+                                id="description"
+                                placeholder="description"
+                                value={newTickInfo.description}
+                                onChange={(e) => handleChange(e)}
+                            />
                         </div>
                     </div>
                     <div>

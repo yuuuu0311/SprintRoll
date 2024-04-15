@@ -1,4 +1,4 @@
-export const postDomainCollection = async () => {
+export const postDomainCollection = async (domain: string) => {
     try {
         const res = await fetch(`http://localhost:3000/${domain}/`);
         const data = await res.json();

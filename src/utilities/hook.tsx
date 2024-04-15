@@ -6,8 +6,9 @@ import { CollectionFace } from "@/interface";
 export const useDomainCollection = (domain: string | undefined) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [domainCollection, setDomainCollection] =
-        useState<CollectionFace[]>();
+    const [domainCollection, setDomainCollection] = useState<CollectionFace[]>(
+        []
+    );
 
     useEffect(() => {
         (async () => {
