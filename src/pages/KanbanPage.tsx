@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -14,32 +13,17 @@ import classNames from "classnames";
 import { TicketList } from "@/components/TicketList";
 import { Ticket } from "@/components/Ticket";
 
-// markData
-import { markFrontEndData, markBackEndData } from "@/markData";
-
 // utilities
 import { rearange, getCollectionIndex } from "@/utilities";
-
-// interface
-import { CollectionFace } from "@/interface";
-
-enum DomainLabel {
-    PERSON = "Personal",
-    All = "All",
-    FE = "FrontEnd",
-    BE = "BackEnd",
-    DATA = "Data",
-    IOS = "ios",
-}
+import { useDomainCollection } from "@/utilities/hook";
 
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
 
-    const [collection, setCollection] = useState<CollectionFace[]>(() =>
-        domain === DomainLabel.FE
-            ? markFrontEndData.collection
-            : markBackEndData.collection
-    );
+    const { loading, error, domainCollection, setDomainCollection } =
+        useDomainCollection(domain);
+
+    // const [collection, setDomainCollection] = useState<CollectionFace[]>();
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
@@ -51,7 +35,7 @@ export const KanbanPage: React.FC = () => {
             destination.droppableId == source.droppableId;
 
         if (isDroppingCollection) {
-            setCollection(
+            setDomainCollection(
                 (prev) =>
                     rearange(
                         prev,
@@ -60,7 +44,7 @@ export const KanbanPage: React.FC = () => {
                     ) as CollectionFace[]
             );
         } else if (isInSameCollection) {
-            setCollection((prev) => {
+            setDomainCollection((prev) => {
                 const collectionsCopy = [...prev];
 
                 const [collectionInfoCopy] = collectionsCopy.filter(
@@ -89,7 +73,7 @@ export const KanbanPage: React.FC = () => {
                 return collectionsCopy;
             });
         } else {
-            setCollection((prev) => {
+            setDomainCollection((prev) => {
                 const collectionCopy = [...prev];
 
                 const [isShifting] = collectionCopy[
@@ -106,23 +90,15 @@ export const KanbanPage: React.FC = () => {
     };
 
     const handleAddCollection: () => void = () => {
-        setCollection((prev) => [
+        setDomainCollection((prev) => [
             ...prev,
             {
-                id: prev.length,
-                name: `Collection ${prev.length + 1}`,
+                id: prev?.length,
+                name: `Collection ${prev?.length ? +1 : da}`,
                 tickets: [],
             },
         ]);
     };
-
-    useEffect(() => {
-        setCollection(() =>
-            domain === DomainLabel.FE
-                ? markFrontEndData.collection
-                : markBackEndData.collection
-        );
-    }, [domain]);
 
     // style
     const wrapperClass = classNames(
@@ -132,44 +108,65 @@ export const KanbanPage: React.FC = () => {
     );
 
     return (
-        <div>
-            {domain}'s KanbanPage
-            <div>
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId="collections" type="droppableItem">
-                        {({ innerRef, placeholder }) => (
-                            <div className={wrapperClass} ref={innerRef}>
-                                {collection.map((collection, index) => (
-                                    <TicketList
-                                        collectionInfo={collection}
-                                        setCollection={setCollection}
-                                        index={index}
-                                        key={`collection-${collection.id}`}
+        <>
+            {loading && <div>is loading</div>}
+            {error && <div>is error</div>}
+
+            {domainCollection !== undefined && (
+                <div>
+                    {domain}'s KanbanPage
+                    <div>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            <Droppable
+                                droppableId="collections"
+                                type="droppableItem"
+                            >
+                                {({ innerRef, placeholder }) => (
+                                    <div
+                                        className={wrapperClass}
+                                        ref={innerRef}
                                     >
-                                        {collection.tickets.map(
-                                            (ticket, index) => (
-                                                <Ticket
-                                                    key={`ticket-${index}`}
-                                                    ticketInfo={ticket}
-                                                    collectionId={collection.id}
+                                        {domainCollection.map(
+                                            (collection, index) => (
+                                                <TicketList
+                                                    collectionInfo={collection}
+                                                    setDomainCollection={
+                                                        setDomainCollection
+                                                    }
                                                     index={index}
-                                                />
+                                                    key={`collection-${collection.id}`}
+                                                >
+                                                    {collection.tickets.map(
+                                                        (ticket, index) => (
+                                                            <Ticket
+                                                                key={`ticket-${index}`}
+                                                                ticketInfo={
+                                                                    ticket
+                                                                }
+                                                                collectionId={
+                                                                    collection.id
+                                                                }
+                                                                index={index}
+                                                            />
+                                                        )
+                                                    )}
+                                                </TicketList>
                                             )
                                         )}
-                                    </TicketList>
-                                ))}
-                                <button
-                                    type="button"
-                                    onClick={handleAddCollection}
-                                >
-                                    + add category
-                                </button>
-                                {placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-            </div>
-        </div>
+                                        <button
+                                            type="button"
+                                            onClick={handleAddCollection}
+                                        >
+                                            + add category
+                                        </button>
+                                        {placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };

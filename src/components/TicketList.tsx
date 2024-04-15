@@ -104,6 +104,12 @@ export const TicketList: React.FC<{
                 <Dialog handleDialogToggle={handleDialogToggle}>
                     dialog content
                     <div>
+                        <div>
+                            <label htmlFor=""></label>
+                            <input type="text" name="" id="" />
+                        </div>
+                    </div>
+                    <div>
                         <Button link onClickFun={handleDialogToggle}>
                             close
                         </Button>
