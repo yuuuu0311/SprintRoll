@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -18,17 +18,16 @@ import { Button } from "@/components/Button";
 
 // utilities
 import { rearange, getCollectionIndex } from "@/utilities";
-import { useDomainCollection } from "@/utilities/hook";
-import { postCollection } from "@/utilities/api";
+import { useCollections } from "@/utilities/hook";
 
 // interface
 import { CollectionFace } from "@/interface";
 
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
+    const { isLoading, isError, collectionsData, setCollectionsData } =
+        useCollections(domain);
 
-    const { loading, error, domainCollection, setDomainCollection } =
-        useDomainCollection(domain);
     const [dialogActive, setDialogActive] = useState(false);
     const [collectionName, setCollectionName] = useState("");
 
@@ -42,17 +41,11 @@ export const KanbanPage: React.FC = () => {
             destination.droppableId == source.droppableId;
 
         if (isDroppingCollection) {
-            setDomainCollection((prev) =>
-                prev !== undefined
-                    ? (rearange(
-                          prev,
-                          source.index,
-                          destination.index
-                      ) as CollectionFace[])
-                    : []
+            setCollectionsData((prev) =>
+                rearange(prev, source.index, destination.index)
             );
         } else if (isInSameCollection) {
-            setDomainCollection((prev) => {
+            setCollectionsData((prev) => {
                 const collectionsCopy = prev !== undefined ? [...prev] : [];
 
                 const [collectionInfoCopy] = collectionsCopy.filter(
@@ -81,7 +74,7 @@ export const KanbanPage: React.FC = () => {
                 return collectionsCopy;
             });
         } else {
-            setDomainCollection((prev) => {
+            setCollectionsData((prev) => {
                 const collectionCopy = prev !== undefined ? [...prev] : [];
 
                 const [isShifting] = collectionCopy[
@@ -98,19 +91,19 @@ export const KanbanPage: React.FC = () => {
     };
 
     const handleAddCollection: () => void = () => {
-        if (collectionName === "") return;
+        // if (collectionName === "") return;
 
-        const domainCollectionCopy = [...domainCollection];
+        // const collectionsDataCopy = [...collectionsData];
 
-        domainCollectionCopy.push({
-            id: domainCollection?.length,
-            name: collectionName,
-            tickets: [],
-        });
+        // collectionsDataCopy.push({
+        //     id: collectionsData?.length,
+        //     name: collectionName,
+        //     tickets: [],
+        // });
 
-        postCollection(domain, domainCollectionCopy);
+        // postCollection(domain, collectionsDataCopy);
 
-        setDomainCollection((prev) =>
+        setCollectionsData((prev) =>
             prev !== undefined
                 ? [
                       ...prev,
@@ -144,14 +137,17 @@ export const KanbanPage: React.FC = () => {
 
     return (
         <>
-            {loading && <div>is loading</div>}
-            {error && <div>is error</div>}
+            {isLoading && <div>is loading</div>}
+            {isError && <div>is error</div>}
 
-            {domainCollection !== undefined && (
+            {collectionsData !== undefined && (
                 <div>
                     {domain}'s KanbanPage
                     <div>
-                        <DragDropContext onDragEnd={onDragEnd}>
+                        <DragDropContext
+                            onDragEnd={() => console.log("onDragEnd")}
+                        >
+                            {/* <DragDropContext onDragEnd={onDragEnd}> */}
                             <Droppable
                                 droppableId="collections"
                                 type="droppableItem"
@@ -161,17 +157,19 @@ export const KanbanPage: React.FC = () => {
                                         className={wrapperClass}
                                         ref={innerRef}
                                     >
-                                        {domainCollection.map(
+                                        {collectionsData.map(
                                             (collection, index) => (
                                                 <TicketList
                                                     collectionInfo={collection}
-                                                    setDomainCollection={
-                                                        setDomainCollection
+                                                    setCollectionsData={
+                                                        setCollectionsData
                                                     }
                                                     index={index}
                                                     key={`collection-${collection.id}`}
                                                 >
-                                                    {collection.tickets.map(
+                                                    {<div>1</div>}
+
+                                                    {/* {collection.tickets.map(
                                                         (ticket, index) => (
                                                             <Ticket
                                                                 key={`ticket-${index}`}
@@ -184,7 +182,7 @@ export const KanbanPage: React.FC = () => {
                                                                 index={index}
                                                             />
                                                         )
-                                                    )}
+                                                    )} */}
                                                 </TicketList>
                                             )
                                         )}

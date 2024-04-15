@@ -1,35 +1,43 @@
+// dependency
+import { collection, query, where, getDocs } from "firebase/firestore";
+
+// utilities
+import { db } from "@/utilities/firebase";
 import { useEffect, useState } from "react";
 
 // interface
 import { CollectionFace } from "@/interface";
 
-export const useDomainCollection = (domain: string | undefined) => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
-    const [domainCollection, setDomainCollection] = useState<CollectionFace[]>(
-        []
-    );
+export const useCollections = (domain: string | undefined) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [collectionsData, setCollectionsData] = useState<CollectionFace[]>();
+    const [isError, setIsError] = useState(false);
 
     useEffect(() => {
         (async () => {
             try {
-                setLoading(true);
-                const res = await fetch(
-                    `http://localhost:3000/${domain?.toLowerCase()}/`
+                setIsLoading(true);
+
+                const collectionsRef = collection(db, "collections");
+                // with certain collection want to find
+                // const q = query(
+                //     collectionsRef,
+                //     where("domain", "==", domain?.toLowerCase())
+                // );
+
+                const querySnapshot = await getDocs(collectionsRef);
+
+                setCollectionsData(() =>
+                    querySnapshot.docs.map((doc) => doc.data())
                 );
-                const { collection } = await res.json();
-
-                setLoading(false);
-                setDomainCollection(collection);
+                setIsLoading(false);
             } catch (error) {
-                setLoading(false);
-                setError(true);
-
-                const Error = error as Error;
-                console.log(Error.message);
+                setIsError(true);
+                setIsLoading(false);
+                console.log(error);
             }
         })();
     }, [domain]);
 
-    return { loading, error, domainCollection, setDomainCollection };
+    return { isLoading, isError, collectionsData, setCollectionsData };
 };

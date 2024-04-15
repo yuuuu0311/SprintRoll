@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
@@ -15,7 +15,7 @@ import { Button } from "@/components/Button";
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
     index: number;
-    setDomainCollection: Dispatch<SetStateAction<CollectionFace[]>>;
+    setDomainCollection: Dispatch<SetStateAction<CollectionFace[] | undefined>>;
     children: React.ReactNode;
 }> = ({ collectionInfo, children, setDomainCollection }) => {
     const [dialogActive, setDialogActive] = useState(false);
@@ -27,6 +27,8 @@ export const TicketList: React.FC<{
 
     const handleAddTicket = () => {
         setDomainCollection((prev) => {
+            if (prev === undefined) return;
+
             const collectionsCopy = [...prev];
             const collectionInfoCopy = {
                 ...collectionInfo,

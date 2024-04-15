@@ -4,5 +4,6 @@ export interface TicketFace {
 }
 
 export interface CollectionFace extends TicketFace {
-    tickets: TicketFace[];
+    domain: string;
+    product: string;
 }
