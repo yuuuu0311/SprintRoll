@@ -14,7 +14,9 @@ export const useDomainCollection = (domain: string | undefined) => {
         (async () => {
             try {
                 setLoading(true);
-                const res = await fetch(`http://localhost:3000/${domain}/`);
+                const res = await fetch(
+                    `http://localhost:3000/${domain?.toLowerCase()}/`
+                );
                 const { collection } = await res.json();
 
                 setLoading(false);

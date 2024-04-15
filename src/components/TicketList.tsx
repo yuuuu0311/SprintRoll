@@ -18,7 +18,7 @@ export const TicketList: React.FC<{
     setDomainCollection: Dispatch<SetStateAction<CollectionFace[]>>;
     children: React.ReactNode;
 }> = ({ collectionInfo, children, setDomainCollection }) => {
-    const [dialogActive, setDialogActive] = useState(true);
+    const [dialogActive, setDialogActive] = useState(false);
     const [newTickInfo, setNewTickInfo] = useState(() => ({
         name: "",
         description: "",
@@ -67,10 +67,6 @@ export const TicketList: React.FC<{
             [e.target.name]: e.target.value,
         }));
     };
-
-    useEffect(() => {
-        console.log(newTickInfo);
-    }, [newTickInfo]);
 
     return (
         <>
@@ -142,10 +138,15 @@ export const TicketList: React.FC<{
                         </div>
                     </div>
                     <div>
-                        <Button link onClickFun={handleDialogToggle}>
+                        <Button link rounded onClickFun={handleDialogToggle}>
                             close
                         </Button>
-                        <Button link primary onClickFun={handleAddTicket}>
+                        <Button
+                            link
+                            primary
+                            rounded
+                            onClickFun={handleAddTicket}
+                        >
                             add
                         </Button>
                     </div>

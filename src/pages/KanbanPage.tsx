@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -12,10 +13,13 @@ import classNames from "classnames";
 // components
 import { TicketList } from "@/components/TicketList";
 import { Ticket } from "@/components/Ticket";
+import { Dialog } from "@/components/Dialog";
+import { Button } from "@/components/Button";
 
 // utilities
 import { rearange, getCollectionIndex } from "@/utilities";
 import { useDomainCollection } from "@/utilities/hook";
+import { postCollection } from "@/utilities/api";
 
 // interface
 import { CollectionFace } from "@/interface";
@@ -25,6 +29,8 @@ export const KanbanPage: React.FC = () => {
 
     const { loading, error, domainCollection, setDomainCollection } =
         useDomainCollection(domain);
+    const [dialogActive, setDialogActive] = useState(false);
+    const [collectionName, setCollectionName] = useState("");
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
@@ -92,18 +98,41 @@ export const KanbanPage: React.FC = () => {
     };
 
     const handleAddCollection: () => void = () => {
+        if (collectionName === "") return;
+
+        const domainCollectionCopy = [...domainCollection];
+
+        domainCollectionCopy.push({
+            id: domainCollection?.length,
+            name: collectionName,
+            tickets: [],
+        });
+
+        postCollection(domain, domainCollectionCopy);
+
         setDomainCollection((prev) =>
             prev !== undefined
                 ? [
                       ...prev,
                       {
                           id: prev?.length,
-                          name: `Collection ${prev.length + 1}`,
+                          name: collectionName,
                           tickets: [],
                       },
                   ]
                 : []
         );
+
+        handleDialogToggle();
+        setCollectionName("");
+    };
+
+    const handleChange = (e) => {
+        setCollectionName(() => e.target.value);
+    };
+
+    const handleDialogToggle = () => {
+        setDialogActive((prev) => (prev ? false : true));
     };
 
     // style
@@ -161,7 +190,7 @@ export const KanbanPage: React.FC = () => {
                                         )}
                                         <button
                                             type="button"
-                                            onClick={handleAddCollection}
+                                            onClick={handleDialogToggle}
                                         >
                                             + add category
                                         </button>
@@ -172,6 +201,40 @@ export const KanbanPage: React.FC = () => {
                         </DragDropContext>
                     </div>
                 </div>
+            )}
+
+            {dialogActive && (
+                <Dialog
+                    handleDialogToggle={handleDialogToggle}
+                    title="add category"
+                >
+                    <div>
+                        <div>
+                            <label htmlFor="name">title</label>
+                            <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                placeholder="title goes here"
+                                value={collectionName}
+                                onChange={(e) => handleChange(e)}
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <Button link rounded onClickFun={handleDialogToggle}>
+                            close
+                        </Button>
+                        <Button
+                            link
+                            primary
+                            rounded
+                            onClickFun={handleAddCollection}
+                        >
+                            add
+                        </Button>
+                    </div>
+                </Dialog>
             )}
         </>
     );
