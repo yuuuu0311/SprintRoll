@@ -35,38 +35,25 @@ export const KanbanPage: React.FC = () => {
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
 
-        console.log(source, destination, result);
+        // console.log(source, destination, result);
 
         if (!destination) return;
 
-        const isDroppingCollection = destination.droppableId === "collections";
-        const isInSameCollection =
-            destination.droppableId == source.droppableId;
+        switch (destination.droppableId) {
+            case "collections":
+                orderCollection(source.index, destination.index);
+                break;
+            case source.droppableId:
+                orderTicket(
+                    source.index,
+                    destination.index,
+                    result.destination?.droppableId
+                );
+                break;
 
-        if (isDroppingCollection) {
-            orderCollection(source.index, destination.index);
-        } else if (isInSameCollection) {
-            orderTicket(
-                source.index,
-                destination.index,
-                result.destination?.droppableId
-            );
+            default:
+                break;
         }
-        // else {
-        //     setCollectionsData((prev) => {
-        //         const collectionCopy = prev !== undefined ? [...prev] : [];
-
-        //         const [isShifting] = collectionCopy[
-        //             parseInt(source.droppableId)
-        //         ].tickets.splice(source.index, 1);
-
-        //         collectionCopy[
-        //             parseInt(destination.droppableId)
-        //         ].tickets.splice(destination.index, 0, isShifting);
-
-        //         return collectionCopy;
-        //     });
-        // }
     };
 
     const handleAddCollection: () => void = async () => {

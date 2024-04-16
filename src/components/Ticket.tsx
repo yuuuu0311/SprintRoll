@@ -23,8 +23,8 @@ export const Ticket: React.FC<{
                             {...draggableProps}
                             {...dragHandleProps}
                         >
-                            {ticketInfo.ticketID}
-                            {/* {ticketInfo.name} */}
+                            {/* {ticketInfo.ticketID} */}
+                            {ticketInfo.name}
                         </div>
                     )}
                 </Draggable>

@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import { addDoc, collection } from "firebase/firestore";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
@@ -13,8 +14,9 @@ import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 import { Ticket } from "@/components/Ticket";
 
-//
+// hook and utilities
 import { useTickets } from "@/utilities/hook";
+import { db } from "@/utilities/firebase";
 
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
@@ -26,32 +28,27 @@ export const TicketList: React.FC<{
     const [newTickInfo, setNewTickInfo] = useState(() => ({
         name: "",
         description: "",
-        assignDevelopL: [],
+        assignedDeveloper: [],
     }));
 
-    // const handleAddTicket = () => {
-    //     setCollectionsData((prev) => {
-    //         if (prev === undefined) return;
+    const handleAddTicket: () => void = async () => {
+        if (newTickInfo.name === "") return;
 
-    //         const collectionsCopy = [...prev];
-    //         const collectionInfoCopy = {
-    //             ...collectionInfo,
-    //             tickets: [
-    //                 ...collectionInfo.tickets,
-    //                 {
-    //                     id: collectionInfo.tickets.length + 1,
-    //                     name: `item${collectionInfo.tickets.length + 1}`,
-    //                 },
-    //             ],
-    //         };
+        const ticketsRef = collection(
+            db,
+            `collections/${collectionInfo.collectionID}/tickets`
+        );
+        await addDoc(ticketsRef, {
+            ...newTickInfo,
+        });
 
-    //         collectionsCopy.splice(collectionInfo.id, 1, collectionInfoCopy);
-
-    //         return collectionsCopy;
-    //     });
-
-    //     setDialogActive(false);
-    // };
+        handleDialogToggle();
+        setNewTickInfo(() => ({
+            name: "",
+            description: "",
+            assignedDeveloper: [],
+        }));
+    };
 
     const handleDialogToggle = () => {
         setDialogActive((prev) => (prev ? false : true));
@@ -94,8 +91,8 @@ export const TicketList: React.FC<{
                                     {...droppableProps}
                                     {...dragHandleProps}
                                 >
-                                    <h3>{collectionInfo.collectionID}</h3>
-                                    {/* <h3>{collectionInfo.name}</h3> */}
+                                    {/* <h3>{collectionInfo.collectionID}</h3> */}
+                                    <h3>{collectionInfo.name}</h3>
 
                                     <div className={ticketsClass}>
                                         {isLoading && <div>is loading</div>}
@@ -165,7 +162,7 @@ export const TicketList: React.FC<{
                             link
                             primary
                             rounded
-                            // onClickFun={handleAddTicket}
+                            onClickFun={handleAddTicket}
                         >
                             add
                         </Button>
