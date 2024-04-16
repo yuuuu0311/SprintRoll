@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -10,13 +10,16 @@ import {
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
+import { addDoc, collection } from "firebase/firestore";
+
 // components
 import { TicketList } from "@/components/TicketList";
 import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 
 // utilities
-import { rearange, orderCollection } from "@/utilities";
+import { orderCollection } from "@/utilities";
+import { db } from "@/utilities/firebase";
 import { useCollections } from "@/utilities/hook";
 
 // interface
@@ -41,18 +44,11 @@ export const KanbanPage: React.FC = () => {
             destination.droppableId == source.droppableId;
 
         if (isDroppingCollection) {
-            // get result draggableID , then u can get dragging target
-            // use query to find current order target
-            // operate db
+            orderCollection(source.index, destination.index);
 
-            // orderCollection(
-            //     result.draggableId,
-            //     source.index,
-            //     destination.index
+            // setCollectionsData((prev: CollectionFace[]) =>
+            //     rearange(prev, source.index, destination.index)
             // );
-            setCollectionsData((prev: CollectionFace[]) =>
-                rearange(prev, source.index, destination.index)
-            );
         } else if (isInSameCollection) {
             // setCollectionsData((prev: CollectionFace[]) => {
             //     const collectionsCopy = prev !== undefined ? [...prev] : [];
@@ -96,12 +92,16 @@ export const KanbanPage: React.FC = () => {
         // }
     };
 
-    // useEffect(() => {
-    //     console.log(collectionsData);
-    // }, [collectionsData]);
+    const handleAddCollection: () => void = async () => {
+        if (collectionName === "") return;
 
-    const handleAddCollection: () => void = () => {
-        // if (collectionName === "") return;
+        const collectionsRef = collection(db, "collections");
+        await addDoc(collectionsRef, {
+            domain: "frontend",
+            order: collectionsData.length,
+            product: "SprintRoll",
+            name: collectionName,
+        });
 
         // const collectionsDataCopy = [...collectionsData];
 
@@ -113,18 +113,18 @@ export const KanbanPage: React.FC = () => {
 
         // postCollection(domain, collectionsDataCopy);
 
-        setCollectionsData((prev: CollectionFace[]) =>
-            prev !== undefined
-                ? [
-                      ...prev,
-                      {
-                          id: prev?.length,
-                          name: collectionName,
-                          tickets: [],
-                      },
-                  ]
-                : []
-        );
+        // setCollectionsData((prev: CollectionFace[]) =>
+        //     prev !== undefined
+        //         ? [
+        //               ...prev,
+        //               {
+        //                   id: prev?.length,
+        //                   name: collectionName,
+        //                   tickets: [],
+        //               },
+        //           ]
+        //         : []
+        // );
 
         handleDialogToggle();
         setCollectionName("");
@@ -172,11 +172,10 @@ export const KanbanPage: React.FC = () => {
                                             ) => (
                                                 <TicketList
                                                     collectionInfo={collection}
-                                                    setCollectionsData={
-                                                        setCollectionsData
-                                                    }
                                                     index={index}
-                                                    key={`collection-${collection.id}`}
+                                                    key={
+                                                        collection.collectionID
+                                                    }
                                                 />
                                             )
                                         )}

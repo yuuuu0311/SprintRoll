@@ -82,7 +82,7 @@ export const TicketList: React.FC<{
         <>
             <Draggable
                 draggableId={collectionInfo.collectionID}
-                index={collectionInfo.id}
+                index={collectionInfo.order}
             >
                 {({ innerRef, draggableProps, dragHandleProps }) => (
                     <div
