@@ -1,5 +1,5 @@
 // dependency
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, where, query } from "firebase/firestore";
 
 // utilities
 import { db } from "@/utilities/firebase";
@@ -8,19 +8,19 @@ import { useEffect, useState } from "react";
 // interface
 import { CollectionFace, TicketFace } from "@/interface";
 
-export const useCollections = () => {
+export const useCollections = (domain: string) => {
     const [isLoading, setIsLoading] = useState(false);
     const [collectionsData, setCollectionsData] = useState<CollectionFace[]>();
 
     useEffect(() => {
         const collectionsRef = collection(db, "collections");
 
-        // const q = query(
-        //     collectionsRef,
-        //     where("domain", "==", domain?.toLowerCase())
-        // );
+        const q = query(
+            collectionsRef,
+            where("domain", "==", domain?.toLowerCase())
+        );
 
-        const unsubscribe = onSnapshot(collectionsRef, (collection) => {
+        const unsubscribe = onSnapshot(q, (collection) => {
             setIsLoading(true);
 
             const collectionCopy = collection.docs.map((doc) => ({
@@ -36,7 +36,7 @@ export const useCollections = () => {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [domain]);
 
     return { isLoading, collectionsData };
 };
@@ -44,15 +44,9 @@ export const useCollections = () => {
 export const useTickets = (id: string) => {
     const [isLoading, setIsLoading] = useState(false);
     const [ticketsData, setTicketsData] = useState<TicketFace[]>();
-    // const [isError, setIsError] = useState(false);
 
     useEffect(() => {
         const ticketsRef = collection(db, `collections/${id}/tickets`);
-
-        // const q = query(
-        //     collectionsRef,
-        //     where("domain", "==", domain?.toLowerCase())
-        // );
 
         const unsubscribe = onSnapshot(ticketsRef, (tickets) => {
             setIsLoading(true);

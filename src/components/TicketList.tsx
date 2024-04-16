@@ -40,13 +40,13 @@ export const TicketList: React.FC<{
         );
         await addDoc(ticketsRef, {
             ...newTickInfo,
+            order: ticketsData.length,
         });
 
         handleDialogToggle();
         setNewTickInfo(() => ({
             name: "",
             description: "",
-            order: ticketsData.length,
             assignedDeveloper: [],
         }));
     };

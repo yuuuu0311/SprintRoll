@@ -27,7 +27,7 @@ import { CollectionFace } from "@/interface";
 
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
-    const { isLoading, collectionsData } = useCollections();
+    const { isLoading, collectionsData } = useCollections(domain as string);
 
     const [dialogActive, setDialogActive] = useState(false);
     const [collectionName, setCollectionName] = useState("");
@@ -62,7 +62,7 @@ export const KanbanPage: React.FC = () => {
 
         const collectionsRef = collection(db, "collections");
         await addDoc(collectionsRef, {
-            domain: "frontend",
+            domain: domain?.toLowerCase(),
             order: collectionsData.length,
             product: "SprintRoll",
             name: collectionName,
