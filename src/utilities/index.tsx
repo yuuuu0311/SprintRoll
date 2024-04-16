@@ -4,7 +4,11 @@ import {
     query,
     where,
     getDocs,
+    getDoc,
+    doc,
+    setDoc,
     updateDoc,
+    deleteDoc,
 } from "firebase/firestore";
 
 // utilities
@@ -110,4 +114,33 @@ export const orderTicket = async (
                 console.error("Error updating document: ", error);
             });
     });
+};
+
+export const toAnotherCollection = async (
+    source: {
+        index: number;
+        droppableId: string;
+    },
+    destination: {
+        index: number;
+        droppableId: string;
+    },
+
+    draggableId: string
+) => {
+    // [x] remove from original
+    // [x] add to new collection
+    // [ ] how to order.....
+
+    const destRef = doc(db, `collections/${destination.droppableId}/`);
+    const destSnap = await getDoc(destRef);
+
+    await deleteDoc(
+        doc(db, `collections/${source.droppableId}/tickets`, draggableId)
+    );
+
+    await setDoc(
+        doc(db, `collections/${destination.droppableId}/tickets`, draggableId),
+        destSnap.data()
+    );
 };

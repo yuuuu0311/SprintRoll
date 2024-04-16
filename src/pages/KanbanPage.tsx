@@ -18,7 +18,7 @@ import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 
 // utilities
-import { orderCollection, orderTicket } from "@/utilities";
+import { orderCollection, orderTicket, toAnotherCollection } from "@/utilities";
 import { db } from "@/utilities/firebase";
 import { useCollections } from "@/utilities/hook";
 
@@ -52,6 +52,7 @@ export const KanbanPage: React.FC = () => {
                 break;
 
             default:
+                toAnotherCollection(source, destination, result.draggableId);
                 break;
         }
     };

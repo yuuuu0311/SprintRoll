@@ -92,8 +92,8 @@ export const TicketList: React.FC<{
                                     {...droppableProps}
                                     {...dragHandleProps}
                                 >
-                                    {/* <h3>{collectionInfo.collectionID}</h3> */}
-                                    <h3>{collectionInfo.name}</h3>
+                                    <h3>{collectionInfo.collectionID}</h3>
+                                    {/* <h3>{collectionInfo.name}</h3> */}
 
                                     <div className={ticketsClass}>
                                         {isLoading && <div>is loading</div>}
