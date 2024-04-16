@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -16,7 +16,7 @@ import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 
 // utilities
-import { rearange } from "@/utilities";
+import { rearange, orderCollection } from "@/utilities";
 import { useCollections } from "@/utilities/hook";
 
 // interface
@@ -41,6 +41,15 @@ export const KanbanPage: React.FC = () => {
             destination.droppableId == source.droppableId;
 
         if (isDroppingCollection) {
+            // get result draggableID , then u can get dragging target
+            // use query to find current order target
+            // operate db
+
+            // orderCollection(
+            //     result.draggableId,
+            //     source.index,
+            //     destination.index
+            // );
             setCollectionsData((prev: CollectionFace[]) =>
                 rearange(prev, source.index, destination.index)
             );
@@ -86,6 +95,10 @@ export const KanbanPage: React.FC = () => {
         //     });
         // }
     };
+
+    // useEffect(() => {
+    //     console.log(collectionsData);
+    // }, [collectionsData]);
 
     const handleAddCollection: () => void = () => {
         // if (collectionName === "") return;

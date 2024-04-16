@@ -1,11 +1,5 @@
 // dependency
-import {
-    collection,
-    getDocs,
-    onSnapshot,
-    query,
-    where,
-} from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 
 // utilities
 import { db } from "@/utilities/firebase";
@@ -31,12 +25,15 @@ export const useCollections = () => {
         const unsubscribe = onSnapshot(collectionsRef, (collection) => {
             setIsLoading(true);
 
+            const collectionCopy = collection.docs.map((doc) => ({
+                ...(doc.data() as CollectionFace),
+                collectionID: doc.id,
+            }));
+
             setCollectionsData(() =>
-                collection.docs.map((doc) => ({
-                    collectionID: doc.id,
-                    ...doc.data(),
-                }))
+                collectionCopy.sort((a, b) => a.order - b.order)
             );
+
             setIsLoading(false);
         });
 
