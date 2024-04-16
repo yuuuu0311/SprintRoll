@@ -8,14 +8,16 @@ import { TicketFace } from "@/interface";
 
 export const Ticket: React.FC<{
     ticketInfo: TicketFace;
-    index: number;
-}> = ({ ticketInfo, index }) => {
+}> = ({ ticketInfo }) => {
     const ticketsClass = classNames(twMerge("p-2 bg-gray-700"));
 
     return (
         <>
             {ticketInfo.ticketID !== undefined && (
-                <Draggable index={index} draggableId={ticketInfo.ticketID}>
+                <Draggable
+                    index={ticketInfo.order}
+                    draggableId={ticketInfo.ticketID}
+                >
                     {({ innerRef, draggableProps, dragHandleProps }) => (
                         <div
                             ref={innerRef}
@@ -23,8 +25,8 @@ export const Ticket: React.FC<{
                             {...draggableProps}
                             {...dragHandleProps}
                         >
-                            {/* {ticketInfo.ticketID} */}
-                            {ticketInfo.name}
+                            {ticketInfo.ticketID}
+                            {/* {ticketInfo.name} */}
                         </div>
                     )}
                 </Draggable>

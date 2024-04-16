@@ -107,20 +107,12 @@ export const KanbanPage: React.FC = () => {
                                     >
                                         {(
                                             collectionsData as CollectionFace[]
-                                        )?.map(
-                                            (
-                                                collection: CollectionFace,
-                                                index: number
-                                            ) => (
-                                                <TicketList
-                                                    collectionInfo={collection}
-                                                    index={index}
-                                                    key={
-                                                        collection.collectionID
-                                                    }
-                                                />
-                                            )
-                                        )}
+                                        )?.map((collection: CollectionFace) => (
+                                            <TicketList
+                                                collectionInfo={collection}
+                                                key={collection.collectionID}
+                                            />
+                                        ))}
                                         <button
                                             type="button"
                                             onClick={handleDialogToggle}

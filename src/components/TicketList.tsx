@@ -20,7 +20,6 @@ import { db } from "@/utilities/firebase";
 
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
-    index: number;
 }> = ({ collectionInfo }) => {
     const { isLoading, ticketsData } = useTickets(collectionInfo.collectionID);
 
@@ -33,6 +32,7 @@ export const TicketList: React.FC<{
 
     const handleAddTicket: () => void = async () => {
         if (newTickInfo.name === "") return;
+        if (ticketsData === undefined) return;
 
         const ticketsRef = collection(
             db,
@@ -46,6 +46,7 @@ export const TicketList: React.FC<{
         setNewTickInfo(() => ({
             name: "",
             description: "",
+            order: ticketsData.length,
             assignedDeveloper: [],
         }));
     };
@@ -97,14 +98,10 @@ export const TicketList: React.FC<{
                                     <div className={ticketsClass}>
                                         {isLoading && <div>is loading</div>}
                                         {(ticketsData as CollectionFace[])?.map(
-                                            (
-                                                ticket: TicketFace,
-                                                index: number
-                                            ) => (
+                                            (ticket: TicketFace) => (
                                                 <Ticket
-                                                    key={`ticket-${index}`}
+                                                    key={ticket.ticketID}
                                                     ticketInfo={ticket}
-                                                    index={index}
                                                 />
                                             )
                                         )}
