@@ -19,10 +19,10 @@ import { useTickets } from "@/utilities/hook";
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
     index: number;
-    setCollectionsData: Dispatch<SetStateAction<CollectionFace[] | undefined>>;
+    // setCollectionsData: Dispatch<SetStateAction<CollectionFace[] | undefined>>;
     // children: React.ReactNode;
-}> = ({ collectionInfo, setCollectionsData }) => {
-    const { isLoading, isError, ticketsData, setTicketsData } = useTickets(
+}> = ({ collectionInfo }) => {
+    const { isLoading, isError, ticketsData } = useTickets(
         collectionInfo.collectionID
     );
 
@@ -72,8 +72,6 @@ export const TicketList: React.FC<{
     const inputRowClass = twMerge(classNames(`flex gap-2 `));
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log(e);
-
         setNewTickInfo((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
@@ -83,7 +81,7 @@ export const TicketList: React.FC<{
     return (
         <>
             <Draggable
-                draggableId={`collection-${collectionInfo.id}`}
+                draggableId={collectionInfo.collectionID}
                 index={collectionInfo.id}
             >
                 {({ innerRef, draggableProps, dragHandleProps }) => (
@@ -92,7 +90,7 @@ export const TicketList: React.FC<{
                         {...draggableProps}
                         {...dragHandleProps}
                     >
-                        <Droppable droppableId={collectionInfo.id.toString()}>
+                        <Droppable droppableId={collectionInfo.collectionID}>
                             {({ innerRef, droppableProps, placeholder }) => (
                                 <div
                                     className={ticketListClass}
@@ -100,7 +98,8 @@ export const TicketList: React.FC<{
                                     {...droppableProps}
                                     {...dragHandleProps}
                                 >
-                                    <h3>{collectionInfo.name}</h3>
+                                    <h3>{collectionInfo.collectionID}</h3>
+                                    {/* <h3>{collectionInfo.name}</h3> */}
 
                                     <div className={ticketsClass}>
                                         {isLoading && <div>is loading</div>}
@@ -113,9 +112,6 @@ export const TicketList: React.FC<{
                                                 <Ticket
                                                     key={`ticket-${index}`}
                                                     ticketInfo={ticket}
-                                                    collectionId={
-                                                        collectionInfo.id
-                                                    }
                                                     index={index}
                                                 />
                                             )

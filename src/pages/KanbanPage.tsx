@@ -24,8 +24,7 @@ import { CollectionFace } from "@/interface";
 
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
-    const { isLoading, isError, collectionsData, setCollectionsData } =
-        useCollections(domain);
+    const { isLoading, collectionsData, setCollectionsData } = useCollections();
 
     const [dialogActive, setDialogActive] = useState(false);
     const [collectionName, setCollectionName] = useState("");
@@ -33,48 +32,45 @@ export const KanbanPage: React.FC = () => {
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
 
+        console.log(source, destination, result);
+
         if (!destination) return;
 
         const isDroppingCollection = destination.droppableId === "collections";
-        // const isInSameCollection =
-        //     destination.droppableId == source.droppableId;
+        const isInSameCollection =
+            destination.droppableId == source.droppableId;
 
         if (isDroppingCollection) {
             setCollectionsData((prev: CollectionFace[]) =>
                 rearange(prev, source.index, destination.index)
             );
+        } else if (isInSameCollection) {
+            // setCollectionsData((prev: CollectionFace[]) => {
+            //     const collectionsCopy = prev !== undefined ? [...prev] : [];
+            //     const [collectionInfoCopy] = collectionsCopy.filter(
+            //         (collection) =>
+            //             collection.id === parseInt(destination.droppableId)
+            //     );
+            //     const edited = {
+            //         ...collectionInfoCopy,
+            //         tickets: rearange(
+            //             collectionInfoCopy.tickets,
+            //             source.index,
+            //             destination.index
+            //         ),
+            //     };
+            //     collectionsCopy.splice(
+            //         getCollectionIndex(
+            //             collectionsCopy,
+            //             destination.droppableId
+            //         ),
+            //         1,
+            //         edited
+            //     );
+            //     return collectionsCopy;
+            // });
         }
-
-        // else if (isInSameCollection) {
-        //     setCollectionsData((prev) => {
-        //         const collectionsCopy = prev !== undefined ? [...prev] : [];
-
-        //         const [collectionInfoCopy] = collectionsCopy.filter(
-        //             (collection) =>
-        //                 collection.id === parseInt(destination.droppableId)
-        //         );
-
-        //         const edited = {
-        //             ...collectionInfoCopy,
-        //             tickets: rearange(
-        //                 collectionInfoCopy.tickets,
-        //                 source.index,
-        //                 destination.index
-        //             ),
-        //         };
-
-        //         collectionsCopy.splice(
-        //             getCollectionIndex(
-        //                 collectionsCopy,
-        //                 destination.droppableId
-        //             ),
-        //             1,
-        //             edited
-        //         );
-
-        //         return collectionsCopy;
-        //     });
-        // } else {
+        // else {
         //     setCollectionsData((prev) => {
         //         const collectionCopy = prev !== undefined ? [...prev] : [];
 
@@ -139,7 +135,6 @@ export const KanbanPage: React.FC = () => {
     return (
         <>
             {isLoading && <div>is loading</div>}
-            {isError && <div>is error</div>}
 
             {collectionsData !== undefined && (
                 <div>

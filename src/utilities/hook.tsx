@@ -1,5 +1,11 @@
 // dependency
-import { collection, getDocs } from "firebase/firestore";
+import {
+    collection,
+    getDocs,
+    onSnapshot,
+    query,
+    where,
+} from "firebase/firestore";
 
 // utilities
 import { db } from "@/utilities/firebase";
@@ -8,43 +14,36 @@ import { useEffect, useState } from "react";
 // interface
 import { CollectionFace, TicketFace } from "@/interface";
 
-export const useCollections = (domain: string | undefined) => {
+export const useCollections = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [collectionsData, setCollectionsData] = useState<
         unknown | CollectionFace[]
     >();
-    const [isError, setIsError] = useState(false);
 
     useEffect(() => {
-        (async () => {
-            try {
-                setIsLoading(true);
+        const collectionsRef = collection(db, "collections");
 
-                const collectionsRef = collection(db, "collections");
-                // with certain collection want to find
-                // const q = query(
-                //     collectionsRef,
-                //     where("domain", "==", domain?.toLowerCase())
-                // );
+        // const q = query(
+        //     collectionsRef,
+        //     where("domain", "==", domain?.toLowerCase())
+        // );
 
-                const querySnapshot = await getDocs(collectionsRef);
+        const unsubscribe = onSnapshot(collectionsRef, (collection) => {
+            setIsLoading(true);
 
-                setCollectionsData(() =>
-                    querySnapshot.docs.map((doc) => ({
-                        collectionID: doc.id,
-                        ...doc.data(),
-                    }))
-                );
-                setIsLoading(false);
-            } catch (error) {
-                setIsError(true);
-                setIsLoading(false);
-                console.log(error);
-            }
-        })();
-    }, [domain]);
+            setCollectionsData(() =>
+                collection.docs.map((doc) => ({
+                    collectionID: doc.id,
+                    ...doc.data(),
+                }))
+            );
+            setIsLoading(false);
+        });
 
-    return { isLoading, isError, collectionsData, setCollectionsData };
+        return () => unsubscribe();
+    }, []);
+
+    return { isLoading, collectionsData, setCollectionsData };
 };
 
 export const useTickets = (id: string) => {
@@ -62,7 +61,10 @@ export const useTickets = (id: string) => {
                 const querySnapshot = await getDocs(ticketsRef);
 
                 setTicketsData(() =>
-                    querySnapshot.docs.map((doc) => doc.data())
+                    querySnapshot.docs.map((doc) => ({
+                        ticketID: doc.id,
+                        ...doc.data(),
+                    }))
                 );
                 setIsLoading(false);
             } catch (error) {
