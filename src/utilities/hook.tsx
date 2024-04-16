@@ -46,31 +46,31 @@ export const useCollections = () => {
 export const useTickets = (id: string) => {
     const [isLoading, setIsLoading] = useState(false);
     const [ticketsData, setTicketsData] = useState<unknown | TicketFace[]>();
-    const [isError, setIsError] = useState(false);
+    // const [isError, setIsError] = useState(false);
 
     useEffect(() => {
-        (async () => {
-            try {
-                setIsLoading(true);
+        const ticketsRef = collection(db, `collections/${id}/tickets`);
 
-                const ticketsRef = collection(db, `collections/${id}/tickets`);
+        // const q = query(
+        //     collectionsRef,
+        //     where("domain", "==", domain?.toLowerCase())
+        // );
 
-                const querySnapshot = await getDocs(ticketsRef);
+        const unsubscribe = onSnapshot(ticketsRef, (tickets) => {
+            setIsLoading(true);
 
-                setTicketsData(() =>
-                    querySnapshot.docs.map((doc) => ({
-                        ticketID: doc.id,
-                        ...doc.data(),
-                    }))
-                );
-                setIsLoading(false);
-            } catch (error) {
-                setIsError(true);
-                setIsLoading(false);
-                console.log(error);
-            }
-        })();
+            const ticketsCopy = tickets.docs.map((doc) => ({
+                ...(doc.data() as TicketFace),
+                ticketID: doc.id,
+            }));
+
+            setTicketsData(() => ticketsCopy.sort((a, b) => a.order - b.order));
+
+            setIsLoading(false);
+        });
+
+        return () => unsubscribe();
     }, [id]);
 
-    return { isLoading, isError, ticketsData, setTicketsData };
+    return { isLoading, ticketsData, setTicketsData };
 };

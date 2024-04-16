@@ -9,7 +9,6 @@ import {
 
 // utilities
 import { db } from "@/utilities/firebase";
-// import { useEffect, useState } from "react";
 
 // interface
 import { CollectionFace, TicketFace } from "@/interface";
@@ -69,15 +68,46 @@ export const orderCollection = async (
     });
 };
 
-// export const getCollectionIndex: (
-//     collections: CollectionFace[],
-//     id: string
-// ) => number = (collections, id) => {
-//     let collectionIndex = -1;
+export const orderTicket = async (
+    sourceIndex: number,
+    destIndex: number,
+    droppableID: string | undefined
+) => {
+    const collectionsRef = collection(db, `collections/${droppableID}/tickets`);
+    const destQuery = query(collectionsRef, where("order", "==", destIndex));
+    const sourceQuery = query(
+        collectionsRef,
+        where("order", "==", sourceIndex)
+    );
 
-//     collections.forEach((collection, index) => {
-//         if (collection.id === parseInt(id)) collectionIndex = index;
-//     });
+    const destQuerySnapshot = await getDocs(destQuery);
+    const sourceQuerySnapshot = await getDocs(sourceQuery);
 
-//     return collectionIndex;
-// };
+    destQuerySnapshot.forEach((doc) => {
+        const docRef = doc.ref;
+
+        updateDoc(docRef, {
+            order: sourceIndex,
+        })
+            .then(() => {
+                console.log("Document successfully updated!");
+            })
+            .catch((error) => {
+                console.error("Error updating document: ", error);
+            });
+    });
+
+    sourceQuerySnapshot.forEach((doc) => {
+        const docRef = doc.ref;
+
+        updateDoc(docRef, {
+            order: destIndex,
+        })
+            .then(() => {
+                console.log("Document successfully updated!");
+            })
+            .catch((error) => {
+                console.error("Error updating document: ", error);
+            });
+    });
+};

@@ -18,7 +18,7 @@ import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 
 // utilities
-import { orderCollection } from "@/utilities";
+import { orderCollection, orderTicket } from "@/utilities";
 import { db } from "@/utilities/firebase";
 import { useCollections } from "@/utilities/hook";
 
@@ -45,11 +45,12 @@ export const KanbanPage: React.FC = () => {
 
         if (isDroppingCollection) {
             orderCollection(source.index, destination.index);
-
-            // setCollectionsData((prev: CollectionFace[]) =>
-            //     rearange(prev, source.index, destination.index)
-            // );
         } else if (isInSameCollection) {
+            orderTicket(
+                source.index,
+                destination.index,
+                result.destination?.droppableId
+            );
             // setCollectionsData((prev: CollectionFace[]) => {
             //     const collectionsCopy = prev !== undefined ? [...prev] : [];
             //     const [collectionInfoCopy] = collectionsCopy.filter(
@@ -102,29 +103,6 @@ export const KanbanPage: React.FC = () => {
             product: "SprintRoll",
             name: collectionName,
         });
-
-        // const collectionsDataCopy = [...collectionsData];
-
-        // collectionsDataCopy.push({
-        //     id: collectionsData?.length,
-        //     name: collectionName,
-        //     tickets: [],
-        // });
-
-        // postCollection(domain, collectionsDataCopy);
-
-        // setCollectionsData((prev: CollectionFace[]) =>
-        //     prev !== undefined
-        //         ? [
-        //               ...prev,
-        //               {
-        //                   id: prev?.length,
-        //                   name: collectionName,
-        //                   tickets: [],
-        //               },
-        //           ]
-        //         : []
-        // );
 
         handleDialogToggle();
         setCollectionName("");
