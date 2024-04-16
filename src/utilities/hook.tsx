@@ -1,5 +1,5 @@
 // dependency
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 
 // utilities
 import { db } from "@/utilities/firebase";
@@ -10,9 +10,7 @@ import { CollectionFace, TicketFace } from "@/interface";
 
 export const useCollections = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [collectionsData, setCollectionsData] = useState<
-        unknown | CollectionFace[]
-    >();
+    const [collectionsData, setCollectionsData] = useState<CollectionFace[]>();
 
     useEffect(() => {
         const collectionsRef = collection(db, "collections");
@@ -40,12 +38,12 @@ export const useCollections = () => {
         return () => unsubscribe();
     }, []);
 
-    return { isLoading, collectionsData, setCollectionsData };
+    return { isLoading, collectionsData };
 };
 
 export const useTickets = (id: string) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [ticketsData, setTicketsData] = useState<unknown | TicketFace[]>();
+    const [ticketsData, setTicketsData] = useState<TicketFace[]>();
     // const [isError, setIsError] = useState(false);
 
     useEffect(() => {

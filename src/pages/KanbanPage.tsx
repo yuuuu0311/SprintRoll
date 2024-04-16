@@ -27,7 +27,7 @@ import { CollectionFace } from "@/interface";
 
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
-    const { isLoading, collectionsData, setCollectionsData } = useCollections();
+    const { isLoading, collectionsData } = useCollections();
 
     const [dialogActive, setDialogActive] = useState(false);
     const [collectionName, setCollectionName] = useState("");
@@ -51,30 +51,6 @@ export const KanbanPage: React.FC = () => {
                 destination.index,
                 result.destination?.droppableId
             );
-            // setCollectionsData((prev: CollectionFace[]) => {
-            //     const collectionsCopy = prev !== undefined ? [...prev] : [];
-            //     const [collectionInfoCopy] = collectionsCopy.filter(
-            //         (collection) =>
-            //             collection.id === parseInt(destination.droppableId)
-            //     );
-            //     const edited = {
-            //         ...collectionInfoCopy,
-            //         tickets: rearange(
-            //             collectionInfoCopy.tickets,
-            //             source.index,
-            //             destination.index
-            //         ),
-            //     };
-            //     collectionsCopy.splice(
-            //         getCollectionIndex(
-            //             collectionsCopy,
-            //             destination.droppableId
-            //         ),
-            //         1,
-            //         edited
-            //     );
-            //     return collectionsCopy;
-            // });
         }
         // else {
         //     setCollectionsData((prev) => {
@@ -95,6 +71,7 @@ export const KanbanPage: React.FC = () => {
 
     const handleAddCollection: () => void = async () => {
         if (collectionName === "") return;
+        if (collectionsData === undefined) return;
 
         const collectionsRef = collection(db, "collections");
         await addDoc(collectionsRef, {

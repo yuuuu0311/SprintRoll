@@ -19,12 +19,8 @@ import { useTickets } from "@/utilities/hook";
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
     index: number;
-    // setCollectionsData: Dispatch<SetStateAction<CollectionFace[] | undefined>>;
-    // children: React.ReactNode;
 }> = ({ collectionInfo }) => {
-    const { isLoading, isError, ticketsData } = useTickets(
-        collectionInfo.collectionID
-    );
+    const { isLoading, ticketsData } = useTickets(collectionInfo.collectionID);
 
     const [dialogActive, setDialogActive] = useState(false);
     const [newTickInfo, setNewTickInfo] = useState(() => ({
@@ -103,7 +99,6 @@ export const TicketList: React.FC<{
 
                                     <div className={ticketsClass}>
                                         {isLoading && <div>is loading</div>}
-                                        {isError && <div>error !!</div>}
                                         {(ticketsData as CollectionFace[])?.map(
                                             (
                                                 ticket: TicketFace,
