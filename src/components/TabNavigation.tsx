@@ -30,7 +30,7 @@ export const TabNavigation = () => {
         <div className={wrapperClass}>
             <div className={navigationLabelClass}>
                 {NavigationLabelArray.map((label) => (
-                    <Link key={label} to={`/${label}`}>
+                    <Link key={label} to={`/${label.toLowerCase()}`}>
                         {label}
                     </Link>
                 ))}

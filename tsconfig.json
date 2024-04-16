@@ -16,7 +16,9 @@
             "markData/": ["./src/markData"],
             "markData/*": ["./src/markData/*"],
             "interface/": ["./src/interface"],
-            "interface/*": ["./src/interface/*"]
+            "interface/*": ["./src/interface/*"],
+            "pages/": ["./src/pages"],
+            "pages/*": ["./src/pages/*"]
         },
 
         /* Bundler mode */

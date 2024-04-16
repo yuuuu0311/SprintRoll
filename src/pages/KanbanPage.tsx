@@ -35,7 +35,7 @@ export const KanbanPage: React.FC = () => {
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
 
-        // console.log(source, destination, result);
+        console.log(source, destination, result);
 
         if (!destination) return;
 

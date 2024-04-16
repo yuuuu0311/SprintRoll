@@ -3,7 +3,8 @@ import App from "./App.tsx";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { KanbanPage } from "./pages/KanbanPage.tsx";
+import { DashBoardPage } from "@/pages/DashBoardPage";
+import { KanbanPage } from "@/pages/KanbanPage";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     // <React.StrictMode>
@@ -12,6 +13,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Routes>
             <Route path="/" element={<App />}>
                 <Route index element={<KanbanPage />} />
+                <Route path="/all" element={<DashBoardPage />} />
                 <Route path="/:domain" element={<KanbanPage />} />
             </Route>
         </Routes>
