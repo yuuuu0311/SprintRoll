@@ -144,3 +144,7 @@ export const toAnotherCollection = async (
         destSnap.data()
     );
 };
+
+export const deleteTicket = async (collectionID: sting, ticketID: string) => {
+    await deleteDoc(doc(db, `collections/${collectionID}/tickets`, ticketID));
+};

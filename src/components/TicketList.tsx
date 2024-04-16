@@ -102,6 +102,9 @@ export const TicketList: React.FC<{
                                                 <Ticket
                                                     key={ticket.ticketID}
                                                     ticketInfo={ticket}
+                                                    isInCollection={
+                                                        collectionInfo.collectionID
+                                                    }
                                                 />
                                             )
                                         )}
