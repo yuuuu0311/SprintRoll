@@ -14,7 +14,7 @@ interface ButtonProps {
 
 export const Button: React.FC<ButtonProps> = ({ ...props }) => {
     const buttonClass = twMerge(
-        classNames(`p-3 transition ${props.addonStyle}`, {
+        classNames(`px-4 py-2 transition bg-blue-400 ${props.addonStyle}`, {
             "rounded-md": props.rounded,
             "bg-blue-700 text-white": props.primary && !props.link,
             "hover:bg-gray-100": props.link,

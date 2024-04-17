@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
@@ -13,6 +13,7 @@ import { CollectionFace, TicketFace } from "@/interface";
 import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 import { Ticket } from "@/components/Ticket";
+import { InputRow } from "@/components/InputRow";
 
 // hook and utilities
 import { useTickets } from "@/utilities/hook";
@@ -25,13 +26,13 @@ export const TicketList: React.FC<{
 
     const [dialogActive, setDialogActive] = useState(false);
     const [newTickInfo, setNewTickInfo] = useState(() => ({
-        name: "",
+        title: "",
         description: "",
         assignedDeveloper: [],
     }));
 
     const handleAddTicket: () => void = async () => {
-        if (newTickInfo.name === "") return;
+        if (newTickInfo.title === "") return;
         if (ticketsData === undefined) return;
 
         const ticketsRef = collection(
@@ -45,7 +46,7 @@ export const TicketList: React.FC<{
 
         handleDialogToggle();
         setNewTickInfo(() => ({
-            name: "",
+            title: "",
             description: "",
             assignedDeveloper: [],
         }));
@@ -57,20 +58,26 @@ export const TicketList: React.FC<{
 
     // style
     const ticketListClass = twMerge(
-        classNames("flex flex-col bg-blue-300 p-4")
+        classNames("flex flex-col bg-blue-300 p-4 rounded-lg")
     );
-    const ticketsClass = twMerge(classNames("w-48 flex flex-col gap-2"));
+    const ticketsClass = twMerge(classNames("w-48 flex flex-col gap-2 my-2"));
     const btnClass = twMerge(
         classNames("bg-blue-400 mt-2 p-2 active:bg-blue-500 transition")
     );
-    const inputRowClass = twMerge(classNames(`flex gap-2 `));
+    const contentClass = twMerge(classNames("flex-1 flex flex-col gap-2"));
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log("change");
+
         setNewTickInfo((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
         }));
     };
+
+    useEffect(() => {
+        console.log(newTickInfo);
+    }, [newTickInfo]);
 
     return (
         <>
@@ -92,8 +99,10 @@ export const TicketList: React.FC<{
                                     {...droppableProps}
                                     {...dragHandleProps}
                                 >
-                                    <h3>{collectionInfo.collectionID}</h3>
-                                    {/* <h3>{collectionInfo.name}</h3> */}
+                                    {/* <h3>{collectionInfo.collectionID}</h3> */}
+                                    <h3 className="text-lg">
+                                        {collectionInfo.name}
+                                    </h3>
 
                                     <div className={ticketsClass}>
                                         {isLoading && <div>is loading</div>}
@@ -117,6 +126,7 @@ export const TicketList: React.FC<{
                                     </div>
 
                                     <Button
+                                        rounded
                                         onClickFun={handleDialogToggle}
                                         addonStyle={btnClass}
                                     >
@@ -134,41 +144,26 @@ export const TicketList: React.FC<{
                     handleDialogToggle={handleDialogToggle}
                     title="add Ticket"
                 >
-                    <div>
-                        <div className={inputRowClass}>
-                            <label htmlFor="name">title</label>
-                            <input
-                                type="text"
-                                name="name"
-                                id="name"
-                                placeholder="title goes here"
-                                value={newTickInfo.name}
-                                onChange={(e) => handleChange(e)}
-                            />
-                        </div>
-                        <div className={inputRowClass}>
-                            <label htmlFor="description">description</label>
-                            <input
-                                type="text"
-                                name="description"
-                                id="description"
-                                placeholder="description"
-                                value={newTickInfo.description}
-                                onChange={(e) => handleChange(e)}
-                            />
-                        </div>
+                    <div className={contentClass}>
+                        <InputRow
+                            label="title"
+                            value={newTickInfo.title}
+                            placeholder="title goes here"
+                            changeHandler={(e) => handleChange(e)}
+                        />
+                        <InputRow
+                            label="description"
+                            value={newTickInfo.description}
+                            placeholder="description"
+                            changeHandler={(e) => handleChange(e)}
+                        />
                     </div>
-                    <div>
-                        <Button link rounded onClickFun={handleDialogToggle}>
-                            close
+                    <div className="flex justify-end gap-2">
+                        <Button rounded onClickFun={handleDialogToggle}>
+                            Close
                         </Button>
-                        <Button
-                            link
-                            primary
-                            rounded
-                            onClickFun={handleAddTicket}
-                        >
-                            add
+                        <Button primary rounded onClickFun={handleAddTicket}>
+                            Add
                         </Button>
                     </div>
                 </Dialog>

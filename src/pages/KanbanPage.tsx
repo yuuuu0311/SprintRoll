@@ -83,7 +83,7 @@ export const KanbanPage: React.FC = () => {
 
     // style
     const wrapperClass = classNames(
-        twMerge("flex gap-3 p-12 overflow-auto")
+        twMerge("inline-flex gap-3 p-12 items-start")
 
         //
     );
@@ -100,6 +100,7 @@ export const KanbanPage: React.FC = () => {
                             <Droppable
                                 droppableId="collections"
                                 type="droppableItem"
+                                direction="horizontal"
                             >
                                 {({ innerRef, placeholder }) => (
                                     <div
@@ -114,17 +115,15 @@ export const KanbanPage: React.FC = () => {
                                                 key={collection.collectionID}
                                             />
                                         ))}
-                                        <button
-                                            type="button"
-                                            onClick={handleDialogToggle}
-                                        >
-                                            + add category
-                                        </button>
+
                                         {placeholder}
                                     </div>
                                 )}
                             </Droppable>
                         </DragDropContext>
+                        <Button rounded onClickFun={handleDialogToggle}>
+                            + add category
+                        </Button>
                     </div>
                 </div>
             )}
