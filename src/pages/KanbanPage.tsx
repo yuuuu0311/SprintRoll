@@ -83,11 +83,7 @@ export const KanbanPage: React.FC = () => {
     };
 
     // style
-    const wrapperClass = classNames(
-        twMerge("inline-flex gap-4")
-
-        //
-    );
+    const wrapperClass = classNames(twMerge("inline-flex gap-4"));
 
     return (
         <Layout>

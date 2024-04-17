@@ -18,12 +18,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     // <React.StrictMode>
 
     <BrowserRouter>
-        {/* <Switch>
-            <Route path="/login" element={<LoginPage />} />
-            <PrivateRoute path="/dashboard" component={Dashboard} />
-            <Redirect from="/" to="/login" />
-        </Switch> */}
-
         <Routes>
             <Route path="/" element={<App />}>
                 <Route index path="/" element={<LoginPage />} />

@@ -53,8 +53,9 @@ export const Ticket: React.FC<{
                     handleDialogToggle={handleDialogToggle}
                     title={ticketInfo.title as string}
                 >
-                    <div className="">
-                        <div>{ticketInfo.description}</div>
+                    <div className="mb-4">
+                        <div>collectionID : {isInCollection}</div>
+                        <div>ticketID : {ticketInfo.ticketID}</div>
                     </div>
                     <Button
                         rounded
@@ -68,23 +69,6 @@ export const Ticket: React.FC<{
                     >
                         delete
                     </Button>
-                    {/* <div className="flex justify-end gap-2">
-                        <Button rounded onClickFun={handleDialogToggle}>
-                            No
-                        </Button>
-                        <Button
-                            primary
-                            rounded
-                            onClickFun={() => {
-                                deleteTicket(
-                                    isInCollection as string,
-                                    ticketInfo.ticketID as string
-                                );
-                            }}
-                        >
-                            Yes
-                        </Button>
-                    </div> */}
                 </Dialog>
             )}
         </>

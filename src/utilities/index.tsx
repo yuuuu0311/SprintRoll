@@ -152,5 +152,7 @@ export const toAnotherCollection = async (
 };
 
 export const deleteTicket = async (collectionID: string, ticketID: string) => {
+    console.log("delete");
+
     await deleteDoc(doc(db, `collections/${collectionID}/tickets`, ticketID));
 };
