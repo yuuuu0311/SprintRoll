@@ -19,7 +19,12 @@ import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 
 // utilities
-import { orderCollection, orderTicket, toAnotherCollection } from "@/utilities";
+import {
+    orderCollection,
+    orderTicket,
+    toAnotherCollection,
+    rearange,
+} from "@/utilities";
 import { db } from "@/utilities/firebase";
 import { useCollections } from "@/utilities/hook";
 
@@ -28,7 +33,9 @@ import { CollectionFace } from "@/interface";
 
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
-    const { isLoading, collectionsData } = useCollections(domain as string);
+    const { isLoading, collectionsData, setCollectionsData } = useCollections(
+        domain as string
+    );
 
     const [dialogActive, setDialogActive] = useState(false);
     const [collectionName, setCollectionName] = useState("");
@@ -42,9 +49,25 @@ export const KanbanPage: React.FC = () => {
 
         switch (destination.droppableId) {
             case "collections":
+                setCollectionsData(
+                    () =>
+                        rearange(
+                            collectionsData as CollectionFace[],
+                            source.index,
+                            destination.index
+                        ) as CollectionFace[]
+                );
                 orderCollection(source.index, destination.index);
                 break;
             case source.droppableId:
+                // setTicketsData(
+                //     (prev) =>
+                //         rearange(
+                //             prev as TicketFace[],
+                //             source.index,
+                //             destination.index
+                //         ) as CollectionFace[]
+                // );
                 orderTicket(
                     source.index,
                     destination.index,

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
@@ -21,6 +21,7 @@ import { db } from "@/utilities/firebase";
 
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
+    children?: React.ReactNode;
 }> = ({ collectionInfo }) => {
     const { isLoading, ticketsData } = useTickets(collectionInfo.collectionID);
 
@@ -75,10 +76,6 @@ export const TicketList: React.FC<{
         }));
     };
 
-    useEffect(() => {
-        console.log(newTickInfo);
-    }, [newTickInfo]);
-
     return (
         <>
             <Draggable
@@ -108,13 +105,13 @@ export const TicketList: React.FC<{
                                         {isLoading && <div>is loading</div>}
                                         {(ticketsData as CollectionFace[])?.map(
                                             (
-                                                ticket: TicketFace,
-                                                index: number
+                                                ticket: TicketFace
+                                                // index: number
                                             ) => (
                                                 <Ticket
                                                     key={ticket.ticketID}
                                                     ticketInfo={ticket}
-                                                    index={index}
+                                                    index={ticket.order}
                                                     isInCollection={
                                                         collectionInfo.collectionID
                                                     }

@@ -44,10 +44,10 @@ export const useCollections = (domain: string) => {
         return () => unsubscribe();
     }, [domain]);
 
-    return { isLoading, collectionsData };
+    return { isLoading, collectionsData, setCollectionsData };
 };
 
-export const useTickets = (id: string) => {
+export const useTickets = (id?: string) => {
     const [isLoading, setIsLoading] = useState(false);
     const [ticketsData, setTicketsData] = useState<TicketFace[]>();
 
@@ -75,7 +75,7 @@ export const useTickets = (id: string) => {
 
 export const useAllTickets = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [allTickets, setAllTickets] = useState<TicketFace[]>([]);
+    const [allTickets, setAllTickets] = useState<TicketFace[]>();
 
     useEffect(() => {
         const collectionsRef = collection(db, "collections");
@@ -83,6 +83,7 @@ export const useAllTickets = () => {
             collection(db, `collections/${id}/tickets`);
 
         const unsubscribe = onSnapshot(collectionsRef, (collection) => {
+            setIsLoading(true);
             collection.forEach(async (doc) => {
                 const ticketsRef = getTicketsRef(doc.id);
 
@@ -96,7 +97,11 @@ export const useAllTickets = () => {
                     isInCollection: doc.id,
                 }));
 
-                setAllTickets((prev) => [...prev, ...ticketsCopy]);
+                setAllTickets((prev) => [
+                    ...(prev as TicketFace[]),
+                    ...ticketsCopy,
+                ]);
+                setIsLoading(false);
             });
         });
 
