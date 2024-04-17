@@ -132,8 +132,14 @@ export const toAnotherCollection = async (
     // [x] add to new collection
     // [ ] how to order.....
 
-    const destRef = doc(db, `collections/${destination.droppableId}/`);
-    const destSnap = await getDoc(destRef);
+    const sourceRef = collection(
+        db,
+        `collections/${source.droppableId}/tickets/`
+    );
+    const sourceSnap = await getDocs(sourceRef);
+    const [sourceTarget] = sourceSnap.docs.filter(
+        (doc) => doc.id === draggableId
+    );
 
     await deleteDoc(
         doc(db, `collections/${source.droppableId}/tickets`, draggableId)
@@ -141,7 +147,7 @@ export const toAnotherCollection = async (
 
     await setDoc(
         doc(db, `collections/${destination.droppableId}/tickets`, draggableId),
-        destSnap.data()
+        sourceTarget.data()
     );
 };
 
