@@ -7,6 +7,7 @@ import classNames from "classnames";
 import { collection, onSnapshot, getDocs } from "firebase/firestore";
 
 // components
+import { Layout } from "@/components/Layout";
 import { Ticket } from "@/components/Ticket";
 
 // utilities
@@ -54,26 +55,24 @@ export const DashBoardPage: React.FC = () => {
     }, [allTickets]);
 
     return (
-        <div>
-            <div>
-                <DragDropContext onDragEnd={() => console.log("drag end")}>
-                    <Droppable droppableId="collections" type="droppableItem">
-                        {({ innerRef, placeholder }) => (
-                            <div className={wrapperClass} ref={innerRef}>
-                                {allTickets?.map((ticket, index) => (
-                                    <Ticket
-                                        key={ticket.ticketID}
-                                        ticketInfo={ticket}
-                                        index={index}
-                                        isInCollection={ticket.isInCollection}
-                                    />
-                                ))}
-                                {placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-            </div>
-        </div>
+        <Layout>
+            <DragDropContext onDragEnd={() => console.log("drag end")}>
+                <Droppable droppableId="collections" type="droppableItem">
+                    {({ innerRef, placeholder }) => (
+                        <div className={wrapperClass} ref={innerRef}>
+                            {allTickets?.map((ticket, index) => (
+                                <Ticket
+                                    key={ticket.ticketID}
+                                    ticketInfo={ticket}
+                                    index={index}
+                                    isInCollection={ticket.isInCollection}
+                                />
+                            ))}
+                            {placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
+        </Layout>
     );
 };

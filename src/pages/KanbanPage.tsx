@@ -13,6 +13,7 @@ import classNames from "classnames";
 import { addDoc, collection } from "firebase/firestore";
 
 // components
+import { Layout } from "@/components/Layout.tsx";
 import { TicketList } from "@/components/TicketList";
 import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
@@ -89,7 +90,7 @@ export const KanbanPage: React.FC = () => {
     );
 
     return (
-        <>
+        <Layout>
             {isLoading && <div>is loading</div>}
 
             {collectionsData !== undefined && (
@@ -161,6 +162,6 @@ export const KanbanPage: React.FC = () => {
                     </div>
                 </Dialog>
             )}
-        </>
+        </Layout>
     );
 };

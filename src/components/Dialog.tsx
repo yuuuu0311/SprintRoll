@@ -25,9 +25,7 @@ export const Dialog: React.FC<{
 
     return (
         <div className={wrapperClass}>
-            <div className={backdropClass} onClick={handleDialogToggle}>
-                backdrop
-            </div>
+            <div className={backdropClass} onClick={handleDialogToggle}></div>
             <div className={dialogClass}>
                 <div className={titleClass}>{title}</div>
                 <div className={contentClass}>{children}</div>

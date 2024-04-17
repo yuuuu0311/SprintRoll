@@ -1,12 +1,13 @@
-import { Outlet } from "react-router-dom";
-
-import "./App.css";
-
 // dependency
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
-const App: React.FC = () => {
+// component
+import { TabNavigation } from "@/components/TabNavigation";
+
+export const Layout: React.FC<{ children: React.ReactNode }> = ({
+    children,
+}) => {
     const wrapperClass = classNames(
         twMerge(
             "flex h-screen w-screen bg-gray-500"
@@ -18,11 +19,8 @@ const App: React.FC = () => {
 
     return (
         <div className={wrapperClass}>
-            <main className={contentClass}>
-                <Outlet />
-            </main>
+            <TabNavigation />
+            <main className={contentClass}>{children}</main>
         </div>
     );
 };
-
-export default App;

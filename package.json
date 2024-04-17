@@ -14,6 +14,7 @@
     "@firebase/firestore-types": "^3.0.1",
     "classnames": "^2.5.1",
     "firebase": "^10.10.0",
+    "firebaseui": "^6.1.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "react": "^18.2.0",
@@ -22,7 +23,8 @@
     "react-firebase-hooks": "^5.1.1",
     "react-router-dom": "^6.22.3",
     "sort-by": "^1.2.0",
-    "tailwind-merge": "^2.2.2"
+    "tailwind-merge": "^2.2.2",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
