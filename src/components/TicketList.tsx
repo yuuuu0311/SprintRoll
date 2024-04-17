@@ -98,10 +98,14 @@ export const TicketList: React.FC<{
                                     <div className={ticketsClass}>
                                         {isLoading && <div>is loading</div>}
                                         {(ticketsData as CollectionFace[])?.map(
-                                            (ticket: TicketFace) => (
+                                            (
+                                                ticket: TicketFace,
+                                                index: number
+                                            ) => (
                                                 <Ticket
                                                     key={ticket.ticketID}
                                                     ticketInfo={ticket}
+                                                    index={index}
                                                     isInCollection={
                                                         collectionInfo.collectionID
                                                     }

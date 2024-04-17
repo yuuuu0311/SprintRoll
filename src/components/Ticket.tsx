@@ -14,17 +14,15 @@ import { deleteTicket } from "@/utilities";
 
 export const Ticket: React.FC<{
     ticketInfo: TicketFace;
-    isInCollection: string;
-}> = ({ isInCollection, ticketInfo }) => {
+    index: number;
+    isInCollection?: string;
+}> = ({ isInCollection, index, ticketInfo }) => {
     const ticketsClass = classNames(twMerge("p-2 bg-gray-700"));
 
     return (
         <>
             {ticketInfo.ticketID !== undefined && (
-                <Draggable
-                    index={ticketInfo.order}
-                    draggableId={ticketInfo.ticketID}
-                >
+                <Draggable index={index} draggableId={ticketInfo.ticketID}>
                     {({ innerRef, draggableProps, dragHandleProps }) => (
                         <div
                             ref={innerRef}

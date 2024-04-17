@@ -1,35 +1,27 @@
 import { useEffect, useState } from "react";
 
-// // dependency
+// dependency
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 import { collection, onSnapshot, getDocs } from "firebase/firestore";
 
-// import { addDoc, collection } from "firebase/firestore";
-
-// // components
+// components
 import { Ticket } from "@/components/Ticket";
-// import { Dialog } from "@/components/Dialog";
-// import { Button } from "@/components/Button";
 
-// // utilities
-// import { orderCollection, orderTicket } from "@/utilities";
+// utilities
+
 import { db } from "@/utilities/firebase";
-// import { useCollections } from "@/utilities/hook";
 
 // // interface
-// import { CollectionFace } from "@/interface";
+import { TicketFace } from "@/interface";
 
 export const DashBoardPage: React.FC = () => {
-    // const { isLoading, collectionsData } = useCollections(domain as string);
-
-    const [allTickets, setAllTickets] = useState<[]>([]);
-    // const [collectionName, setCollectionName] = useState("");
+    const [allTickets, setAllTickets] = useState<TicketFace[]>([]);
 
     // style
     const wrapperClass = classNames(
-        twMerge("flex gap-3 p-12 overflow-auto")
+        twMerge("flex flex-col gap-3 p-12 overflow-auto")
 
         //
     );
@@ -44,18 +36,14 @@ export const DashBoardPage: React.FC = () => {
                 const ticketsRef = getTicketsRef(doc.id);
                 const ticketsData = await getDocs(ticketsRef);
 
-                ticketsData.forEach((doc) =>
-                    setAllTickets((prev) => [
-                        ...prev,
-                        { ...doc.data(), ticketID: doc.id },
-                    ])
-                );
+                const ticketsCopy = ticketsData.docs.map((doc) => ({
+                    ...(doc.data() as TicketFace),
+                    ticketID: doc.id,
+                    isInCollection: doc.id,
+                }));
 
-                // ...doc.data(),
-                // collectionID: doc.id,
+                setAllTickets((prev) => [...prev, ...ticketsCopy]);
             });
-
-            // console.log(collectionCopy);
         });
 
         return () => unsubscribe();
@@ -72,8 +60,13 @@ export const DashBoardPage: React.FC = () => {
                     <Droppable droppableId="collections" type="droppableItem">
                         {({ innerRef, placeholder }) => (
                             <div className={wrapperClass} ref={innerRef}>
-                                {allTickets.map((ticket) => (
-                                    <Ticket ticketInfo={ticket} />
+                                {allTickets?.map((ticket, index) => (
+                                    <Ticket
+                                        key={ticket.ticketID}
+                                        ticketInfo={ticket}
+                                        index={index}
+                                        isInCollection={ticket.isInCollection}
+                                    />
                                 ))}
                                 {placeholder}
                             </div>
