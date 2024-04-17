@@ -83,7 +83,7 @@ export const KanbanPage: React.FC = () => {
 
     // style
     const wrapperClass = classNames(
-        twMerge("inline-flex gap-3 p-12 items-start")
+        twMerge("inline-flex gap-4")
 
         //
     );
@@ -93,9 +93,9 @@ export const KanbanPage: React.FC = () => {
             {isLoading && <div>is loading</div>}
 
             {collectionsData !== undefined && (
-                <div>
+                <div className="h-full">
                     {domain}'s KanbanPage
-                    <div>
+                    <div className="flex gap-2 items-start p-12 overflow-x-auto overflow-y-hidden w-full h-full">
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable
                                 droppableId="collections"

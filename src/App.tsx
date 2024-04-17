@@ -16,7 +16,7 @@ const App: React.FC = () => {
         )
     );
 
-    const contentClass = classNames(twMerge("flex-1"));
+    const contentClass = classNames(twMerge("relative flex-1 overflow-hidden"));
 
     return (
         <div className={wrapperClass}>
