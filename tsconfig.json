@@ -18,7 +18,9 @@
             "interface/": ["./src/interface"],
             "interface/*": ["./src/interface/*"],
             "pages/": ["./src/pages"],
-            "pages/*": ["./src/pages/*"]
+            "pages/*": ["./src/pages/*"],
+            "assets/": ["./src/assets"],
+            "assets/*": ["./src/assets/*"]
         },
 
         /* Bundler mode */

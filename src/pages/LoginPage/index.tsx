@@ -1,4 +1,4 @@
-import philJustin from "../assets/phil-justin.png";
+import philJustin from "@/assets/phil-justin.png";
 // import { useHistory } from "react";
 import { useNavigate } from "react-router-dom";
 

@@ -14,6 +14,18 @@ export interface CollectionFace extends TicketFace {
     collectionID: string;
 }
 
+export interface UserFace {
+    domain: string;
+    email: string;
+    name: string;
+    uid: string;
+}
+
+export interface DialogState {
+    isActive: boolean;
+    toggleDialog: (prev: boolean) => void;
+}
+
 // collection: {
 //     ...collectionData
 //     tickets: [

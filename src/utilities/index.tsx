@@ -163,9 +163,12 @@ export const setTicket = async (
 export const deleteTicket = async (
     collectionID: string,
     ticketID: string,
-    index: number
+    index?: number
 ) => {
-    orderSourceInCollection({ droppableId: collectionID, index });
+    orderSourceInCollection({
+        droppableId: collectionID,
+        index: index as number,
+    });
     await deleteDoc(doc(db, `collections/${collectionID}/tickets`, ticketID));
 };
 
@@ -209,4 +212,23 @@ export const orderDestInCollection = async (dest: {
             order: doc.data().order + 1,
         });
     });
+};
+
+export const getDomainDeveloper: (
+    domain: string,
+    name: string
+) => void = async (domain, name) => {
+    const usersRef = collection(db, `users`);
+
+    const usersQuerySnapshot = await getDocs(usersRef);
+
+    const regex = new RegExp(name);
+
+    const developersDocs = usersQuerySnapshot.docs.filter(
+        (doc) => doc.data().domain == domain && regex.test(doc.data().name)
+    );
+
+    console.log(developersDocs.map((doc) => ({ ...doc.data() })));
+
+    return developersDocs.map((doc) => ({ ...doc.data() }));
 };

@@ -1,18 +1,11 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 
-import {
-    BrowserRouter,
-    Navigate,
-    Route,
-    Routes,
-    // Redirect,
-    // Switch,
-} from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import { DashBoardPage } from "@/pages/DashBoardPage";
-import { KanbanPage } from "@/pages/KanbanPage";
-import { LoginPage } from "@/pages/LoginPage";
+import { DashBoardPage } from "@/pages/DashBoardPage/index.tsx";
+import { KanbanPage } from "@/pages/KanbanPage/index.tsx";
+import { LoginPage } from "@/pages/LoginPage/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     // <React.StrictMode>

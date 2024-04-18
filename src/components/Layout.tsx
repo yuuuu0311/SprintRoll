@@ -9,10 +9,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const wrapperClass = classNames(
-        twMerge(
-            "flex h-screen w-screen bg-gray-500"
-            // isDarkMode && "bg-blue-500"
-        )
+        twMerge("flex h-screen w-screen bg-gray-500")
     );
 
     const contentClass = classNames(twMerge("relative flex-1 overflow-hidden"));
