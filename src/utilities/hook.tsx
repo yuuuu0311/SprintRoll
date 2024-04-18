@@ -84,6 +84,8 @@ export const useAllTickets = () => {
 
         const unsubscribe = onSnapshot(collectionsRef, (collection) => {
             setIsLoading(true);
+
+            let allTickets: TicketFace[] = [];
             collection.forEach(async (doc) => {
                 const ticketsRef = getTicketsRef(doc.id);
 
@@ -95,10 +97,9 @@ export const useAllTickets = () => {
                     isInCollection: doc.id,
                 }));
 
-                setAllTickets((prev) => [
-                    ...(prev as TicketFace[]),
-                    ...ticketsCopy,
-                ]);
+                allTickets = [...allTickets, ...ticketsCopy];
+
+                setAllTickets(allTickets);
                 setIsLoading(false);
             });
         });

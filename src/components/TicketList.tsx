@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
+import { useParams } from "react-router-dom";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
@@ -23,6 +24,7 @@ export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
     children?: React.ReactNode;
 }> = ({ collectionInfo }) => {
+    const { domain } = useParams();
     const { isLoading, ticketsData } = useTickets(collectionInfo.collectionID);
 
     const [dialogActive, setDialogActive] = useState(false);
@@ -45,11 +47,13 @@ export const TicketList: React.FC<{
         await addDoc(ticketsRef, {
             ...newTickInfo,
             order: ticketsData.length,
+            domain: domain,
         });
 
         setNewTickInfo(() => ({
             title: "",
             description: "",
+            domain: domain,
             assignedDeveloper: [],
         }));
     };
@@ -69,8 +73,6 @@ export const TicketList: React.FC<{
     const contentClass = twMerge(classNames("flex-1 flex flex-col gap-2"));
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log("change");
-
         setNewTickInfo((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,

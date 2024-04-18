@@ -6,6 +6,7 @@ export interface TicketFace {
     order: number;
     ticketID?: string;
     isInCollection?: string;
+    domain?: string;
     assignedDeveloper?: [];
 }
 

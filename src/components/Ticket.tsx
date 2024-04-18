@@ -105,8 +105,16 @@ export const Ticket: React.FC<{
 
     const [dialogActive, setDialogActive] = useState(false);
 
+    const ticketsDomainClass = twMerge(
+        classNames("p-3", {
+            "bg-lime-500": ticketInfo.domain === "frontend",
+            "bg-red-500": ticketInfo.domain === "backend",
+            "bg-yellow-500": ticketInfo.domain === "data",
+            "bg-blue-500": ticketInfo.domain === "ios",
+        })
+    );
     const ticketsClass = classNames(
-        twMerge("p-2 bg-blue-700 rounded-md hover:bg-blue-500 transition")
+        twMerge("bg-blue-700  hover:bg-blue-500 transition p-2")
     );
 
     const handleDialogToggle = () => {
@@ -134,13 +142,15 @@ export const Ticket: React.FC<{
                     {({ innerRef, draggableProps, dragHandleProps }) => (
                         <div
                             ref={innerRef}
-                            className={ticketsClass}
+                            className="rounded-md overflow-hidden"
                             {...draggableProps}
                             {...dragHandleProps}
                             onClick={handleDialogToggle}
                         >
-                            {/* {ticketInfo.ticketID} */}
-                            {ticketInfo.title} - {ticketInfo.order}
+                            <div className={ticketsDomainClass}></div>
+                            <div className={ticketsClass}>
+                                {ticketInfo.title} - {ticketInfo.order}
+                            </div>
                         </div>
                     )}
                 </Draggable>

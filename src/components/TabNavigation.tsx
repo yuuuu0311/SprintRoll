@@ -55,7 +55,7 @@ export const TabNavigation = () => {
                 ))}
             </div>
             <div
-                className="rounded-full h-14 w-14 flex justify-center items-center bg-blue-500 bottom-5 -right-1/2 absolute z-"
+                className="rounded-full h-14 w-14 flex justify-center items-center hidden bg-blue-500 bottom-5 -right-1/2 absolute z-"
                 onClick={handleToggle}
             >
                 toggle
