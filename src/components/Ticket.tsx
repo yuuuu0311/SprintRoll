@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -40,14 +40,11 @@ const Developer: React.FC<{
     isInCollection: string;
     ticketInfo: TicketFace;
 }> = ({ developerInfo, isInCollection, ticketInfo }) => {
-    console.log(ticketInfo);
     const assignedDeveloperArr = [
-        ...(ticketInfo.assignedDeveloper as TicketFace[]),
+        ...(ticketInfo.assignedDeveloper as string[]),
     ];
     const isInAssigned =
         assignedDeveloperArr.indexOf(developerInfo.name) !== -1;
-
-    console.log(isInAssigned);
 
     const btnClass = twMerge(
         classNames("text-sm py-1 px-3", {
