@@ -9,6 +9,7 @@ import {
     setDoc,
     updateDoc,
     deleteDoc,
+    runTransaction,
 } from "firebase/firestore";
 
 // utilities
@@ -90,6 +91,8 @@ export const orderTicket = async (
     destQuerySnapshot.forEach((doc) => {
         const docRef = doc.ref;
 
+        console.log(docRef);
+
         updateDoc(docRef, {
             order: sourceIndex,
         })
@@ -128,10 +131,6 @@ export const toAnotherCollection = async (
 
     draggableId: string
 ) => {
-    // [x] remove from original
-    // [x] add to new collection
-    // [ ] how to order.....
-
     const sourceRef = collection(
         db,
         `collections/${source.droppableId}/tickets/`
@@ -141,18 +140,69 @@ export const toAnotherCollection = async (
         (doc) => doc.id === draggableId
     );
 
-    await deleteDoc(
-        doc(db, `collections/${source.droppableId}/tickets`, draggableId)
-    );
+    deleteTicket(source.droppableId, draggableId);
+    orderSourceInCollection(source);
 
+    await orderDestInCollection(destination);
+    setTicket(destination.droppableId, draggableId, {
+        ...sourceTarget.data(),
+        order: destination.index,
+    });
+};
+
+export const setTicket = async (
+    collectionID: string,
+    ticketID: string,
+    data: object
+) => {
     await setDoc(
-        doc(db, `collections/${destination.droppableId}/tickets`, draggableId),
-        sourceTarget.data()
+        doc(db, `collections/${collectionID}/tickets`, ticketID),
+        data
     );
 };
 
 export const deleteTicket = async (collectionID: string, ticketID: string) => {
-    console.log("delete");
-
     await deleteDoc(doc(db, `collections/${collectionID}/tickets`, ticketID));
+};
+
+export const orderSourceInCollection = async (source: {
+    droppableId: string;
+    index: number;
+}) => {
+    const { droppableId: collectionID, index } = source;
+    const collectionsRef = collection(
+        db,
+        `collections/${collectionID}/tickets`
+    );
+    const sourceQuery = query(collectionsRef, where("order", ">", index));
+
+    const sourceQuerySnapshot = await getDocs(sourceQuery);
+    sourceQuerySnapshot.forEach((doc) => {
+        const docRef = doc.ref;
+
+        updateDoc(docRef, {
+            order: doc.data().order - 1,
+        });
+    });
+};
+
+export const orderDestInCollection = async (dest: {
+    droppableId: string;
+    index: number;
+}) => {
+    const { droppableId: collectionID, index } = dest;
+    const collectionsRef = collection(
+        db,
+        `collections/${collectionID}/tickets`
+    );
+    const destQuery = query(collectionsRef, where("order", ">=", index));
+
+    const destQuerySnapshot = await getDocs(destQuery);
+    destQuerySnapshot.forEach((doc) => {
+        const docRef = doc.ref;
+
+        updateDoc(docRef, {
+            order: doc.data().order + 1,
+        });
+    });
 };

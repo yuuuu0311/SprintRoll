@@ -43,7 +43,7 @@ export const Ticket: React.FC<{
                             onClick={handleDialogToggle}
                         >
                             {/* {ticketInfo.ticketID} */}
-                            {ticketInfo.title}
+                            {ticketInfo.title} - {ticketInfo.order}
                         </div>
                     )}
                 </Draggable>

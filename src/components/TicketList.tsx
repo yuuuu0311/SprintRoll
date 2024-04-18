@@ -36,6 +36,8 @@ export const TicketList: React.FC<{
         if (newTickInfo.title === "") return;
         if (ticketsData === undefined) return;
 
+        handleDialogToggle();
+
         const ticketsRef = collection(
             db,
             `collections/${collectionInfo.collectionID}/tickets`
@@ -45,7 +47,6 @@ export const TicketList: React.FC<{
             order: ticketsData.length,
         });
 
-        handleDialogToggle();
         setNewTickInfo(() => ({
             title: "",
             description: "",
