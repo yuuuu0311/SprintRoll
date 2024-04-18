@@ -78,7 +78,6 @@ export const KanbanPage: React.FC = () => {
 
             {collectionsData !== undefined && (
                 <div className="h-full">
-                    {domain}'s KanbanPage
                     <div className="flex gap-2 items-start p-12 overflow-x-auto overflow-y-hidden w-full h-full">
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable

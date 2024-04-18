@@ -9,7 +9,7 @@ import classNames from "classnames";
 const App: React.FC = () => {
     const wrapperClass = classNames(
         twMerge(
-            "flex h-screen w-screen bg-gray-500"
+            "flex h-screen w-screen bg-neutral-500"
             // isDarkMode && "bg-blue-500"
         )
     );

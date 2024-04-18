@@ -64,12 +64,15 @@ export const TicketList: React.FC<{
 
     // style
     const ticketListClass = twMerge(
-        classNames("flex flex-col bg-blue-300 p-4 rounded-lg")
+        classNames("flex flex-col gap-2 bg-neutral-200 p-4 rounded-lg w-48")
     );
-    const ticketsClass = twMerge(classNames("w-48 flex flex-col gap-2 my-2"));
+
     const btnClass = twMerge(
-        classNames("bg-blue-400 mt-2 p-2 active:bg-blue-500 transition")
+        classNames(
+            "bg-neutral-500 p-2 active:bg-neutral-600 hover:bg-neutral-400 transition"
+        )
     );
+
     const contentClass = twMerge(classNames("flex-1 flex flex-col gap-2"));
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -99,31 +102,25 @@ export const TicketList: React.FC<{
                                     {...droppableProps}
                                     {...dragHandleProps}
                                 >
-                                    {/* <h3>{collectionInfo.collectionID}</h3> */}
                                     <h3 className="text-lg">
                                         {collectionInfo.name}
                                     </h3>
 
-                                    <div className={ticketsClass}>
-                                        {isLoading && <div>is loading</div>}
-                                        {(ticketsData as CollectionFace[])?.map(
-                                            (
-                                                ticket: TicketFace
-                                                // index: number
-                                            ) => (
-                                                <Ticket
-                                                    key={ticket.ticketID}
-                                                    ticketInfo={ticket}
-                                                    index={ticket.order}
-                                                    isInCollection={
-                                                        collectionInfo.collectionID
-                                                    }
-                                                />
-                                            )
-                                        )}
+                                    {isLoading && <div>is loading</div>}
+                                    {(ticketsData as CollectionFace[])?.map(
+                                        (ticket: TicketFace) => (
+                                            <Ticket
+                                                key={ticket.ticketID}
+                                                ticketInfo={ticket}
+                                                index={ticket.order}
+                                                isInCollection={
+                                                    collectionInfo.collectionID
+                                                }
+                                            />
+                                        )
+                                    )}
 
-                                        {placeholder}
-                                    </div>
+                                    {placeholder}
 
                                     <Button
                                         rounded
@@ -162,7 +159,7 @@ export const TicketList: React.FC<{
                         <Button rounded onClickFun={handleDialogToggle}>
                             Close
                         </Button>
-                        <Button primary rounded onClickFun={handleAddTicket}>
+                        <Button success rounded onClickFun={handleAddTicket}>
                             Add
                         </Button>
                     </div>

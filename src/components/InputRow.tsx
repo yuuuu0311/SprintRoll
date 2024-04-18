@@ -13,12 +13,12 @@ export const InputRow: React.FC<{
     const [isFocus, setIsFocus] = useState(false);
 
     const inputRowClass = twMerge(classNames(`flex flex-col gap-2 `));
-    const labelClass = twMerge(classNames(`text-md text-blue-500 `));
+    const labelClass = twMerge(classNames(`text-md text-neutral-500 `));
     const inputClass = twMerge(
         classNames(
             `text-md px-3 py-2 rounded-md overflow-hidden leading-none outline-none transition `,
             {
-                "bg-blue-300": isFocus,
+                "bg-neutral-300": isFocus,
             }
         )
     );

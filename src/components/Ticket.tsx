@@ -27,7 +27,7 @@ const DialogSection: React.FC<{
 }> = ({ children, sectionTitle }) => {
     return (
         <div>
-            <div className="capitalize text-lg font-bold text-blue-500 mb-1">
+            <div className="capitalize text-lg font-bold text-neutral-500 mb-1">
                 {sectionTitle}
             </div>
             <div>{children}</div>
@@ -53,7 +53,7 @@ const Developer: React.FC<{
     );
 
     return (
-        <div className="rounded-md bg-blue-100 flex gap-2 p-4">
+        <div className="rounded-md bg-neutral-100 flex gap-2 p-4">
             <div className="flex flex-1 flex-col gap-1">
                 <div className="capitalize">{developerInfo.name}</div>
                 <div className="text-gray-500 text-sm normal-case">
@@ -114,7 +114,7 @@ export const Ticket: React.FC<{
         })
     );
     const ticketsClass = classNames(
-        twMerge("bg-blue-700  hover:bg-blue-500 transition p-2")
+        twMerge("bg-neutral-400  hover:bg-neutral-300 transition p-2")
     );
 
     const handleDialogToggle = () => {
@@ -166,11 +166,11 @@ export const Ticket: React.FC<{
 
                         <DialogSection sectionTitle="Description">
                             {ticketInfo.description?.length === 0 ? (
-                                <div className="text-gray-500">
+                                <div className="text-neutral-500">
                                     add some description here
                                 </div>
                             ) : (
-                                <div className="bg-blue-300 rounded p-4">
+                                <div className="bg-neutral-300 rounded p-4">
                                     {ticketInfo.description}
                                 </div>
                             )}
@@ -179,7 +179,7 @@ export const Ticket: React.FC<{
                             <div className="flex flex-col gap-2">
                                 <input
                                     type="text"
-                                    className="w-full py-2 px-4 rounded-md focus:bg-blue-300"
+                                    className="w-full py-2 px-4 rounded-md focus:bg-neutral-300"
                                     onChange={(e) => handelSearchDeveloper(e)}
                                 />
                                 <div className="flex flex-col gap-2">
@@ -207,7 +207,7 @@ export const Ticket: React.FC<{
                     </div>
                     <Button
                         rounded
-                        primary
+                        danger
                         onClickFun={() => {
                             deleteTicket(
                                 isInCollection as string,

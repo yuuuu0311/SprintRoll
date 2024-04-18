@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 // dependency
 import { twMerge } from "tailwind-merge";
@@ -28,14 +28,21 @@ export const TabNavigation = () => {
 
     const wrapperClass = twMerge(
         classNames(
-            "relative flex flex-col p-6 bg-blue-200 w-48 -translate-x-full transition z-50",
+            "relative flex flex-col p-6 bg-stone-200 w-48 -translate-x-full transition z-50",
             {
                 "translate-x-0": isActive,
             }
         )
     );
 
-    const navigationLabelClass = classNames(twMerge("flex flex-col gap-2"));
+    const navLinkClass = (isActive: boolean) =>
+        twMerge(
+            classNames("transition text-neutral-400", {
+                "text-neutral-900": isActive,
+            })
+        );
+
+    const navigationLabelClass = twMerge(classNames("flex flex-col gap-2"));
 
     const handleToggle = () => {
         setIsActive((prev) => (prev ? false : true));
@@ -45,17 +52,17 @@ export const TabNavigation = () => {
         <div className={wrapperClass}>
             <div className={navigationLabelClass}>
                 {NavigationLabelArray.map((label) => (
-                    <Link
+                    <NavLink
                         key={label}
                         to={`/${label.toLowerCase()}`}
-                        className="text-blue-500"
+                        className={({ isActive }) => navLinkClass(isActive)}
                     >
                         {label}
-                    </Link>
+                    </NavLink>
                 ))}
             </div>
             <div
-                className="rounded-full h-14 w-14 flex justify-center items-center hidden bg-blue-500 bottom-5 -right-1/2 absolute z-"
+                className="rounded-full h-14 w-14 justify-center items-center hidden bg-blue-500 bottom-5 -right-1/2 absolute z-"
                 onClick={handleToggle}
             >
                 toggle
