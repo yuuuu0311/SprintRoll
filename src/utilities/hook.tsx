@@ -75,7 +75,7 @@ export const useTickets = (id?: string) => {
 
 export const useAllTickets = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [allTickets, setAllTickets] = useState<TicketFace[]>();
+    const [allTickets, setAllTickets] = useState<TicketFace[]>([]);
 
     useEffect(() => {
         const collectionsRef = collection(db, "collections");
@@ -88,8 +88,6 @@ export const useAllTickets = () => {
                 const ticketsRef = getTicketsRef(doc.id);
 
                 const ticketsData = await getDocs(ticketsRef);
-
-                console.log(ticketsData);
 
                 const ticketsCopy = ticketsData.docs.map((doc) => ({
                     ...(doc.data() as TicketFace),

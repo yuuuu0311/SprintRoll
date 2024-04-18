@@ -63,7 +63,8 @@ export const Ticket: React.FC<{
                         onClickFun={() => {
                             deleteTicket(
                                 isInCollection as string,
-                                ticketInfo.ticketID as string
+                                ticketInfo.ticketID as string,
+                                index as number
                             );
                         }}
                     >

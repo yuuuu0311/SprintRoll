@@ -13,3 +13,11 @@ export interface CollectionFace extends TicketFace {
     product: string;
     collectionID: string;
 }
+
+// collection: {
+//     ...collectionData
+//     tickets: [
+//         ...ticketsData
+//     ]
+
+// }

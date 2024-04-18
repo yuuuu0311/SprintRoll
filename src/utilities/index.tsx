@@ -9,7 +9,6 @@ import {
     setDoc,
     updateDoc,
     deleteDoc,
-    runTransaction,
 } from "firebase/firestore";
 
 // utilities
@@ -161,7 +160,12 @@ export const setTicket = async (
     );
 };
 
-export const deleteTicket = async (collectionID: string, ticketID: string) => {
+export const deleteTicket = async (
+    collectionID: string,
+    ticketID: string,
+    index: number
+) => {
+    orderSourceInCollection({ droppableId: collectionID, index });
     await deleteDoc(doc(db, `collections/${collectionID}/tickets`, ticketID));
 };
 

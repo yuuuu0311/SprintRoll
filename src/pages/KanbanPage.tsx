@@ -26,26 +26,34 @@ import {
     rearange,
 } from "@/utilities";
 import { db } from "@/utilities/firebase";
-import { useCollections, useTickets } from "@/utilities/hook";
+import { useCollections } from "@/utilities/hook";
+// import { useCollectionWithZustand } from "@/utilities/store";
 
 // interface
-import { CollectionFace, TicketFace } from "@/interface";
+import { CollectionFace } from "@/interface";
 
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
     const { isLoading, collectionsData, setCollectionsData } = useCollections(
         domain as string
     );
-    const [lastDroppedDest, setLastDroppedDest] = useState<string>();
-    const { ticketsData, setTicketsData } = useTickets(lastDroppedDest);
 
     const [dialogActive, setDialogActive] = useState(false);
     const [collectionName, setCollectionName] = useState("");
 
+    /// test zustand
+
+    // const { useCollectionTest } = useCollectionWithZustand(domain);
+    // const collections = useCollectionTest((state) => state.collection);
+
+    // console.log(collections);
+
+    /// test zustand
+
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
 
-        console.log(source, destination, result);
+        // console.log(source, destination, result);
 
         if (!destination) return;
 
@@ -62,16 +70,6 @@ export const KanbanPage: React.FC = () => {
                 orderCollection(source.index, destination.index);
                 break;
             case source.droppableId:
-                setLastDroppedDest(source.droppableId);
-                setTicketsData(
-                    () =>
-                        rearange(
-                            ticketsData as TicketFace[],
-                            source.index,
-                            destination.index
-                        ) as CollectionFace[]
-                );
-
                 orderTicket(
                     source.index,
                     destination.index,
@@ -111,11 +109,6 @@ export const KanbanPage: React.FC = () => {
 
     // style
     const wrapperClass = classNames(twMerge("inline-flex gap-4"));
-
-    // useEffect(() => {
-    //     console.log(lastDroppedDest);
-    //     console.log(ticketsData);
-    // }, [lastDroppedDest, ticketsData]);
 
     return (
         <Layout>
