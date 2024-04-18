@@ -228,8 +228,6 @@ export const getDomainDeveloper: (
         (doc) => doc.data().domain == domain && regex.test(doc.data().name)
     );
 
-    console.log(developersDocs.map((doc) => ({ ...doc.data() })));
-
     return developersDocs.map((doc) => ({ ...doc.data() }));
 };
 

@@ -22,7 +22,7 @@ export const DashBoardPage: React.FC = () => {
     // style
     const wrapperClass = classNames(
         twMerge(
-            "flex flex-col gap-3 p-6 w-56 bg-blue-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-blue-300 h-full overflow-y-auto"
+            "flex flex-col gap-3 p-6 w-56 bg-neutral-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-blue-300 h-full overflow-y-auto"
         )
     );
 

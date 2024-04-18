@@ -46,26 +46,26 @@ const Developer: React.FC<{
     const isInAssigned =
         assignedDeveloperArr.indexOf(developerInfo.name) !== -1;
 
-    const btnClass = twMerge(
-        classNames("text-sm py-1 px-3", {
-            "bg-orange-300": isInAssigned,
-        })
-    );
+    const btnClass = twMerge(classNames("text-2xl aspect-square"));
 
     return (
         <div className="rounded-md bg-neutral-100 flex gap-2 p-4">
             <div className="flex flex-1 flex-col gap-1">
-                <div className="capitalize">{developerInfo.name}</div>
-                <div className="text-gray-500 text-sm normal-case">
-                    {developerInfo.email}
+                <div className="capitalize">
+                    {developerInfo.name} ｜
+                    <span className="text-gray-500">
+                        {developerInfo.domain}
+                    </span>
                 </div>
                 <div className="capitalize text-gray-500 text-sm">
-                    {developerInfo.domain}
+                    {developerInfo.email}
                 </div>
             </div>
 
             <Button
                 rounded
+                success={!isInAssigned}
+                danger={isInAssigned}
                 addonStyle={btnClass}
                 onClickFun={() =>
                     isInAssigned
@@ -81,7 +81,7 @@ const Developer: React.FC<{
                           )
                 }
             >
-                {isInAssigned ? "assigned" : "assign"}
+                {isInAssigned ? "-" : "+"}
             </Button>
         </div>
     );
@@ -100,7 +100,7 @@ export const Ticket: React.FC<{
     const [searchDeveloper, setSearchDeveloper] = useState<string>();
     const [searchValue] = useDebounce(searchDeveloper, 1000, {
         leading: true,
-        maxWait: 1000,
+        maxWait: 300,
     });
 
     const [dialogActive, setDialogActive] = useState(false);
@@ -138,7 +138,11 @@ export const Ticket: React.FC<{
     return (
         <>
             {ticketInfo.ticketID !== undefined && (
-                <Draggable index={index} draggableId={ticketInfo.ticketID}>
+                <Draggable
+                    index={index}
+                    draggableId={ticketInfo.ticketID}
+                    isDragDisabled={dialogActive}
+                >
                     {({ innerRef, draggableProps, dragHandleProps }) => (
                         <div
                             ref={innerRef}
@@ -157,7 +161,10 @@ export const Ticket: React.FC<{
             )}
             {dialogActive && (
                 <Dialog
-                    handleDialogToggle={handleDialogToggle}
+                    handleDialogToggle={() => {
+                        handleDialogToggle();
+                        setAssignedDeveloper(undefined);
+                    }}
                     title={ticketInfo.title as string}
                 >
                     <div className="mb-4 flex flex-col gap-2">
@@ -176,10 +183,20 @@ export const Ticket: React.FC<{
                             )}
                         </DialogSection>
                         <DialogSection sectionTitle="assign developer">
+                            <div className="flex gap-1 flex-wrap mb-2">
+                                {ticketInfo.assignedDeveloper?.map(
+                                    (developer) => (
+                                        <div className="capitalize rounded-full bg-lime-500 text-white w-fit py-1 px-3">
+                                            {developer}
+                                        </div>
+                                    )
+                                )}
+                            </div>
                             <div className="flex flex-col gap-2">
                                 <input
                                     type="text"
                                     className="w-full py-2 px-4 rounded-md focus:bg-neutral-300"
+                                    placeholder="Search for Developer"
                                     onChange={(e) => handelSearchDeveloper(e)}
                                 />
                                 <div className="flex flex-col gap-2">

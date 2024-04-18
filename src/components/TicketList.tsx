@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -82,11 +82,16 @@ export const TicketList: React.FC<{
         }));
     };
 
+    useEffect(() => {
+        console.log(dialogActive);
+    }, [dialogActive]);
+
     return (
         <>
             <Draggable
                 draggableId={collectionInfo.collectionID}
                 index={collectionInfo.order}
+                isDragDisabled={dialogActive}
             >
                 {({ innerRef, draggableProps, dragHandleProps }) => (
                     <div
