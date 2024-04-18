@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -14,7 +14,81 @@ import { Button } from "@/components/Button";
 import { Dialog } from "@/components/Dialog";
 
 // utilities
-import { deleteTicket, getDomainDeveloper } from "@/utilities";
+import {
+    deleteTicket,
+    getDomainDeveloper,
+    assignDeveloper,
+    removeFromAssigned,
+} from "@/utilities";
+
+const DialogSection: React.FC<{
+    children: React.ReactNode;
+    sectionTitle: string;
+}> = ({ children, sectionTitle }) => {
+    return (
+        <div>
+            <div className="capitalize text-lg font-bold text-blue-500 mb-1">
+                {sectionTitle}
+            </div>
+            <div>{children}</div>
+        </div>
+    );
+};
+
+const Developer: React.FC<{
+    developerInfo: UserFace;
+    isInCollection: string;
+    ticketInfo: TicketFace;
+}> = ({ developerInfo, isInCollection, ticketInfo }) => {
+    console.log(ticketInfo);
+    const assignedDeveloperArr = [
+        ...(ticketInfo.assignedDeveloper as TicketFace[]),
+    ];
+    const isInAssigned =
+        assignedDeveloperArr.indexOf(developerInfo.name) !== -1;
+
+    console.log(isInAssigned);
+
+    const btnClass = twMerge(
+        classNames("text-sm py-1 px-3", {
+            "bg-orange-300": isInAssigned,
+        })
+    );
+
+    return (
+        <div className="rounded-md bg-blue-100 flex gap-2 p-4">
+            <div className="flex flex-1 flex-col gap-1">
+                <div className="capitalize">{developerInfo.name}</div>
+                <div className="text-gray-500 text-sm normal-case">
+                    {developerInfo.email}
+                </div>
+                <div className="capitalize text-gray-500 text-sm">
+                    {developerInfo.domain}
+                </div>
+            </div>
+
+            <Button
+                rounded
+                addonStyle={btnClass}
+                onClickFun={() =>
+                    isInAssigned
+                        ? removeFromAssigned(
+                              developerInfo,
+                              isInCollection,
+                              ticketInfo.ticketID as string
+                          )
+                        : assignDeveloper(
+                              developerInfo,
+                              isInCollection,
+                              ticketInfo.ticketID as string
+                          )
+                }
+            >
+                {isInAssigned ? "assigned" : "assign"}
+            </Button>
+        </div>
+    );
+};
 
 export const Ticket: React.FC<{
     ticketInfo: TicketFace;
@@ -44,11 +118,16 @@ export const Ticket: React.FC<{
 
     const handelSearchDeveloper = async (e: ChangeEvent<HTMLInputElement>) => {
         setSearchDeveloper(e.target.value);
-        const developerInfo = await getDomainDeveloper(
-            domain as string,
-            searchValue as string
-        );
-        setAssignedDeveloper(developerInfo);
+
+        if (e.target.value.length === 0) {
+            setAssignedDeveloper([]);
+        } else {
+            const developerInfo = await getDomainDeveloper(
+                domain as string,
+                searchValue as string
+            );
+            setAssignedDeveloper(developerInfo);
+        }
     };
 
     return (
@@ -74,26 +153,50 @@ export const Ticket: React.FC<{
                     handleDialogToggle={handleDialogToggle}
                     title={ticketInfo.title as string}
                 >
-                    <div className="mb-4">
-                        <div>collectionID : {isInCollection}</div>
-                        <div>ticketID : {ticketInfo.ticketID}</div>
-                        <div>due date:</div>
-                        <div>assign develop</div>
-                        <input
-                            type="text"
-                            onChange={(e) => handelSearchDeveloper(e)}
-                        />
-                        <ul>
-                            {assignedDeveloper?.length === 0 ? (
-                                <div>developer not founded</div>
+                    <div className="mb-4 flex flex-col gap-2">
+                        {/* <div>collectionID : {isInCollection}</div>
+                        <div>ticketID : {ticketInfo.ticketID}</div> */}
+
+                        <DialogSection sectionTitle="Description">
+                            {ticketInfo.description?.length === 0 ? (
+                                <div className="text-gray-500">
+                                    add some description here
+                                </div>
                             ) : (
-                                assignedDeveloper?.map((developer) => (
-                                    <li key={developer.uid}>
-                                        {developer.name}
-                                    </li>
-                                ))
+                                <div className="bg-blue-300 rounded p-4">
+                                    {ticketInfo.description}
+                                </div>
                             )}
-                        </ul>
+                        </DialogSection>
+                        <DialogSection sectionTitle="assign developer">
+                            <div className="flex flex-col gap-2">
+                                <input
+                                    type="text"
+                                    className="w-full py-2 px-4 rounded-md focus:bg-blue-300"
+                                    onChange={(e) => handelSearchDeveloper(e)}
+                                />
+                                <div className="flex flex-col gap-2">
+                                    {assignedDeveloper?.length === 0 ? (
+                                        <div>Developer not found</div>
+                                    ) : (
+                                        assignedDeveloper?.map(
+                                            (developerInfo) => (
+                                                <Developer
+                                                    key={developerInfo.uid}
+                                                    isInCollection={
+                                                        isInCollection as string
+                                                    }
+                                                    ticketInfo={ticketInfo}
+                                                    developerInfo={
+                                                        developerInfo
+                                                    }
+                                                />
+                                            )
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                        </DialogSection>
                     </div>
                     <Button
                         rounded

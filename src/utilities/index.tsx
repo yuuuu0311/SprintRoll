@@ -4,7 +4,7 @@ import {
     query,
     where,
     getDocs,
-    // getDoc,
+    getDoc,
     doc,
     setDoc,
     updateDoc,
@@ -15,7 +15,7 @@ import {
 import { db } from "@/utilities/firebase";
 
 // interface
-import { CollectionFace, TicketFace } from "@/interface";
+import { CollectionFace, TicketFace, UserFace } from "@/interface";
 
 export const rearange: (
     arr: (CollectionFace | TicketFace)[],
@@ -231,4 +231,43 @@ export const getDomainDeveloper: (
     console.log(developersDocs.map((doc) => ({ ...doc.data() })));
 
     return developersDocs.map((doc) => ({ ...doc.data() }));
+};
+
+export const assignDeveloper: (
+    developerInfo: UserFace,
+    isInCollection: string,
+    ticketID: string
+) => void = async (developerInfo, isInCollection, ticketID) => {
+    const docRef = doc(db, `collections/${isInCollection}/tickets/${ticketID}`);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) return;
+    const modifiedArr = [...docSnap.data().assignedDeveloper];
+
+    modifiedArr.push(developerInfo.name);
+
+    await setDoc(docRef, {
+        ...docSnap.data(),
+        assignedDeveloper: modifiedArr,
+    });
+};
+
+export const removeFromAssigned: (
+    developerInfo: UserFace,
+    isInCollection: string,
+    ticketID: string
+) => void = async (developerInfo, isInCollection, ticketID) => {
+    const docRef = doc(db, `collections/${isInCollection}/tickets/${ticketID}`);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) return;
+    const modifiedArr = [...docSnap.data().assignedDeveloper];
+    const index = modifiedArr.indexOf(developerInfo.name);
+
+    modifiedArr.splice(index, 1);
+
+    await setDoc(docRef, {
+        ...docSnap.data(),
+        assignedDeveloper: modifiedArr,
+    });
 };
