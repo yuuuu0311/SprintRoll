@@ -12,8 +12,6 @@ export const InputRow: React.FC<{
 }> = ({ label, value, placeholder, changeHandler }) => {
     const [isFocus, setIsFocus] = useState(false);
 
-    const inputRowClass = twMerge(classNames(`flex flex-col gap-2 `));
-    const labelClass = twMerge(classNames(`text-md text-neutral-500 `));
     const inputClass = twMerge(
         classNames(
             `text-md px-3 py-2 rounded-md overflow-hidden leading-none outline-none transition `,
@@ -24,8 +22,8 @@ export const InputRow: React.FC<{
     );
 
     return (
-        <div className={inputRowClass}>
-            <label htmlFor={label} className={labelClass}>
+        <div className="flex flex-col gap-2">
+            <label htmlFor={label} className="text-md text-neutral-500 ">
                 {label}
             </label>
             <input

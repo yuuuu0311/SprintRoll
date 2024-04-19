@@ -59,6 +59,7 @@ export const useTickets = (id?: string) => {
 
             const ticketsCopy = tickets.docs.map((doc) => ({
                 ...(doc.data() as TicketFace),
+                collectionID: id,
                 ticketID: doc.id,
             }));
 

@@ -288,6 +288,24 @@ export const toSprint = async (draggableId: string, index: number) => {
     });
 };
 
+export const updateDescription = async (
+    value: string,
+    ticketInfo: TicketFace
+) => {
+    console.log(value, ticketInfo);
+
+    const docRef = doc(
+        db,
+        `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
+    );
+    const docSnap = await getDoc(docRef);
+
+    await setDoc(docRef, {
+        ...docSnap.data(),
+        description: value,
+    });
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = (fn: any, delay: number) => {
     let timer: number;

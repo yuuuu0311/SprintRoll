@@ -20,6 +20,7 @@ import {
     assignDeveloper,
     removeFromAssigned,
     debounce,
+    updateDescription,
 } from "@/utilities";
 
 const DialogSection: React.FC<{
@@ -98,6 +99,7 @@ export const Ticket: React.FC<{
     const [assignedDeveloper, setAssignedDeveloper] = useState<
         UserFace[] | void
     >();
+    const [newDescription, setNewDescription] = useState<string>();
     const [searchDeveloper, setSearchDeveloper] = useState<string>();
     const [searchValue] = useDebounce(searchDeveloper, 1000, {
         leading: true,
@@ -134,10 +136,10 @@ export const Ticket: React.FC<{
     };
 
     const handleTextAreaChange = debounce(
-        (e: ChangeEvent<HTMLTextAreaElement>) => {
-            console.log(e.target.value);
+        (e: ChangeEvent<HTMLTextAreaElement>, ticketInfo: TicketFace) => {
+            updateDescription(e.target.value, ticketInfo);
         },
-        5000
+        500
     );
 
     return (
@@ -177,8 +179,11 @@ export const Ticket: React.FC<{
                             <textarea
                                 className="text-neutral-500 rounded p-4 appearance-none w-full resize-none bg-transparent focus:bg-stone-100 transition "
                                 placeholder="add some description here"
-                                onChange={(e) => handleTextAreaChange(e)}
-                                value={ticketInfo.description}
+                                onChange={(e) => {
+                                    setNewDescription(e.target.value);
+                                    handleTextAreaChange(e, ticketInfo);
+                                }}
+                                value={newDescription}
                             ></textarea>
                         </DialogSection>
                         <DialogSection sectionTitle="assign developer">
