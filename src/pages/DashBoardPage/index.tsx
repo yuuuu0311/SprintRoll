@@ -1,7 +1,11 @@
 // import { useEffect, useState } from "react";
 
 // dependency
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import {
+    DragDropContext,
+    Droppable,
+    OnDragEndResponder,
+} from "react-beautiful-dnd";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 // import { collection, onSnapshot, getDocs } from "firebase/firestore";
@@ -9,16 +13,28 @@ import classNames from "classnames";
 // components
 import { Layout } from "@/components/Layout";
 import { Ticket } from "@/components/Ticket";
+import { SprintPanel } from "./SprintPanel";
 
 // utilities
-import { useAllTickets } from "@/utilities/hook";
-// import { db } from "@/utilities/firebase";
+import { useAllTickets, useSprint } from "@/utilities/hook";
+import { toSprint } from "@/utilities";
+import { useEffect } from "react";
 
-// // interface
-// import { TicketFace } from "@/interface";
+const toSprintPanel = (droppableId: string) => {
+    const sprintIndexRegex = /sprintTickets-[0-9]/;
+    return sprintIndexRegex.test(droppableId);
+};
+
+const getSprintNum = (droppableId: string) => {
+    const splitString = droppableId.split("-");
+    const index = splitString[1];
+
+    return parseInt(index);
+};
 
 export const DashBoardPage: React.FC = () => {
     const { isLoading, allTickets } = useAllTickets();
+    const { isSprintLoading, sprintInfo } = useSprint();
     // style
     const wrapperClass = classNames(
         twMerge(
@@ -26,10 +42,20 @@ export const DashBoardPage: React.FC = () => {
         )
     );
 
+    const onDragEnd: OnDragEndResponder = (result) => {
+        const { source, destination } = result;
+
+        if (!destination) return;
+
+        if (toSprintPanel(destination.droppableId)) {
+            toSprint(result.draggableId, getSprintNum(destination.droppableId));
+        }
+    };
+
     return (
         <Layout>
-            <DragDropContext onDragEnd={() => console.log("drag end")}>
-                <div className="flex gap-6 h-full">
+            <DragDropContext onDragEnd={onDragEnd}>
+                <div className="relative flex h-full items-start">
                     <Droppable droppableId="collections" type="droppableItem">
                         {({ innerRef, placeholder }) => (
                             <div className={wrapperClass} ref={innerRef}>
@@ -47,7 +73,19 @@ export const DashBoardPage: React.FC = () => {
                         )}
                     </Droppable>
 
-                    <div className="p-6">sprint progress</div>
+                    <div className="flex-1 p-4">
+                        <div className="rounded-md overflow-y-auto h-full">
+                            {isSprintLoading && <div>loading</div>}
+
+                            {sprintInfo.map((sprint: object, index: number) => (
+                                <SprintPanel
+                                    sprintInfo={sprint}
+                                    key={index}
+                                    index={index}
+                                />
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </DragDropContext>
         </Layout>

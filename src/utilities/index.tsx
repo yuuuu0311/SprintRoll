@@ -9,6 +9,8 @@ import {
     setDoc,
     updateDoc,
     deleteDoc,
+    collectionGroup,
+    documentId,
 } from "firebase/firestore";
 
 // utilities
@@ -267,5 +269,21 @@ export const removeFromAssigned: (
     await setDoc(docRef, {
         ...docSnap.data(),
         assignedDeveloper: modifiedArr,
+    });
+};
+
+export const toSprint = async (draggableId: string, index: number) => {
+    const ticket = query(
+        collectionGroup(db, "tickets"),
+        where(documentId(), "==", draggableId)
+    );
+
+    const tickets = await getDocs(ticket);
+
+    tickets.forEach((ticket) => {
+        setDoc(ticket.ref, {
+            ...ticket.data(),
+            inSprint: index,
+        });
     });
 };

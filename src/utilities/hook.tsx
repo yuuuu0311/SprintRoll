@@ -4,7 +4,7 @@ import {
     onSnapshot,
     where,
     query,
-    getDocs,
+    collectionGroup,
 } from "firebase/firestore";
 
 // utilities
@@ -73,39 +73,72 @@ export const useTickets = (id?: string) => {
     return { isLoading, ticketsData, setTicketsData };
 };
 
-export const useAllTickets = () => {
+export const useAllTickets = (index?: number) => {
     const [isLoading, setIsLoading] = useState(false);
     const [allTickets, setAllTickets] = useState<TicketFace[]>([]);
+    const [isTicketLoading, setIsTicketLoading] = useState(false);
+    const [sprintTickets, setSprintTickets] = useState<TicketFace[]>([]);
 
     useEffect(() => {
-        const collectionsRef = collection(db, "collections");
-        const getTicketsRef = (id: string) =>
-            collection(db, `collections/${id}/tickets`);
+        const ticketsRef = collectionGroup(db, "tickets");
 
-        const unsubscribe = onSnapshot(collectionsRef, (collection) => {
+        const unsubscribe = onSnapshot(ticketsRef, (tickets) => {
             setIsLoading(true);
 
-            let allTickets: TicketFace[] = [];
-            collection.forEach(async (doc) => {
-                const ticketsRef = getTicketsRef(doc.id);
+            const notInSprint = tickets.docs.filter(
+                (ticket) =>
+                    !ticket.data().inSprint && ticket.data().inSprint !== 0
+            );
 
-                const ticketsData = await getDocs(ticketsRef);
+            const allTicketCopy = notInSprint.map((ticket) => ({
+                ...(ticket.data() as TicketFace),
+                ticketID: ticket.ref.path,
+            }));
 
-                const ticketsCopy = ticketsData.docs.map((doc) => ({
-                    ...(doc.data() as TicketFace),
-                    ticketID: doc.id,
-                    isInCollection: doc.id,
-                }));
+            const InSprint = tickets.docs.filter(
+                (ticket) => ticket.data().inSprint == index
+            );
 
-                allTickets = [...allTickets, ...ticketsCopy];
+            const sprintTicketsCopy = InSprint.map((ticket) => ({
+                ...(ticket.data() as TicketFace),
+                ticketID: ticket.ref.path,
+            }));
 
-                setAllTickets(allTickets);
-                setIsLoading(false);
-            });
+            setAllTickets(allTicketCopy);
+            setSprintTickets(sprintTicketsCopy);
+            setIsLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, [index]);
+
+    return {
+        isLoading,
+        allTickets,
+        isTicketLoading,
+        sprintTickets,
+        setAllTickets,
+    };
+};
+
+export const useSprint = () => {
+    const [isSprintLoading, setIsSprintLoading] = useState(false);
+    const [sprintInfo, setSprintInfo] = useState([]);
+
+    useEffect(() => {
+        const sprintsRef = collection(db, "sprints");
+
+        const unsubscribe = onSnapshot(sprintsRef, (collection) => {
+            setIsSprintLoading(true);
+
+            const sprintInfoCopy = collection.docs.map((doc) => doc.data());
+
+            setSprintInfo(sprintInfoCopy as []);
+            setIsSprintLoading(false);
         });
 
         return () => unsubscribe();
     }, []);
 
-    return { isLoading, allTickets, setAllTickets };
+    return { isSprintLoading, sprintInfo };
 };
