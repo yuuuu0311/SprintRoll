@@ -69,7 +69,7 @@ export const DashBoardPage: React.FC = () => {
                                         key={ticket.ticketID}
                                         ticketInfo={ticket}
                                         index={index}
-                                        isInCollection={ticket.isInCollection}
+                                        isInCollection={ticket.collectionID}
                                     />
                                 ))}
                                 {placeholder}

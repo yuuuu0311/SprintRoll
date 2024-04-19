@@ -292,8 +292,6 @@ export const updateDescription = async (
     value: string,
     ticketInfo: TicketFace
 ) => {
-    console.log(value, ticketInfo);
-
     const docRef = doc(
         db,
         `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
