@@ -18,7 +18,6 @@ import { SprintPanel } from "./SprintPanel";
 // utilities
 import { useAllTickets, useSprint } from "@/utilities/hook";
 import { toSprint } from "@/utilities";
-import { useEffect } from "react";
 
 const toSprintPanel = (droppableId: string) => {
     const sprintIndexRegex = /sprintTickets-[0-9]/;
@@ -38,7 +37,7 @@ export const DashBoardPage: React.FC = () => {
     // style
     const wrapperClass = classNames(
         twMerge(
-            "flex flex-col gap-3 p-6 w-56 bg-neutral-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-blue-300 h-full overflow-y-auto"
+            "flex flex-col gap-3 p-4 rounded-md w-56 bg-neutral-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-blue-300 h-full overflow-y-auto"
         )
     );
 
@@ -49,16 +48,21 @@ export const DashBoardPage: React.FC = () => {
 
         if (toSprintPanel(destination.droppableId)) {
             toSprint(result.draggableId, getSprintNum(destination.droppableId));
+        } else {
+            console.log(source);
         }
     };
 
     return (
         <Layout>
             <DragDropContext onDragEnd={onDragEnd}>
-                <div className="relative flex h-full items-start">
+                <div className="relative flex h-full items-start p-6 gap-6">
                     <Droppable droppableId="collections" type="droppableItem">
                         {({ innerRef, placeholder }) => (
                             <div className={wrapperClass} ref={innerRef}>
+                                <div className="font-bold text-neutral-800">
+                                    Product Backlog
+                                </div>
                                 {isLoading && <div>loading</div>}
                                 {allTickets?.map((ticket, index) => (
                                     <Ticket
@@ -73,8 +77,8 @@ export const DashBoardPage: React.FC = () => {
                         )}
                     </Droppable>
 
-                    <div className="flex-1 p-4">
-                        <div className="rounded-md overflow-y-auto h-full">
+                    <div className="flex-1 ">
+                        <div className="rounded-md overflow-y-auto h-full [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200">
                             {isSprintLoading && <div>loading</div>}
 
                             {sprintInfo.map((sprint: object, index: number) => (

@@ -118,6 +118,7 @@ export const useAllTickets = (index?: number) => {
         isTicketLoading,
         sprintTickets,
         setAllTickets,
+        setIsTicketLoading,
     };
 };
 

@@ -19,6 +19,7 @@ import {
     getDomainDeveloper,
     assignDeveloper,
     removeFromAssigned,
+    debounce,
 } from "@/utilities";
 
 const DialogSection: React.FC<{
@@ -113,9 +114,6 @@ export const Ticket: React.FC<{
             "bg-blue-500": ticketInfo.domain === "ios",
         })
     );
-    const ticketsClass = classNames(
-        twMerge("bg-neutral-400  hover:bg-neutral-300 transition p-2")
-    );
 
     const handleDialogToggle = () => {
         setDialogActive((prev) => (prev ? false : true));
@@ -135,6 +133,13 @@ export const Ticket: React.FC<{
         }
     };
 
+    const handleTextAreaChange = debounce(
+        (e: ChangeEvent<HTMLTextAreaElement>) => {
+            console.log(e.target.value);
+        },
+        5000
+    );
+
     return (
         <>
             {ticketInfo.ticketID !== undefined && (
@@ -152,7 +157,7 @@ export const Ticket: React.FC<{
                             onClick={handleDialogToggle}
                         >
                             <div className={ticketsDomainClass}></div>
-                            <div className={ticketsClass}>
+                            <div className="bg-stone-100  hover:bg-neutral-300 transition p-2">
                                 {ticketInfo.title} - {ticketInfo.order}
                             </div>
                         </div>
@@ -168,25 +173,22 @@ export const Ticket: React.FC<{
                     title={ticketInfo.title as string}
                 >
                     <div className="mb-4 flex flex-col gap-2">
-                        {/* <div>collectionID : {isInCollection}</div>
-                        <div>ticketID : {ticketInfo.ticketID}</div> */}
-
                         <DialogSection sectionTitle="Description">
-                            {ticketInfo.description?.length === 0 ? (
-                                <div className="text-neutral-500">
-                                    add some description here
-                                </div>
-                            ) : (
-                                <div className="bg-neutral-300 rounded p-4">
-                                    {ticketInfo.description}
-                                </div>
-                            )}
+                            <textarea
+                                className="text-neutral-500 rounded p-4 appearance-none w-full resize-none bg-transparent focus:bg-stone-100 transition "
+                                placeholder="add some description here"
+                                onChange={(e) => handleTextAreaChange(e)}
+                                value={ticketInfo.description}
+                            ></textarea>
                         </DialogSection>
                         <DialogSection sectionTitle="assign developer">
                             <div className="flex gap-1 flex-wrap mb-2">
                                 {ticketInfo.assignedDeveloper?.map(
-                                    (developer) => (
-                                        <div className="capitalize rounded-full bg-lime-500 text-white w-fit py-1 px-3">
+                                    (developer, index) => (
+                                        <div
+                                            key={`${developer}-${index}`}
+                                            className="capitalize rounded-full bg-lime-500 text-white w-fit py-1 px-3"
+                                        >
                                             {developer}
                                         </div>
                                     )

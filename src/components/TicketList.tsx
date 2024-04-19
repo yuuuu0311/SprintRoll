@@ -1,11 +1,9 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { addDoc, collection } from "firebase/firestore";
-import { twMerge } from "tailwind-merge";
-import classNames from "classnames";
 
 // interface
 import { CollectionFace, TicketFace } from "@/interface";
@@ -62,29 +60,12 @@ export const TicketList: React.FC<{
         setDialogActive((prev) => (prev ? false : true));
     };
 
-    // style
-    const ticketListClass = twMerge(
-        classNames("flex flex-col gap-2 bg-neutral-200 p-4 rounded-lg w-48")
-    );
-
-    const btnClass = twMerge(
-        classNames(
-            "bg-neutral-500 p-2 active:bg-neutral-600 hover:bg-neutral-400 transition"
-        )
-    );
-
-    const contentClass = twMerge(classNames("flex-1 flex flex-col gap-2"));
-
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTickInfo((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
         }));
     };
-
-    useEffect(() => {
-        console.log(dialogActive);
-    }, [dialogActive]);
 
     return (
         <>
@@ -102,12 +83,12 @@ export const TicketList: React.FC<{
                         <Droppable droppableId={collectionInfo.collectionID}>
                             {({ innerRef, droppableProps, placeholder }) => (
                                 <div
-                                    className={ticketListClass}
+                                    className="flex flex-col gap-2 bg-neutral-200 p-4 rounded-lg w-56"
                                     ref={innerRef}
                                     {...droppableProps}
                                     {...dragHandleProps}
                                 >
-                                    <h3 className="text-lg">
+                                    <h3 className="text-lg text-neutral-700 font-bold capitalize">
                                         {collectionInfo.name}
                                     </h3>
 
@@ -129,8 +110,10 @@ export const TicketList: React.FC<{
 
                                     <Button
                                         rounded
+                                        link
+                                        secondary
                                         onClickFun={handleDialogToggle}
-                                        addonStyle={btnClass}
+                                        addonStyle="text-left"
                                     >
                                         + add ticket
                                     </Button>
@@ -146,7 +129,7 @@ export const TicketList: React.FC<{
                     handleDialogToggle={handleDialogToggle}
                     title="add Ticket"
                 >
-                    <div className={contentClass}>
+                    <div className="flex-1 flex flex-col gap-2">
                         <InputRow
                             label="title"
                             value={newTickInfo.title}
@@ -161,7 +144,11 @@ export const TicketList: React.FC<{
                         />
                     </div>
                     <div className="flex justify-end gap-2">
-                        <Button rounded onClickFun={handleDialogToggle}>
+                        <Button
+                            rounded
+                            secondary
+                            onClickFun={handleDialogToggle}
+                        >
                             Close
                         </Button>
                         <Button success rounded onClickFun={handleAddTicket}>

@@ -13,7 +13,7 @@ export const Dialog: React.FC<{
         classNames("fixed w-screen h-screen inset-0 backdrop-blur-md")
     );
     const backdropClass = twMerge(
-        classNames("fixed bg-gray-700 opacity-60 w-full h-full z-0")
+        classNames("fixed bg-neutral-700 opacity-60 w-full h-full z-0")
     );
     const dialogClass = twMerge(
         classNames(
@@ -21,7 +21,9 @@ export const Dialog: React.FC<{
         )
     );
     const titleClass = twMerge(
-        classNames("px-6 pt-4 font-bold text-lg text-neutral-700")
+        classNames(
+            "px-6 pt-4 pb-2 font-bold text-lg text-neutral-700 capitalize text-stone-100 bg-neutral-700"
+        )
     );
     const contentClass = twMerge(classNames("flex flex-col flex-1 px-6 py-4"));
 

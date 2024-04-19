@@ -287,3 +287,16 @@ export const toSprint = async (draggableId: string, index: number) => {
         });
     });
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const debounce = (fn: any, delay: number) => {
+    let timer: number;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (...args: any) => {
+        clearTimeout(timer);
+        timer = window.setTimeout(() => {
+            fn(...args);
+        }, delay);
+    };
+};

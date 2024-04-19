@@ -37,9 +37,12 @@ export const TabNavigation = () => {
 
     const navLinkClass = (isActive: boolean) =>
         twMerge(
-            classNames("transition text-neutral-400", {
-                "text-neutral-900": isActive,
-            })
+            classNames(
+                "transition text-neutral-400 rounded-md py-2 px-3 bg-neutral-200",
+                {
+                    "bg-neutral-500 text-white": isActive,
+                }
+            )
         );
 
     const navigationLabelClass = twMerge(classNames("flex flex-col gap-2"));

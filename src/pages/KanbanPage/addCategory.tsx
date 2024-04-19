@@ -59,17 +59,16 @@ export const AddCategoryDialog: React.FC<{
                             />
                         </div>
                     </div>
-                    <div>
+                    <div className="flex gap-2">
                         <Button
-                            link
+                            secondary
                             rounded
                             onClickFun={() => toggleDialog(isActive)}
                         >
                             close
                         </Button>
                         <Button
-                            link
-                            primary
+                            success
                             rounded
                             onClickFun={handleAddCollection}
                         >
