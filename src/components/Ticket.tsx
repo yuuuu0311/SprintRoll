@@ -109,7 +109,7 @@ export const Ticket: React.FC<{
     const [dialogActive, setDialogActive] = useState(false);
 
     const ticketsDomainClass = twMerge(
-        classNames("p-3", {
+        classNames("p-2", {
             "bg-lime-500": ticketInfo.domain === "frontend",
             "bg-red-500": ticketInfo.domain === "backend",
             "bg-yellow-500": ticketInfo.domain === "data",
@@ -142,6 +142,16 @@ export const Ticket: React.FC<{
         1000
     );
 
+    const renderLabel = (labels: object) => {
+        const labelArr = [];
+        for (const key in labels) {
+            labelArr.push(key);
+        }
+        return labelArr.map((label) => <div key={label}>{label}</div>);
+    };
+
+    // renderLabel(ticketInfo.label);
+
     return (
         <>
             {ticketInfo.ticketID !== undefined && (
@@ -159,8 +169,13 @@ export const Ticket: React.FC<{
                             onClick={handleDialogToggle}
                         >
                             <div className={ticketsDomainClass}></div>
-                            <div className="bg-stone-100  hover:bg-neutral-300 transition p-2">
-                                {ticketInfo.title} - {ticketInfo.order}
+                            <div className="bg-stone-100 hover:bg-neutral-300 transition">
+                                <div>
+                                    {renderLabel(ticketInfo.label as object)}
+                                </div>
+                                <div className="p-2">
+                                    {ticketInfo.title} - {ticketInfo.order}
+                                </div>
                             </div>
                         </div>
                     )}
@@ -185,7 +200,7 @@ export const Ticket: React.FC<{
                                 defaultValue={ticketInfo.description}
                             ></textarea>
                         </DialogSection>
-                        <DialogSection sectionTitle="assign developer">
+                        <DialogSection sectionTitle="developers">
                             <div className="flex gap-1 flex-wrap mb-2">
                                 {ticketInfo.assignedDeveloper?.map(
                                     (developer, index) => (
@@ -228,19 +243,30 @@ export const Ticket: React.FC<{
                             </div>
                         </DialogSection>
                     </div>
-                    <Button
-                        rounded
-                        danger
-                        onClickFun={() => {
-                            deleteTicket(
-                                isInCollection as string,
-                                ticketInfo.ticketID as string,
-                                index as number
-                            );
-                        }}
-                    >
-                        delete
-                    </Button>
+                    <div className="flex gap-2 mt-auto justify-end">
+                        <Button
+                            rounded
+                            danger
+                            onClickFun={() => {
+                                deleteTicket(
+                                    isInCollection as string,
+                                    ticketInfo.ticketID as string,
+                                    index as number
+                                );
+                            }}
+                        >
+                            delete
+                        </Button>
+                        <Button
+                            rounded
+                            secondary
+                            onClickFun={() => {
+                                handleDialogToggle();
+                            }}
+                        >
+                            close
+                        </Button>
+                    </div>
                 </Dialog>
             )}
         </>

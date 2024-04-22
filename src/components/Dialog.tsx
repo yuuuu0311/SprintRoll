@@ -1,9 +1,11 @@
+import ReactDOM from "react-dom";
+
 export const Dialog: React.FC<{
     children: React.ReactNode;
     title: string;
     handleDialogToggle: () => void;
 }> = ({ children, handleDialogToggle, title }) => {
-    return (
+    return ReactDOM.createPortal(
         <div className="fixed w-screen h-screen inset-0 backdrop-blur-md">
             <div
                 className="fixed bg-neutral-700 opacity-60 w-full h-full z-0"
@@ -15,6 +17,7 @@ export const Dialog: React.FC<{
                 </div>
                 <div className="flex flex-col flex-1 px-6 py-4">{children}</div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };

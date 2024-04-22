@@ -1,9 +1,11 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, Dispatch, SetStateAction } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { addDoc, collection } from "firebase/firestore";
+import { twMerge } from "tailwind-merge";
+import classNames from "classnames";
 
 // interface
 import { CollectionFace, TicketFace } from "@/interface";
@@ -18,6 +20,52 @@ import { InputRow } from "@/components/InputRow";
 import { useTickets } from "@/utilities/hook";
 import { db } from "@/utilities/firebase";
 
+enum LabelType {
+    BUG = "bug",
+    FEATURE = "feature",
+    REFACTOR = "refactor",
+    ASAP = "ASAP",
+}
+
+const LabelTypeArray = [
+    LabelType.BUG,
+    LabelType.FEATURE,
+    LabelType.REFACTOR,
+    LabelType.ASAP,
+];
+
+export const Label: React.FC<{
+    labelName: string;
+    changeHandler: Dispatch<SetStateAction<TicketFace>>;
+}> = ({ labelName, changeHandler }) => {
+    const labelClass = twMerge(
+        classNames(
+            `transition bg-neutral-400 rounded-full py-1 px-3  [&:has(input:checked)]:bg-lime-500 `
+        )
+    );
+
+    return (
+        <label htmlFor={labelName} className={labelClass}>
+            <span>{labelName}</span>
+            <input
+                type="checkbox"
+                name={labelName}
+                id={labelName}
+                hidden
+                onChange={(e) =>
+                    changeHandler((prev) => ({
+                        ...prev,
+                        label: {
+                            ...prev.label,
+                            [e.target.name]: e.target.checked,
+                        },
+                    }))
+                }
+            />
+        </label>
+    );
+};
+
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
     children?: React.ReactNode;
@@ -30,6 +78,7 @@ export const TicketList: React.FC<{
         title: "",
         description: "",
         assignedDeveloper: [],
+        label: {},
     }));
 
     const handleAddTicket: () => void = async () => {
@@ -53,6 +102,7 @@ export const TicketList: React.FC<{
             description: "",
             domain: domain,
             assignedDeveloper: [],
+            label: {},
         }));
     };
 
@@ -136,6 +186,27 @@ export const TicketList: React.FC<{
                             placeholder="title goes here"
                             changeHandler={(e) => handleChange(e)}
                         />
+
+                        <div>
+                            <div>Date</div>
+                            <input type="datetime-local" name="" id="" />
+                        </div>
+                        <div>
+                            <div>Label</div>
+                            <div className="flex gap-2 flex-wrap">
+                                {LabelTypeArray.map((label) => (
+                                    <Label
+                                        labelName={label}
+                                        key={label}
+                                        changeHandler={
+                                            setNewTickInfo as Dispatch<
+                                                SetStateAction<TicketFace>
+                                            >
+                                        }
+                                    ></Label>
+                                ))}
+                            </div>
+                        </div>
                         <InputRow
                             label="description"
                             value={newTickInfo.description}

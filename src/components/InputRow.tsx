@@ -23,7 +23,10 @@ export const InputRow: React.FC<{
 
     return (
         <div className="flex flex-col gap-2">
-            <label htmlFor={label} className="text-md text-neutral-500 ">
+            <label
+                htmlFor={label}
+                className="text-md text-neutral-500 capitalize"
+            >
                 {label}
             </label>
             <input

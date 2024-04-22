@@ -8,6 +8,7 @@ export interface TicketFace {
     collectionID?: string;
     domain?: string;
     assignedDeveloper?: [];
+    label?: object;
 }
 
 export interface CollectionFace extends TicketFace {
