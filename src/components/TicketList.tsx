@@ -164,11 +164,11 @@ export const TicketList: React.FC<{
 
                                     {isLoading && <div>is loading</div>}
                                     {(ticketsData as CollectionFace[])?.map(
-                                        (ticket: TicketFace) => (
+                                        (ticket: TicketFace, index: number) => (
                                             <Ticket
                                                 key={ticket.ticketID}
                                                 ticketInfo={ticket}
-                                                index={ticket.order}
+                                                index={index}
                                                 isInCollection={
                                                     collectionInfo.collectionID
                                                 }

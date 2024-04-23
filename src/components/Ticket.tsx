@@ -147,14 +147,17 @@ export const Ticket: React.FC<{
         for (const key in labels) {
             labelArr.push(key);
         }
-        return labelArr.map((label) => (
-            <div
-                key={label}
-                className="bg-lime-500/50 rounded-full px-2 text-sm"
-            >
-                {label}
-            </div>
-        ));
+
+        return labelArr
+            .sort((a, b) => a.length - b.length)
+            .map((label) => (
+                <div
+                    key={label}
+                    className="bg-lime-500/50 rounded-full px-2 text-sm"
+                >
+                    {label}
+                </div>
+            ));
     };
 
     return (

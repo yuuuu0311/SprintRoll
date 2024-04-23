@@ -50,13 +50,7 @@ export const orderCollection = async (
 
         updateDoc(docRef, {
             order: sourceIndex,
-        })
-            .then(() => {
-                console.log("Document successfully updated!");
-            })
-            .catch((error) => {
-                console.error("Error updating document: ", error);
-            });
+        });
     });
 
     sourceQuerySnapshot.forEach((doc) => {
@@ -64,13 +58,7 @@ export const orderCollection = async (
 
         updateDoc(docRef, {
             order: destIndex,
-        })
-            .then(() => {
-                console.log("Document successfully updated!");
-            })
-            .catch((error) => {
-                console.error("Error updating document: ", error);
-            });
+        });
     });
 };
 

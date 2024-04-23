@@ -80,10 +80,6 @@ export const KanbanPage: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        console.log(ticketsSetters);
-    }, [ticketsSetters]);
-
     return (
         <Layout>
             {isLoading && <div>is loading</div>}
