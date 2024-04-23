@@ -1,11 +1,5 @@
 // dependency
-import {
-    collection,
-    onSnapshot,
-    where,
-    query,
-    collectionGroup,
-} from "firebase/firestore";
+import { collection, onSnapshot, collectionGroup } from "firebase/firestore";
 
 // utilities
 import { db } from "@/utilities/firebase";
@@ -21,22 +15,18 @@ export const useCollections = (domain: string) => {
     useEffect(() => {
         const collectionsRef = collection(db, "collections");
 
-        const q = query(
-            collectionsRef,
-            where("domain", "==", domain?.toLowerCase())
-        );
-
-        const unsubscribe = onSnapshot(q, (collection) => {
+        const unsubscribe = onSnapshot(collectionsRef, (collection) => {
             setIsLoading(true);
 
-            const collectionCopy = collection.docs.map((doc) => ({
-                ...(doc.data() as CollectionFace),
-                collectionID: doc.id,
-            }));
+            const collectionCopy = collection.docs
+                .filter((doc) => doc.data().domain === domain)
+                .map((doc) => ({
+                    ...(doc.data() as CollectionFace),
+                    collectionID: doc.id,
+                }))
+                .sort((a, b) => a.order - b.order);
 
-            setCollectionsData(() =>
-                collectionCopy.sort((a, b) => a.order - b.order)
-            );
+            setCollectionsData(collectionCopy);
 
             setIsLoading(false);
         });
@@ -57,13 +47,15 @@ export const useTickets = (id?: string) => {
         const unsubscribe = onSnapshot(ticketsRef, (tickets) => {
             setIsLoading(true);
 
-            const ticketsCopy = tickets.docs.map((doc) => ({
-                ...(doc.data() as TicketFace),
-                collectionID: id,
-                ticketID: doc.id,
-            }));
+            const ticketsCopy = tickets.docs
+                .map((doc) => ({
+                    ...(doc.data() as TicketFace),
+                    collectionID: id,
+                    ticketID: doc.id,
+                }))
+                .sort((a, b) => a.order - b.order);
 
-            setTicketsData(() => ticketsCopy.sort((a, b) => a.order - b.order));
+            setTicketsData(ticketsCopy);
 
             setIsLoading(false);
         });
@@ -86,24 +78,22 @@ export const useAllTickets = (index?: number) => {
         const unsubscribe = onSnapshot(ticketsRef, (tickets) => {
             setIsLoading(true);
 
-            const notInSprint = tickets.docs.filter(
-                (ticket) =>
-                    !ticket.data().inSprint && ticket.data().inSprint !== 0
-            );
+            const allTicketCopy = tickets.docs
+                .filter(
+                    (ticket) =>
+                        !ticket.data().inSprint && ticket.data().inSprint !== 0
+                )
+                .map((ticket) => ({
+                    ...(ticket.data() as TicketFace),
+                    ticketID: ticket.ref.path,
+                }));
 
-            const allTicketCopy = notInSprint.map((ticket) => ({
-                ...(ticket.data() as TicketFace),
-                ticketID: ticket.ref.path,
-            }));
-
-            const InSprint = tickets.docs.filter(
-                (ticket) => ticket.data().inSprint == index
-            );
-
-            const sprintTicketsCopy = InSprint.map((ticket) => ({
-                ...(ticket.data() as TicketFace),
-                ticketID: ticket.ref.path,
-            }));
+            const sprintTicketsCopy = tickets.docs
+                .filter((ticket) => ticket.data().inSprint == index)
+                .map((ticket) => ({
+                    ...(ticket.data() as TicketFace),
+                    ticketID: ticket.ref.path,
+                }));
 
             setAllTickets(allTicketCopy);
             setSprintTickets(sprintTicketsCopy);

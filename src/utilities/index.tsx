@@ -92,17 +92,9 @@ export const orderTicket = async (
     destQuerySnapshot.forEach((doc) => {
         const docRef = doc.ref;
 
-        console.log(docRef);
-
         updateDoc(docRef, {
             order: sourceIndex,
-        })
-            .then(() => {
-                console.log("Document successfully updated!");
-            })
-            .catch((error) => {
-                console.error("Error updating document: ", error);
-            });
+        });
     });
 
     sourceQuerySnapshot.forEach((doc) => {
@@ -110,13 +102,7 @@ export const orderTicket = async (
 
         updateDoc(docRef, {
             order: destIndex,
-        })
-            .then(() => {
-                console.log("Document successfully updated!");
-            })
-            .catch((error) => {
-                console.error("Error updating document: ", error);
-            });
+        });
     });
 };
 
