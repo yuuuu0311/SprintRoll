@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 // dependency
 import {
@@ -6,8 +7,6 @@ import {
     Droppable,
     OnDragEndResponder,
 } from "react-beautiful-dnd";
-import { twMerge } from "tailwind-merge";
-import classNames from "classnames";
 
 // components
 import { Layout } from "@/components/Layout.tsx";
@@ -27,7 +26,7 @@ import { useCollections } from "@/utilities/hook";
 import { useDialog } from "@/utilities/store";
 
 // interface
-import { CollectionFace, DialogState } from "@/interface";
+import { CollectionFace, TicketFace, DialogState } from "@/interface";
 
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
@@ -35,6 +34,13 @@ export const KanbanPage: React.FC = () => {
     const { isLoading, collectionsData, setCollectionsData } = useCollections(
         domain as string
     );
+
+    const [ticketsSetters, setTicketsSetters] = useState<
+        | {
+              [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
+          }
+        | undefined
+    >();
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
@@ -54,11 +60,18 @@ export const KanbanPage: React.FC = () => {
                 orderCollection(source.index, destination.index);
                 break;
             case source.droppableId:
+                if (ticketsSetters === undefined) return;
+
+                ticketsSetters[source.droppableId]((prev: TicketFace[]) =>
+                    rearange(prev, source.index, destination.index)
+                );
+
                 orderTicket(
                     source.index,
                     destination.index,
-                    result.destination?.droppableId
+                    result.source?.droppableId
                 );
+
                 break;
 
             default:
@@ -67,8 +80,9 @@ export const KanbanPage: React.FC = () => {
         }
     };
 
-    // style
-    const wrapperClass = classNames(twMerge("inline-flex gap-4"));
+    useEffect(() => {
+        console.log(ticketsSetters);
+    }, [ticketsSetters]);
 
     return (
         <Layout>
@@ -85,7 +99,7 @@ export const KanbanPage: React.FC = () => {
                             >
                                 {({ innerRef, placeholder }) => (
                                     <div
-                                        className={wrapperClass}
+                                        className="inline-flex gap-4"
                                         ref={innerRef}
                                     >
                                         {(
@@ -94,6 +108,9 @@ export const KanbanPage: React.FC = () => {
                                             <TicketList
                                                 collectionInfo={collection}
                                                 key={collection.collectionID}
+                                                setTicketsSetters={
+                                                    setTicketsSetters
+                                                }
                                             />
                                         ))}
 

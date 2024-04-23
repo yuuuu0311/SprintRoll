@@ -147,10 +147,15 @@ export const Ticket: React.FC<{
         for (const key in labels) {
             labelArr.push(key);
         }
-        return labelArr.map((label) => <div key={label}>{label}</div>);
+        return labelArr.map((label) => (
+            <div
+                key={label}
+                className="bg-lime-500/50 rounded-full px-2 text-sm"
+            >
+                {label}
+            </div>
+        ));
     };
-
-    // renderLabel(ticketInfo.label);
 
     return (
         <>
@@ -169,12 +174,10 @@ export const Ticket: React.FC<{
                             onClick={handleDialogToggle}
                         >
                             <div className={ticketsDomainClass}></div>
-                            <div className="bg-stone-100 hover:bg-neutral-300 transition">
-                                <div>
+                            <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
+                                <div className="">{ticketInfo.title}</div>
+                                <div className="flex justify-end gap-2">
                                     {renderLabel(ticketInfo.label as object)}
-                                </div>
-                                <div className="p-2">
-                                    {ticketInfo.title} - {ticketInfo.order}
                                 </div>
                             </div>
                         </div>
@@ -190,16 +193,18 @@ export const Ticket: React.FC<{
                     title={ticketInfo.title as string}
                 >
                     <div className="mb-4 flex flex-col gap-2">
-                        <DialogSection sectionTitle="Description">
-                            <textarea
-                                className="text-neutral-500 rounded p-4 appearance-none w-full resize-none bg-transparent focus:bg-stone-100 transition "
-                                placeholder="add some description here"
-                                onChange={(e) =>
-                                    handleTextAreaChange(e, ticketInfo)
-                                }
-                                defaultValue={ticketInfo.description}
-                            ></textarea>
-                        </DialogSection>
+                        <textarea
+                            className="text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-stone-100 outline-none transition "
+                            placeholder="add some description here"
+                            onChange={(e) => {
+                                handleTextAreaChange(e, ticketInfo);
+                                setTimeout(() => {
+                                    e.target.blur();
+                                }, 2000);
+                            }}
+                            defaultValue={ticketInfo.description}
+                        ></textarea>
+                        {/* <DialogSection sectionTitle="Description"></DialogSection> */}
                         <DialogSection sectionTitle="developers">
                             <div className="flex gap-1 flex-wrap mb-2">
                                 {ticketInfo.assignedDeveloper?.map(

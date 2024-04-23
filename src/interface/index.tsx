@@ -28,11 +28,3 @@ export interface DialogState {
     isActive: boolean;
     toggleDialog: (prev: boolean) => void;
 }
-
-// collection: {
-//     ...collectionData
-//     tickets: [
-//         ...ticketsData
-//     ]
-
-// }

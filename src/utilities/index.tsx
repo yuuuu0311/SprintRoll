@@ -165,20 +165,21 @@ export const orderSourceInCollection = async (source: {
     index: number;
 }) => {
     const { droppableId: collectionID, index } = source;
+
     const collectionsRef = collection(
         db,
         `collections/${collectionID}/tickets`
     );
-    const sourceQuery = query(collectionsRef, where("order", ">", index));
 
-    const sourceQuerySnapshot = await getDocs(sourceQuery);
-    sourceQuerySnapshot.forEach((doc) => {
-        const docRef = doc.ref;
-
-        updateDoc(docRef, {
-            order: doc.data().order - 1,
+    const sourceQuerySnapshot = await getDocs(collectionsRef);
+    sourceQuerySnapshot.docs
+        .filter((doc) => doc.data().order > index)
+        .forEach((doc) => {
+            const docRef = doc.ref;
+            updateDoc(docRef, {
+                order: doc.data().order - 1,
+            });
         });
-    });
 };
 
 export const orderDestInCollection = async (dest: {

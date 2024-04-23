@@ -17,17 +17,15 @@ export const useCollections = (domain: string) => {
 
         const unsubscribe = onSnapshot(collectionsRef, (collection) => {
             setIsLoading(true);
-
-            const collectionCopy = collection.docs
-                .filter((doc) => doc.data().domain === domain)
-                .map((doc) => ({
-                    ...(doc.data() as CollectionFace),
-                    collectionID: doc.id,
-                }))
-                .sort((a, b) => a.order - b.order);
-
-            setCollectionsData(collectionCopy);
-
+            setCollectionsData(() =>
+                collection.docs
+                    .filter((doc) => doc.data().domain === domain)
+                    .map((doc) => ({
+                        ...(doc.data() as CollectionFace),
+                        collectionID: doc.id,
+                    }))
+                    .sort((a, b) => a.order - b.order)
+            );
             setIsLoading(false);
         });
 
@@ -47,15 +45,15 @@ export const useTickets = (id?: string) => {
         const unsubscribe = onSnapshot(ticketsRef, (tickets) => {
             setIsLoading(true);
 
-            const ticketsCopy = tickets.docs
-                .map((doc) => ({
-                    ...(doc.data() as TicketFace),
-                    collectionID: id,
-                    ticketID: doc.id,
-                }))
-                .sort((a, b) => a.order - b.order);
-
-            setTicketsData(ticketsCopy);
+            setTicketsData(() =>
+                tickets.docs
+                    .map((doc) => ({
+                        ...(doc.data() as TicketFace),
+                        collectionID: id,
+                        ticketID: doc.id,
+                    }))
+                    .sort((a, b) => a.order - b.order)
+            );
 
             setIsLoading(false);
         });
@@ -123,9 +121,8 @@ export const useSprint = () => {
         const unsubscribe = onSnapshot(sprintsRef, (collection) => {
             setIsSprintLoading(true);
 
-            const sprintInfoCopy = collection.docs.map((doc) => doc.data());
+            setSprintInfo(() => collection.docs.map((doc) => doc.data()) as []);
 
-            setSprintInfo(sprintInfoCopy as []);
             setIsSprintLoading(false);
         });
 

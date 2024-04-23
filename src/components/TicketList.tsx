@@ -1,4 +1,10 @@
-import React, { ChangeEvent, useState, Dispatch, SetStateAction } from "react";
+import React, {
+    ChangeEvent,
+    useState,
+    Dispatch,
+    SetStateAction,
+    useEffect,
+} from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -68,10 +74,16 @@ export const Label: React.FC<{
 
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
-    children?: React.ReactNode;
-}> = ({ collectionInfo }) => {
+    setTicketsSetters?: Dispatch<
+        SetStateAction<{
+            key: Dispatch<SetStateAction<TicketFace[]>>;
+        }>
+    >;
+}> = ({ collectionInfo, setTicketsSetters }) => {
     const { domain } = useParams();
-    const { isLoading, ticketsData } = useTickets(collectionInfo.collectionID);
+    const { isLoading, ticketsData, setTicketsData } = useTickets(
+        collectionInfo.collectionID
+    );
 
     const [dialogActive, setDialogActive] = useState(false);
     const [newTickInfo, setNewTickInfo] = useState(() => ({
@@ -117,12 +129,20 @@ export const TicketList: React.FC<{
         }));
     };
 
+    useEffect(() => {
+        if (setTicketsSetters === undefined) return;
+
+        setTicketsSetters((prev) => ({
+            ...prev,
+            [collectionInfo.collectionID]: setTicketsData,
+        }));
+    }, [ticketsData]);
+
     return (
         <>
             <Draggable
                 draggableId={collectionInfo.collectionID}
                 index={collectionInfo.order}
-                isDragDisabled={dialogActive}
             >
                 {({ innerRef, draggableProps, dragHandleProps }) => (
                     <div
