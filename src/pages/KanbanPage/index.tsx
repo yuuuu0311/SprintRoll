@@ -37,7 +37,10 @@ export const KanbanPage: React.FC = () => {
 
     const [ticketsSetters, setTicketsSetters] = useState<
         | {
-              [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
+              [key: string]: {
+                  state: TicketFace[];
+                  setter: Dispatch<SetStateAction<TicketFace[]>>;
+              };
           }
         | undefined
     >();
@@ -62,8 +65,9 @@ export const KanbanPage: React.FC = () => {
             case source.droppableId:
                 if (ticketsSetters === undefined) return;
 
-                ticketsSetters[source.droppableId]((prev: TicketFace[]) =>
-                    rearange(prev, source.index, destination.index)
+                ticketsSetters[source.droppableId].setter(
+                    (prev: TicketFace[]) =>
+                        rearange(prev, source.index, destination.index)
                 );
 
                 orderTicket(
@@ -75,6 +79,33 @@ export const KanbanPage: React.FC = () => {
                 break;
 
             default:
+                if (ticketsSetters === undefined) return;
+
+                ticketsSetters[source.droppableId].setter(
+                    (prev: TicketFace[]) => {
+                        return prev.filter(
+                            (ticket) => ticket.ticketID !== result.draggableId
+                        );
+                    }
+                );
+
+                ticketsSetters[destination.droppableId].setter(
+                    (prev: TicketFace[]) => {
+                        const prevCopy = [...prev];
+
+                        prevCopy.splice(
+                            destination.index,
+                            0,
+                            ticketsSetters[source.droppableId].state.filter(
+                                (ticket) =>
+                                    ticket.ticketID === result.draggableId
+                            )[0]
+                        );
+
+                        return prevCopy;
+                    }
+                );
+
                 toAnotherCollection(source, destination, result.draggableId);
                 break;
         }

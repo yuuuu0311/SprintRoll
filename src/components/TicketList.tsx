@@ -134,7 +134,10 @@ export const TicketList: React.FC<{
 
         setTicketsSetters((prev) => ({
             ...prev,
-            [collectionInfo.collectionID]: setTicketsData,
+            [collectionInfo.collectionID]: {
+                state: ticketsData,
+                setter: setTicketsData,
+            },
         }));
     }, [ticketsData]);
 
