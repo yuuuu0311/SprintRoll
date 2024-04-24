@@ -91,7 +91,14 @@ export const useAllTickets = (index?: number) => {
                 .map((ticket) => ({
                     ...(ticket.data() as TicketFace),
                     ticketID: ticket.ref.path,
-                }));
+                }))
+                .sort(
+                    (a, b) =>
+                        parseInt(a.status as string) -
+                        parseInt(b.status as string)
+                );
+
+            console.log(sprintTicketsCopy);
 
             setAllTickets(allTicketCopy);
             setSprintTickets(sprintTicketsCopy);

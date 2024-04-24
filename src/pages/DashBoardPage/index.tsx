@@ -6,9 +6,6 @@ import {
     Droppable,
     OnDragEndResponder,
 } from "react-beautiful-dnd";
-import { twMerge } from "tailwind-merge";
-import classNames from "classnames";
-// import { collection, onSnapshot, getDocs } from "firebase/firestore";
 
 // components
 import { Layout } from "@/components/Layout";

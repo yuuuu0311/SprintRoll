@@ -114,6 +114,7 @@ export const TicketList: React.FC<{
             order: ticketsData.length,
             domain: domain,
             createdTime: Timestamp.fromDate(new Date()),
+            status: -1,
         });
 
         setNewTickInfo(() => ({

@@ -2,10 +2,12 @@ import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 import { Droppable } from "react-beautiful-dnd";
-// icons
 
 // hook
 import { useAllTickets } from "@/utilities/hook";
+
+// components
+import { TicketStatusRow } from "./TicketStatusRow";
 
 export const SprintPanel: React.FC<{
     sprintInfo: {
@@ -40,12 +42,13 @@ export const SprintPanel: React.FC<{
                                 {sprintInfo.name}
                             </div>
                             <div className={ticketsWrapClass} ref={innerRef}>
-                                <div>
+                                <div className="flex flex-col gap-2">
                                     {isTicketLoading && <div>Loading</div>}
                                     {sprintTickets.map((ticket) => (
-                                        <div key={ticket.ticketID}>
-                                            {ticket.title}
-                                        </div>
+                                        <TicketStatusRow
+                                            ticketInfo={ticket}
+                                            key={ticket.ticketID}
+                                        />
                                     ))}
                                 </div>
                                 {placeholder}
