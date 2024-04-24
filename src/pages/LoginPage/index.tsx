@@ -68,7 +68,7 @@ export const LoginPage: React.FC = () => {
         try {
             setIsLoading(true);
             const auth = getAuth();
-            const { user } = await signInWithEmailAndPassword(
+            await signInWithEmailAndPassword(
                 auth,
                 userInfo.email,
                 userInfo.password
@@ -78,18 +78,12 @@ export const LoginPage: React.FC = () => {
             setIsLogin(true);
         } catch (error) {
             setIsError(error as Error);
-            // console.log(error);
-            // console.log("has user");
         }
     };
 
     useEffect(() => {
         if (isLogin) navigate("/all");
     }, [isLogin, navigate]);
-
-    useEffect(() => {
-        console.log(isError?.message);
-    }, [isError]);
 
     return (
         <div className="grid place-items-center bg-blue-500 h-full">

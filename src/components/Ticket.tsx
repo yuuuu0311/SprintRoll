@@ -12,6 +12,7 @@ import { TicketFace, UserFace } from "@/interface";
 // components
 import { Button } from "@/components/Button";
 import { Dialog } from "@/components/Dialog";
+import { renderLabel } from "@/components/Label";
 
 // utilities
 import {
@@ -133,8 +134,6 @@ export const Ticket: React.FC<{
     );
 
     const handleDialogToggle = () => {
-        console.log(ticketInfo);
-
         setDialogActive((prev) => (prev ? false : true));
     };
 
@@ -160,27 +159,7 @@ export const Ticket: React.FC<{
     );
 
     const handleTicketChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        console.log(ticketInfo);
-
         updateTicketStatus(e.target.value, ticketInfo);
-    };
-
-    const renderLabel = (labels: object) => {
-        const labelArr = [];
-        for (const key in labels) {
-            labelArr.push(key);
-        }
-
-        return labelArr
-            .sort((a, b) => a.length - b.length)
-            .map((label) => (
-                <div
-                    key={label}
-                    className="bg-lime-500/50 rounded-full px-2 text-sm"
-                >
-                    {label}
-                </div>
-            ));
     };
 
     return (

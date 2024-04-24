@@ -122,17 +122,24 @@ export const useSprint = () => {
 
     useEffect(() => {
         const sprintsRef = collection(db, "sprints");
+        setIsSprintLoading(true);
 
         const unsubscribe = onSnapshot(sprintsRef, (collection) => {
-            setIsSprintLoading(true);
-
-            setSprintInfo(() => collection.docs.map((doc) => doc.data()) as []);
-
-            setIsSprintLoading(false);
+            setSprintInfo(
+                () =>
+                    collection.docs
+                        .map((doc) => doc.data())
+                        .sort((a, b) => a.index - b.index) as []
+            );
         });
+        setIsSprintLoading(false);
 
         return () => unsubscribe();
     }, []);
+
+    useEffect(() => {
+        setIsSprintLoading((prev) => !prev);
+    }, [sprintInfo]);
 
     return { isSprintLoading, sprintInfo };
 };

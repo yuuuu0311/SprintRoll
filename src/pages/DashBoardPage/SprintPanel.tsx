@@ -31,8 +31,8 @@ export const SprintPanel: React.FC<{
     };
 
     const ticketsWrapClass = twMerge(
-        classNames("transition overflow-hidden p-1 h-0", {
-            "h-auto": isToggle,
+        classNames("transition-all overflow-hidden max-h-0", {
+            "max-h-[999px]": isToggle,
         })
     );
 
@@ -44,9 +44,11 @@ export const SprintPanel: React.FC<{
             >
                 {({ innerRef, placeholder }) => (
                     <div>
-                        <div className="bg-neutral-100 w-full px-6 pt-4 flex flex-col gap-3 ">
+                        <div className="bg-neutral-100 w-full px-6 pt-4 flex flex-col gap-3 relative">
                             <div className="text-neutral-900 flex gap-2 items-baseline">
-                                <div className="font-bold text-3xl">Sprint</div>
+                                <div className="font-bold text-3xl text-neutral-600">
+                                    Sprint
+                                </div>
                                 <span className="text-xl">#{index}</span>
                             </div>
                             <div className="flex gap-4 items-center">

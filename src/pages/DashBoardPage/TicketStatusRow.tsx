@@ -42,7 +42,6 @@ export const TicketStatusRow: React.FC<{
         <div key={ticketInfo.ticketID} className="flex justify-between">
             <div className="flex gap-4 items-center">
                 <span className={ticketStatusLight}></span>
-
                 <span>{ticketInfo.title}</span>
             </div>
             <div className="flex justify-end gap-2">

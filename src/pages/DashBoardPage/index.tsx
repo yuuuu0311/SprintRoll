@@ -10,6 +10,7 @@ import {
 // components
 import { Layout } from "@/components/Layout";
 import { Ticket } from "@/components/Ticket";
+import { Loader } from "@/components/Loader";
 import { SprintPanel } from "./SprintPanel";
 
 // utilities
@@ -44,7 +45,7 @@ export const DashBoardPage: React.FC = () => {
         }
     };
 
-    console.log(isLoading);
+    console.log(isSprintLoading);
 
     return (
         <Layout>
@@ -59,7 +60,7 @@ export const DashBoardPage: React.FC = () => {
                                 <div className="font-bold text-neutral-800">
                                     Product Backlog
                                 </div>
-                                {isLoading && <div>loading</div>}
+                                {isLoading && <Loader />}
                                 {allTickets?.map((ticket, index) => (
                                     <Ticket
                                         key={ticket.ticketID}
@@ -74,9 +75,12 @@ export const DashBoardPage: React.FC = () => {
                     </Droppable>
 
                     <div className="flex-1 ">
+                        {isSprintLoading && (
+                            <div className="w-full h-full grid place-items-center p-6">
+                                <Loader />
+                            </div>
+                        )}
                         <div className="rounded-md overflow-y-auto h-full [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200">
-                            {isSprintLoading && <div>loading</div>}
-
                             {sprintInfo.map((sprint: object, index: number) => (
                                 <SprintPanel
                                     sprintInfo={sprint}
