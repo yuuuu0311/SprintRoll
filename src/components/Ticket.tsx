@@ -293,12 +293,12 @@ export const Ticket: React.FC<{
                                     defaultValue={ticketInfo.status}
                                 >
                                     <option
-                                        value="undefined"
+                                        value="-1"
                                         defaultChecked
                                         disabled
-                                        hidden
+                                        aria-hidden
                                     >
-                                        null
+                                        select status
                                     </option>
                                     <option value="0">complete</option>
                                     <option value="1">reject</option>
