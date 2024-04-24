@@ -126,7 +126,7 @@ export const KanbanPage: React.FC = () => {
                             >
                                 {({ innerRef, placeholder }) => (
                                     <div
-                                        className="inline-flex gap-4"
+                                        className="inline-flex gap-4 "
                                         ref={innerRef}
                                     >
                                         {(

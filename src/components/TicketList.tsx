@@ -220,11 +220,6 @@ export const TicketList: React.FC<{
                             placeholder="title goes here"
                             changeHandler={(e) => handleChange(e)}
                         />
-
-                        <div>
-                            <div>Date</div>
-                            <input type="datetime-local" name="" id="" />
-                        </div>
                         <div>
                             <div>Label</div>
                             <div className="flex gap-2 flex-wrap">
