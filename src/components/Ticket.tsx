@@ -160,6 +160,8 @@ export const Ticket: React.FC<{
     );
 
     const handleTicketChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        console.log(ticketInfo);
+
         updateTicketStatus(e.target.value, ticketInfo);
     };
 

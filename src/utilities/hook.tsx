@@ -98,8 +98,6 @@ export const useAllTickets = (index?: number) => {
                         parseInt(b.status as string)
                 );
 
-            console.log(sprintTicketsCopy);
-
             setAllTickets(allTicketCopy);
             setSprintTickets(sprintTicketsCopy);
             setIsLoading(false);

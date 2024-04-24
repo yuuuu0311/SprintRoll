@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 
 export const LoginPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [isError, setIsError] = useState<Error>();
     const [isSignIn, setIsSignIn] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const [userInfo, setUserInfo] = useState<{
@@ -50,8 +50,6 @@ export const LoginPage: React.FC = () => {
                 userInfo.password
             );
 
-            if (!user.uid) setIsError(true);
-
             await setDoc(doc(db, "users", user.uid), {
                 uid: user.uid,
                 email: user.email,
@@ -61,8 +59,8 @@ export const LoginPage: React.FC = () => {
             setIsSignIn(true);
         } catch (error) {
             setIsLoading(false);
-            setIsError(true);
-            console.error(error);
+            setIsError(error as Error);
+            // console.error(error);
         }
     };
 
@@ -76,20 +74,22 @@ export const LoginPage: React.FC = () => {
                 userInfo.password
             );
 
-            if (!user.uid) setIsError(true);
-
             setIsLoading(false);
             setIsLogin(true);
         } catch (error) {
-            console.log(error);
-
-            console.log("has user");
+            setIsError(error as Error);
+            // console.log(error);
+            // console.log("has user");
         }
     };
 
     useEffect(() => {
         if (isLogin) navigate("/all");
     }, [isLogin, navigate]);
+
+    useEffect(() => {
+        console.log(isError?.message);
+    }, [isError]);
 
     return (
         <div className="grid place-items-center bg-blue-500 h-full">
@@ -130,7 +130,9 @@ export const LoginPage: React.FC = () => {
                         {isLoading && <div>loading</div>}
                         {isError && (
                             <div className="text-red-500">
-                                something went wrong
+                                {isError.message ===
+                                    "Firebase: Error (auth/email-already-in-use)." &&
+                                    "email has been used"}
                             </div>
                         )}
                         {isSignIn && (
@@ -138,10 +140,10 @@ export const LoginPage: React.FC = () => {
                         )}
                     </div>
                     <div className="flex  gap-2 justify-end ">
-                        <Button rounded onClickFun={handleSignIn}>
+                        <Button rounded primary onClickFun={handleSignIn}>
                             signIn
                         </Button>
-                        <Button rounded onClickFun={handleLogin}>
+                        <Button rounded primary onClickFun={handleLogin}>
                             login
                         </Button>
                     </div>

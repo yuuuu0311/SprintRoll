@@ -32,7 +32,7 @@ export const TicketStatusRow: React.FC<{
             "aspect-square bg-neutral-300 rounded-full w-3 h-3 transition",
             {
                 "bg-lime-400": ticketInfo.status === "0",
-                "bg-red-300": ticketInfo.status === "1",
+                "bg-red-400": ticketInfo.status === "1",
                 "bg-yellow-300": ticketInfo.status === "2",
             }
         )
@@ -42,6 +42,7 @@ export const TicketStatusRow: React.FC<{
         <div key={ticketInfo.ticketID} className="flex justify-between">
             <div className="flex gap-4 items-center">
                 <span className={ticketStatusLight}></span>
+
                 <span>{ticketInfo.title}</span>
             </div>
             <div className="flex justify-end gap-2">

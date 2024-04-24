@@ -8,6 +8,7 @@ import { useAllTickets } from "@/utilities/hook";
 
 // components
 import { TicketStatusRow } from "./TicketStatusRow";
+import { TicketFace } from "@/interface";
 
 export const SprintPanel: React.FC<{
     sprintInfo: {
@@ -16,9 +17,19 @@ export const SprintPanel: React.FC<{
     index: number;
 }> = ({ sprintInfo, index }) => {
     const [isToggle, setIsToggle] = useState(true);
+
     const { isTicketLoading, sprintTickets } = useAllTickets(index);
 
-    // style
+    const getProgressPercentage = (sprintTickets: TicketFace[]) => {
+        const havingStatus = sprintTickets.filter(
+            (ticket) => ticket.status !== -1
+        );
+
+        return havingStatus.length === 0 && sprintTickets.length === 0
+            ? 0
+            : Math.floor((havingStatus.length / sprintTickets.length) * 100);
+    };
+
     const ticketsWrapClass = twMerge(
         classNames("transition overflow-hidden p-1 h-0", {
             "h-auto": isToggle,
@@ -37,6 +48,23 @@ export const SprintPanel: React.FC<{
                             <div className="text-neutral-900 flex gap-2 items-baseline">
                                 <div className="font-bold text-3xl">Sprint</div>
                                 <span className="text-xl">#{index}</span>
+                            </div>
+                            <div className="flex gap-4 items-center">
+                                <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200  h-3">
+                                    {getProgressPercentage(sprintTickets) ? (
+                                        <div
+                                            className={`animate-pulse transition origin-left bg-lime-500 rounded-full h-full `}
+                                            style={{
+                                                width: `${getProgressPercentage(
+                                                    sprintTickets
+                                                )}%`,
+                                            }}
+                                        ></div>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </div>
+                                {`${getProgressPercentage(sprintTickets)}%`}
                             </div>
                             <div className="text-neutral-500">
                                 {sprintInfo.name}

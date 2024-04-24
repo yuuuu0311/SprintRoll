@@ -9,7 +9,7 @@ export interface TicketFace {
     domain?: string;
     assignedDeveloper?: [];
     label?: object;
-    status?: string | undefined;
+    status?: string | number | undefined;
     createdTime: {
         seconds: number;
         nanoseconds: number;

@@ -44,6 +44,8 @@ export const DashBoardPage: React.FC = () => {
         }
     };
 
+    console.log(isLoading);
+
     return (
         <Layout>
             <DragDropContext onDragEnd={onDragEnd}>
