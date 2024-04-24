@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 
 // dependency
 import {

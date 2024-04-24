@@ -74,10 +74,16 @@ export const Label: React.FC<{
 
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
-    setTicketsSetters?: Dispatch<
-        SetStateAction<{
-            key: Dispatch<SetStateAction<TicketFace[]>>;
-        }>
+    setTicketsSetters: Dispatch<
+        SetStateAction<
+            | {
+                  [key: string]: {
+                      state: TicketFace[];
+                      setter: Dispatch<SetStateAction<TicketFace[]>>;
+                  };
+              }
+            | undefined
+        >
     >;
 }> = ({ collectionInfo, setTicketsSetters }) => {
     const { domain } = useParams();
@@ -137,6 +143,9 @@ export const TicketList: React.FC<{
             [collectionInfo.collectionID]: {
                 state: ticketsData,
                 setter: setTicketsData,
+            } as {
+                state: TicketFace[];
+                setter: Dispatch<SetStateAction<TicketFace[]>>;
             },
         }));
     }, [ticketsData]);
