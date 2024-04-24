@@ -2,7 +2,6 @@ import { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
-import { Draggable } from "react-beautiful-dnd";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 import { useDebounce } from "use-debounce";
@@ -93,7 +92,7 @@ export const Ticket: React.FC<{
     ticketInfo: TicketFace;
     index: number;
     isInCollection?: string;
-    isDragging: boolean;
+    isDragging?: boolean;
 }> = ({ isInCollection, index, ticketInfo, isDragging }) => {
     const { domain } = useParams();
 
