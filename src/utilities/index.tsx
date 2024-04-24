@@ -279,6 +279,22 @@ export const updateDescription = async (
     });
 };
 
+export const updateTicketStatus = async (
+    value: string,
+    ticketInfo: TicketFace
+) => {
+    const docRef = doc(
+        db,
+        `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
+    );
+    const docSnap = await getDoc(docRef);
+
+    await setDoc(docRef, {
+        ...docSnap.data(),
+        status: value,
+    });
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = (fn: any, delay: number) => {
     let timer: number;

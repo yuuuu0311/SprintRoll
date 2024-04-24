@@ -9,6 +9,11 @@ export interface TicketFace {
     domain?: string;
     assignedDeveloper?: [];
     label?: object;
+    status?: string;
+    createdTime: {
+        seconds: number;
+        nanoseconds: number;
+    };
 }
 
 export interface CollectionFace extends TicketFace {

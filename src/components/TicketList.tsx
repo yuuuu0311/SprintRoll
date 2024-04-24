@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
@@ -113,6 +113,7 @@ export const TicketList: React.FC<{
             ...newTickInfo,
             order: ticketsData.length,
             domain: domain,
+            createdTime: Timestamp.fromDate(new Date()),
         });
 
         setNewTickInfo(() => ({

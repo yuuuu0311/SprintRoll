@@ -21,6 +21,7 @@ import {
     removeFromAssigned,
     debounce,
     updateDescription,
+    updateTicketStatus,
 } from "@/utilities";
 
 const DialogSection: React.FC<{
@@ -29,7 +30,7 @@ const DialogSection: React.FC<{
 }> = ({ children, sectionTitle }) => {
     return (
         <div>
-            <div className="capitalize text-lg font-bold text-neutral-500 mb-1">
+            <div className="capitalize text-md px-2 text-neutral-400 mb-2">
                 {sectionTitle}
             </div>
             <div>{children}</div>
@@ -48,27 +49,25 @@ const Developer: React.FC<{
     const isInAssigned =
         assignedDeveloperArr.indexOf(developerInfo.name) !== -1;
 
-    const btnClass = twMerge(classNames("text-2xl aspect-square"));
-
     return (
-        <div className="rounded-md bg-neutral-100 flex gap-2 p-4">
+        <div className="rounded-md bg-neutral-100 flex justify-between items-center gap-4 p-4">
             <div className="flex flex-1 flex-col gap-1">
-                <div className="capitalize">
-                    {developerInfo.name} ｜
-                    <span className="text-gray-500">
+                <div className="capitalize flex justify-between items-baseline">
+                    <span>{developerInfo.name} </span>
+                    <span className="text-xs text-neutral-500">
                         {developerInfo.domain}
                     </span>
                 </div>
-                <div className="capitalize text-gray-500 text-sm">
+                <div className="text-gray-500 text-sm ">
                     {developerInfo.email}
                 </div>
             </div>
 
             <Button
-                rounded
+                link
                 success={!isInAssigned}
                 danger={isInAssigned}
-                addonStyle={btnClass}
+                addonStyle="text-md aspect-square p-0 w-6 grid place-items-center rounded-full"
                 onClickFun={() =>
                     isInAssigned
                         ? removeFromAssigned(
@@ -117,7 +116,25 @@ export const Ticket: React.FC<{
         })
     );
 
+    const ticketsStatusClass = twMerge(
+        classNames("flex flex-col gap-2 bg-neutral-300 rounded-lg p-4", {
+            "bg-lime-400": ticketInfo.status === "0",
+            "bg-red-300": ticketInfo.status === "1",
+            "bg-yellow-300": ticketInfo.status === "2",
+        })
+    );
+
+    const ticketsStatusLabelClass = twMerge(
+        classNames("text-neutral-400", {
+            "text-lime-900": ticketInfo.status === "0",
+            "text-red-900": ticketInfo.status === "1",
+            "text-yellow-900": ticketInfo.status === "2",
+        })
+    );
+
     const handleDialogToggle = () => {
+        console.log(ticketInfo);
+
         setDialogActive((prev) => (prev ? false : true));
     };
 
@@ -141,6 +158,10 @@ export const Ticket: React.FC<{
         },
         1000
     );
+
+    const handleTicketChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        updateTicketStatus(e.target.value, ticketInfo);
+    };
 
     const renderLabel = (labels: object) => {
         const labelArr = [];
@@ -195,37 +216,50 @@ export const Ticket: React.FC<{
                     }}
                     title={ticketInfo.title as string}
                 >
-                    <div className="mb-4 flex flex-col gap-2">
-                        <textarea
-                            className="text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-stone-100 outline-none transition "
-                            placeholder="add some description here"
-                            onChange={(e) => {
-                                handleTextAreaChange(e, ticketInfo);
-                                setTimeout(() => {
-                                    e.target.blur();
-                                }, 2000);
-                            }}
-                            defaultValue={ticketInfo.description}
-                        ></textarea>
-                        {/* <DialogSection sectionTitle="Description"></DialogSection> */}
-                        <DialogSection sectionTitle="developers">
-                            <div className="flex gap-1 flex-wrap mb-2">
-                                {ticketInfo.assignedDeveloper?.map(
-                                    (developer, index) => (
-                                        <div
-                                            key={`${developer}-${index}`}
-                                            className="capitalize rounded-full bg-lime-500 text-white w-fit py-1 px-3"
-                                        >
-                                            {developer}
-                                        </div>
-                                    )
-                                )}
-                            </div>
-                            <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 flex-1 mb-3 items-start">
+                        <div className="flex flex-col gap-4 flex-1">
+                            <DialogSection sectionTitle="created date">
+                                <div className="px-2 text-neutral-500">
+                                    {new Date(
+                                        ticketInfo.createdTime.seconds * 1000 +
+                                            ticketInfo.createdTime.nanoseconds /
+                                                1000000
+                                    ).toLocaleDateString()}
+                                </div>
+                            </DialogSection>
+                            <DialogSection sectionTitle="assigned developers">
+                                <div className="flex gap-1 flex-wrap px-2">
+                                    {ticketInfo.assignedDeveloper?.map(
+                                        (developer, index) => (
+                                            <div
+                                                key={`${developer}-${index}`}
+                                                className="capitalize rounded-full bg-lime-500 text-white w-fit py-1 px-3"
+                                            >
+                                                {developer}
+                                            </div>
+                                        )
+                                    )}
+                                </div>
+                            </DialogSection>
+                            <DialogSection sectionTitle="Description">
+                                <textarea
+                                    className="p-2 text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-neutral-300 outline-none transition "
+                                    placeholder="add some description here"
+                                    onChange={(e) => {
+                                        handleTextAreaChange(e, ticketInfo);
+                                    }}
+                                    defaultValue={ticketInfo.description}
+                                ></textarea>
+                            </DialogSection>
+                        </div>
+                        <div className="w-1/3 flex flex-col gap-3">
+                            <div className="flex flex-col gap-2 bg-neutral-300 rounded-lg p-4">
+                                <div className="text-neutral-400">
+                                    Search Developer
+                                </div>
                                 <input
                                     type="text"
-                                    className="w-full py-2 px-4 rounded-md focus:bg-neutral-300"
-                                    placeholder="Search for Developer"
+                                    className="w-full py-2 px-4 rounded-md focus:outline-neutral-400"
                                     onChange={(e) => handelSearchDeveloper(e)}
                                 />
                                 <div className="flex flex-col gap-2">
@@ -249,7 +283,29 @@ export const Ticket: React.FC<{
                                     )}
                                 </div>
                             </div>
-                        </DialogSection>
+                            <div className={ticketsStatusClass}>
+                                <div className={ticketsStatusLabelClass}>
+                                    Status
+                                </div>
+                                <select
+                                    className="px-2 py-1 rounded-lg"
+                                    onChange={(e) => handleTicketChange(e)}
+                                    defaultValue={ticketInfo.status}
+                                >
+                                    <option
+                                        value="undefined"
+                                        defaultChecked
+                                        disabled
+                                        hidden
+                                    >
+                                        null
+                                    </option>
+                                    <option value="0">complete</option>
+                                    <option value="1">reject</option>
+                                    <option value="2">padding</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div className="flex gap-2 mt-auto justify-end">
                         <Button

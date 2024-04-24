@@ -34,12 +34,6 @@ const getSprintNum = (droppableId: string) => {
 export const DashBoardPage: React.FC = () => {
     const { isLoading, allTickets } = useAllTickets();
     const { isSprintLoading, sprintInfo } = useSprint();
-    // style
-    const wrapperClass = classNames(
-        twMerge(
-            "flex flex-col gap-3 p-4 rounded-md w-56 bg-neutral-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-blue-300 h-full overflow-y-auto"
-        )
-    );
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
@@ -59,7 +53,10 @@ export const DashBoardPage: React.FC = () => {
                 <div className="relative flex h-full items-start p-6 gap-6">
                     <Droppable droppableId="collections" type="droppableItem">
                         {({ innerRef, placeholder }) => (
-                            <div className={wrapperClass} ref={innerRef}>
+                            <div
+                                className="flex flex-col gap-3 p-4 rounded-md w-56 bg-neutral-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-blue-300 h-full overflow-y-auto"
+                                ref={innerRef}
+                            >
                                 <div className="font-bold text-neutral-800">
                                     Product Backlog
                                 </div>
