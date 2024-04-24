@@ -31,8 +31,8 @@ export const SprintPanel: React.FC<{
     };
 
     const ticketsWrapClass = twMerge(
-        classNames("transition-all overflow-hidden max-h-0", {
-            "max-h-[999px]": isToggle,
+        classNames("transition-all overflow-y-auto no-scrollbar max-h-0", {
+            "max-h-[500px]": isToggle,
         })
     );
 

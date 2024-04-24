@@ -13,6 +13,7 @@ import { Layout } from "@/components/Layout.tsx";
 import { TicketList } from "@/components/TicketList";
 import { AddCategoryDialog } from "./addCategory";
 import { Button } from "@/components/Button";
+import { Loader } from "@/components/Loader";
 
 // utilities
 import {
@@ -113,7 +114,11 @@ export const KanbanPage: React.FC = () => {
 
     return (
         <Layout>
-            {isLoading && <div>is loading</div>}
+            {isLoading && (
+                <div className="p-12 ">
+                    <Loader />
+                </div>
+            )}
 
             {collectionsData !== undefined && (
                 <div className="h-full">

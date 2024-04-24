@@ -16,7 +16,6 @@ export const useCollections = (domain: string) => {
         const collectionsRef = collection(db, "collections");
 
         const unsubscribe = onSnapshot(collectionsRef, (collection) => {
-            setIsLoading(true);
             setCollectionsData(() =>
                 collection.docs
                     .filter((doc) => doc.data().domain === domain)
@@ -26,13 +25,12 @@ export const useCollections = (domain: string) => {
                     }))
                     .sort((a, b) => a.order - b.order)
             );
-            setIsLoading(false);
         });
 
         return () => unsubscribe();
     }, [domain]);
 
-    return { isLoading, collectionsData, setCollectionsData };
+    return { isLoading, collectionsData, setCollectionsData, setIsLoading };
 };
 
 export const useTickets = (id?: string) => {
@@ -43,8 +41,6 @@ export const useTickets = (id?: string) => {
         const ticketsRef = collection(db, `collections/${id}/tickets`);
 
         const unsubscribe = onSnapshot(ticketsRef, (tickets) => {
-            setIsLoading(true);
-
             setTicketsData(() =>
                 tickets.docs
                     .map((doc) => ({
@@ -54,14 +50,12 @@ export const useTickets = (id?: string) => {
                     }))
                     .sort((a, b) => a.order - b.order)
             );
-
-            setIsLoading(false);
         });
 
         return () => unsubscribe();
     }, [id]);
 
-    return { isLoading, ticketsData, setTicketsData };
+    return { isLoading, ticketsData, setTicketsData, setIsLoading };
 };
 
 export const useAllTickets = (index?: number) => {

@@ -21,6 +21,7 @@ import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 import { Ticket } from "@/components/Ticket";
 import { InputRow } from "@/components/InputRow";
+import { Loader } from "@/components/Loader";
 
 // hook and utilities
 import { useTickets } from "@/utilities/hook";
@@ -176,17 +177,36 @@ export const TicketList: React.FC<{
                                         {collectionInfo.name}
                                     </h3>
 
-                                    {isLoading && <div>is loading</div>}
+                                    {isLoading && <Loader />}
                                     {(ticketsData as CollectionFace[])?.map(
                                         (ticket: TicketFace, index: number) => (
-                                            <Ticket
-                                                key={ticket.ticketID}
-                                                ticketInfo={ticket}
+                                            <Draggable
                                                 index={index}
-                                                isInCollection={
-                                                    collectionInfo.collectionID
+                                                draggableId={
+                                                    ticket.ticketID as string
                                                 }
-                                            />
+                                                key={ticket.ticketID}
+                                                isDragDisabled={dialogActive}
+                                            >
+                                                {(provided, snapshot) => (
+                                                    <div
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                    >
+                                                        <Ticket
+                                                            ticketInfo={ticket}
+                                                            index={index}
+                                                            isDragging={
+                                                                snapshot.isDragging
+                                                            }
+                                                            isInCollection={
+                                                                collectionInfo.collectionID
+                                                            }
+                                                        />
+                                                    </div>
+                                                )}
+                                            </Draggable>
                                         )
                                     )}
 

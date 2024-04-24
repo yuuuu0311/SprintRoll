@@ -93,7 +93,8 @@ export const Ticket: React.FC<{
     ticketInfo: TicketFace;
     index: number;
     isInCollection?: string;
-}> = ({ isInCollection, index, ticketInfo }) => {
+    isDragging: boolean;
+}> = ({ isInCollection, index, ticketInfo, isDragging }) => {
     const { domain } = useParams();
 
     const [assignedDeveloper, setAssignedDeveloper] = useState<
@@ -108,6 +109,11 @@ export const Ticket: React.FC<{
 
     const [dialogActive, setDialogActive] = useState(false);
 
+    const ticketsClass = twMerge(
+        classNames("rounded-md overflow-hidden transition", {
+            "drop-shadow-xl": isDragging,
+        })
+    );
     const ticketsDomainClass = twMerge(
         classNames("p-2", {
             "bg-lime-500": ticketInfo.domain === "frontend",
@@ -165,29 +171,15 @@ export const Ticket: React.FC<{
     return (
         <>
             {ticketInfo.ticketID !== undefined && (
-                <Draggable
-                    index={index}
-                    draggableId={ticketInfo.ticketID}
-                    isDragDisabled={dialogActive}
-                >
-                    {({ innerRef, draggableProps, dragHandleProps }) => (
-                        <div
-                            ref={innerRef}
-                            className="rounded-md overflow-hidden"
-                            {...draggableProps}
-                            {...dragHandleProps}
-                            onClick={handleDialogToggle}
-                        >
-                            <div className={ticketsDomainClass}></div>
-                            <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
-                                <div className="">{ticketInfo.title}</div>
-                                <div className="flex justify-end gap-2">
-                                    {renderLabel(ticketInfo.label as object)}
-                                </div>
-                            </div>
+                <div className={ticketsClass} onClick={handleDialogToggle}>
+                    <div className={ticketsDomainClass}></div>
+                    <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
+                        <div className="">{ticketInfo.title}</div>
+                        <div className="flex justify-end gap-2">
+                            {renderLabel(ticketInfo.label as object)}
                         </div>
-                    )}
-                </Draggable>
+                    </div>
+                </div>
             )}
             {dialogActive && (
                 <Dialog

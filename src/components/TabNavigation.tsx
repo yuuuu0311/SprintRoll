@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
 enum NavigationLabel {
-    PERSON = "Personal",
+    // PERSON = "Personal",
     All = "All",
     FE = "FrontEnd",
     BE = "BackEnd",
@@ -15,7 +15,7 @@ enum NavigationLabel {
 }
 
 const NavigationLabelArray = [
-    NavigationLabel.PERSON,
+    // NavigationLabel.PERSON,
     NavigationLabel.All,
     NavigationLabel.FE,
     NavigationLabel.BE,
