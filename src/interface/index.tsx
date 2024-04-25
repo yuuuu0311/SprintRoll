@@ -33,3 +33,10 @@ export interface DialogState {
     isActive: boolean;
     toggleDialog: (prev: boolean) => void;
 }
+
+export interface SprintFace {
+    index?: number;
+    name: string;
+    description: string;
+    cycle: [Date, Date | undefined];
+}

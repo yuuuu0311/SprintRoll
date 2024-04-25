@@ -1,24 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 import { Droppable } from "react-beautiful-dnd";
+import { Timestamp } from "firebase/firestore";
 
 // hook
 import { useAllTickets } from "@/utilities/hook";
 
 // components
 import { TicketStatusRow } from "./TicketStatusRow";
-import { TicketFace } from "@/interface";
+import { SprintFace, TicketFace } from "@/interface";
 
 export const SprintPanel: React.FC<{
-    sprintInfo: {
-        name?: string;
-    };
+    sprintInfo: SprintFace;
+    setSprintTicketsSetters: Dispatch<
+        SetStateAction<
+            | {
+                  [key: string]: {
+                      [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
+                  };
+              }
+            | undefined
+        >
+    >;
     index: number;
-}> = ({ sprintInfo, index }) => {
+}> = ({ sprintInfo, index, setSprintTicketsSetters }) => {
     const [isToggle, setIsToggle] = useState(true);
 
-    const { isTicketLoading, sprintTickets } = useAllTickets(index);
+    const { isTicketLoading, sprintTickets, setSprintTickets } =
+        useAllTickets(index);
 
     const getProgressPercentage = (sprintTickets: TicketFace[]) => {
         const havingStatus = sprintTickets.filter(
@@ -31,13 +41,31 @@ export const SprintPanel: React.FC<{
     };
 
     const ticketsWrapClass = twMerge(
-        classNames(
-            "transition-all overflow-y-auto no-scrollbar max-h-0 bg-neutral-100 px-6 pt-1",
-            {
-                "max-h-[500px] py-2": isToggle,
-            }
-        )
+        classNames("transition-all max-h-0 bg-neutral-100 px-6 pt-1", {
+            "py-2 max-h-[9999999px]": isToggle,
+            "overflow-y-auto no-scrollbar max-h-[500px] ": false,
+        })
     );
+
+    const getDateString = (date: Timestamp | Date) => {
+        return new Date(
+            date.seconds * 1000 + date.nanoseconds / 1000000
+        ).toLocaleDateString();
+    };
+
+    useEffect(() => {
+        setSprintTicketsSetters(
+            (prev) =>
+                ({
+                    ...prev,
+                    [`sprintTickets-${index}`]: setSprintTickets,
+                } as {
+                    [key: string]: {
+                        [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
+                    };
+                })
+        );
+    }, []);
 
     return (
         <div>
@@ -47,12 +75,28 @@ export const SprintPanel: React.FC<{
             >
                 {({ innerRef, placeholder }) => (
                     <div>
-                        <div className="bg-neutral-100 w-full px-6 pt-4 flex flex-col gap-3 relative">
-                            <div className="text-neutral-900 flex gap-2 items-baseline">
-                                <div className="font-bold text-3xl text-neutral-600">
-                                    Sprint
+                        <div className="sticky top-0 bg-neutral-100 w-full px-6 pt-4 flex flex-col gap-3 ">
+                            <div className="text-neutral-600 flex gap-2 items-end">
+                                <div>
+                                    <div className="font-bold text-3xl">
+                                        {sprintInfo.name}
+                                    </div>
+                                    <span className="text-sm ">
+                                        # Sprint {index}
+                                    </span>
                                 </div>
-                                <span className="text-xl">#{index}</span>
+
+                                <span className="text-sm ml-auto flex gap-2">
+                                    <span>
+                                        {getDateString(sprintInfo.cycle[0])}
+                                    </span>
+                                    -
+                                    <span>
+                                        {getDateString(
+                                            sprintInfo.cycle[1] as Date
+                                        )}
+                                    </span>
+                                </span>
                             </div>
                             <div className="flex gap-4 items-center">
                                 <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200  h-3">
@@ -86,7 +130,7 @@ export const SprintPanel: React.FC<{
                                     sprintTickets.map((ticket) => (
                                         <TicketStatusRow
                                             ticketInfo={ticket}
-                                            key={ticket.ticketID}
+                                            key={`${ticket.ticketID}-${ticket.order}`}
                                         />
                                     ))
                                 )}

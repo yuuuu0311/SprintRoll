@@ -1,4 +1,4 @@
-// import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 
 import "rsuite/DateRangePicker/styles/index.css";
 
@@ -18,12 +18,12 @@ import { Button } from "@/components/Button";
 import { DateRangePicker } from "rsuite";
 
 // utilities
-import { toSprint } from "@/utilities";
+import { toSprint, addSprint } from "@/utilities";
 import { useAllTickets, useSprint } from "@/utilities/hook";
 import { useDialog } from "@/utilities/store";
 
 // interface
-import { DialogState } from "@/interface";
+import { DialogState, SprintFace, TicketFace } from "@/interface";
 import { Dialog } from "@/components/Dialog";
 
 const toSprintPanel = (droppableId: string) => {
@@ -40,8 +40,21 @@ const getSprintNum = (droppableId: string) => {
 
 export const DashBoardPage: React.FC = () => {
     const { isLoading, allTickets } = useAllTickets();
-    const { isSprintLoading, sprintInfo } = useSprint();
+    const { isSprintLoading, sprintInfo, setSprintInfo } = useSprint();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
+
+    const [sprintTicketsSetters, setSprintTicketsSetters] = useState<
+        | {
+              [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
+          }
+        | undefined
+    >();
+
+    const [newSprintInfo, setNewSprintInfo] = useState<SprintFace>({
+        name: "GGGG",
+        description: "",
+        cycle: [new Date(), undefined],
+    });
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
@@ -49,6 +62,23 @@ export const DashBoardPage: React.FC = () => {
         if (!destination) return;
 
         if (toSprintPanel(destination.droppableId)) {
+            if (sprintTicketsSetters === undefined) return;
+
+            const ticketsCopy = [...allTickets];
+            const [movedTicket] = ticketsCopy.splice(source.index, 1);
+            console.log(movedTicket);
+
+            sprintTicketsSetters[destination.droppableId](
+                (prev: TicketFace[]) => {
+                    prev.splice(destination.index, 0, movedTicket);
+
+                    return prev.sort(
+                        (a: TicketFace, b: TicketFace) =>
+                            (a.status as number) - (b.status as number)
+                    );
+                }
+            );
+
             toSprint(result.draggableId, getSprintNum(destination.droppableId));
         } else {
             console.log(source);
@@ -56,8 +86,25 @@ export const DashBoardPage: React.FC = () => {
     };
 
     const handleAddSprint = () => {
-        console.log(sprintInfo);
+        setSprintInfo((prev) => {
+            return [
+                ...prev,
+                {
+                    index: sprintInfo.length,
+                    ...newSprintInfo,
+                },
+            ] as SprintFace[];
+        });
+        addSprint({
+            index: sprintInfo.length,
+            ...newSprintInfo,
+        });
+        toggleDialog(isActive);
     };
+
+    useEffect(() => {
+        console.log(sprintTicketsSetters);
+    }, [sprintTicketsSetters]);
 
     return (
         <Layout>
@@ -86,24 +133,35 @@ export const DashBoardPage: React.FC = () => {
                         )}
                     </Droppable>
 
-                    <div className="flex-1 ">
+                    <div className="flex-1 h-full flex flex-col gap-5">
                         {isSprintLoading && (
                             <div className="w-full h-full grid place-items-center p-6">
                                 <Loader />
                             </div>
                         )}
-                        <div className="rounded-md overflow-y-auto h-full [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200">
-                            {sprintInfo.map((sprint: object, index: number) => (
-                                <SprintPanel
-                                    sprintInfo={sprint}
-                                    key={index}
-                                    index={index}
-                                />
-                            ))}
+                        <div className="rounded-md max-h-full overflow-y-auto no-scrollbar [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200">
+                            {sprintInfo.length === 0 ? (
+                                <div className="text-neutral-400 text-center text-sm">
+                                    SprintRoll Your Product now !
+                                </div>
+                            ) : (
+                                sprintInfo.map(
+                                    (sprint: object, index: number) => (
+                                        <SprintPanel
+                                            setSprintTicketsSetters={
+                                                setSprintTicketsSetters
+                                            }
+                                            sprintInfo={sprint as SprintFace}
+                                            key={index}
+                                            index={index}
+                                        />
+                                    )
+                                )
+                            )}
                         </div>
                         <Button
                             rounded
-                            addonStyle="hover:bg-neutral-400 hover:text-neutral-600 w-full mt-5 bg-neutral-400/50 text-neutral-500 active:bg-neutral-400/50"
+                            addonStyle="hover:bg-neutral-400 hover:text-neutral-600 w-full  bg-neutral-400/50 text-neutral-500 active:bg-neutral-400/50"
                             onClickFun={() => toggleDialog(isActive)}
                         >
                             + sprint
@@ -119,17 +177,44 @@ export const DashBoardPage: React.FC = () => {
                 >
                     <div>
                         <div>sprint cycle</div>
-                        <DateRangePicker />
+                        <input
+                            type="text"
+                            placeholder="title"
+                            onChange={(e) => {
+                                setNewSprintInfo((prev) => ({
+                                    ...prev,
+                                    name: e.target.value,
+                                }));
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <div>sprint cycle</div>
+                        <DateRangePicker
+                            // value={newSprintInfo.cycle as [Date, Date]}
+                            onChange={(dateVal) => {
+                                setNewSprintInfo(
+                                    (prev) =>
+                                        ({
+                                            ...prev,
+                                            cycle: dateVal,
+                                        } as SprintFace)
+                                );
+                            }}
+                        />
                     </div>
                     <div>
                         <div>description</div>
                         <textarea
                             className="p-2 text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-neutral-300 outline-none transition "
                             placeholder="add some description here"
-                            // onChange={(e) => {
-                            //     handleTextAreaChange(e, ticketInfo);
-                            // }}
-                            // defaultValue={ticketInfo.description}
+                            onChange={(e) => {
+                                setNewSprintInfo((prev) => ({
+                                    ...prev,
+                                    description: e.target.value,
+                                }));
+                            }}
+                            defaultValue={newSprintInfo.description}
                         ></textarea>
                     </div>
 

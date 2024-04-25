@@ -6,7 +6,7 @@ import { db } from "@/utilities/firebase";
 import { useEffect, useState } from "react";
 
 // interface
-import { CollectionFace, TicketFace } from "@/interface";
+import { CollectionFace, SprintFace, TicketFace } from "@/interface";
 
 export const useCollections = (domain: string) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -106,17 +106,18 @@ export const useAllTickets = (index?: number) => {
         isTicketLoading,
         sprintTickets,
         setAllTickets,
+        setSprintTickets,
         setIsTicketLoading,
     };
 };
 
 export const useSprint = () => {
     const [isSprintLoading, setIsSprintLoading] = useState(false);
-    const [sprintInfo, setSprintInfo] = useState([]);
+    const [sprintInfo, setSprintInfo] = useState<SprintFace[]>([]);
 
     useEffect(() => {
         const sprintsRef = collection(db, "sprints");
-        setIsSprintLoading(true);
+        // setIsSprintLoading(true);
 
         const unsubscribe = onSnapshot(sprintsRef, (collection) => {
             setSprintInfo(
@@ -126,14 +127,14 @@ export const useSprint = () => {
                         .sort((a, b) => a.index - b.index) as []
             );
         });
-        setIsSprintLoading(false);
+        // setIsSprintLoading(false);
 
         return () => unsubscribe();
     }, []);
 
-    useEffect(() => {
-        setIsSprintLoading((prev) => !prev);
-    }, [sprintInfo]);
+    // useEffect(() => {
+    //     setIsSprintLoading((prev) => !prev);
+    // }, [sprintInfo]);
 
-    return { isSprintLoading, sprintInfo };
+    return { isSprintLoading, setIsSprintLoading, sprintInfo, setSprintInfo };
 };

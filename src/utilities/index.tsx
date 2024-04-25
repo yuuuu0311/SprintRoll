@@ -10,6 +10,7 @@ import {
     updateDoc,
     deleteDoc,
     collectionGroup,
+    addDoc,
     documentId,
 } from "firebase/firestore";
 
@@ -17,7 +18,7 @@ import {
 import { db } from "@/utilities/firebase";
 
 // interface
-import { CollectionFace, TicketFace, UserFace } from "@/interface";
+import { CollectionFace, SprintFace, TicketFace, UserFace } from "@/interface";
 
 export const rearange: (
     arr: (CollectionFace | TicketFace)[],
@@ -292,6 +293,15 @@ export const updateTicketStatus = async (
     await setDoc(docRef, {
         ...docSnap.data(),
         status: value,
+    });
+};
+
+export const addSprint = async (sprintInfo: SprintFace) => {
+    const sprintsRef = collection(db, "sprints");
+    console.log(sprintsRef);
+
+    await addDoc(sprintsRef, {
+        ...sprintInfo,
     });
 };
 
