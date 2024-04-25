@@ -197,7 +197,7 @@ export const Ticket: React.FC<{
                                         )}
                                     </div>
                                 </div>
-                            </div>{" "}
+                            </div>
                         </div>
                     )}
                 </Draggable>

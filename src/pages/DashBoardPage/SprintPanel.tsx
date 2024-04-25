@@ -11,12 +11,28 @@ import { useAllTickets } from "@/utilities/hook";
 import { TicketStatusRow } from "./TicketStatusRow";
 import { SprintFace, TicketFace } from "@/interface";
 
+const getProgressPercentage = (sprintTickets: TicketFace[]) => {
+    const havingStatus = sprintTickets.filter((ticket) => ticket.status !== -1);
+
+    return havingStatus.length === 0 && sprintTickets.length === 0
+        ? 0
+        : Math.floor((havingStatus.length / sprintTickets.length) * 100);
+};
+
+const getDateString = (date: Timestamp) =>
+    new Date(
+        date.seconds * 1000 + date.nanoseconds / 1000000
+    ).toLocaleDateString();
+
 export const SprintPanel: React.FC<{
     sprintInfo: SprintFace;
     setSprintTicketsSetters: Dispatch<
         SetStateAction<
             | {
-                  [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
+                  [key: string]: {
+                      state: TicketFace[];
+                      setter: Dispatch<SetStateAction<TicketFace[]>>;
+                  };
               }
             | undefined
         >
@@ -29,39 +45,29 @@ export const SprintPanel: React.FC<{
     const { isTicketLoading, sprintTickets, setSprintTickets } =
         useAllTickets(index);
 
-    const getProgressPercentage = (sprintTickets: TicketFace[]) => {
-        const havingStatus = sprintTickets.filter(
-            (ticket) => ticket.status !== -1
-        );
-
-        return havingStatus.length === 0 && sprintTickets.length === 0
-            ? 0
-            : Math.floor((havingStatus.length / sprintTickets.length) * 100);
-    };
-
     const ticketsWrapClass = twMerge(
-        classNames("transition-all max-h-0 bg-neutral-100 px-6 pt-1", {
-            "py-2 max-h-[9999999px]": isToggle,
-            "overflow-y-auto no-scrollbar max-h-[500px] ": false,
+        classNames("transition-all bg-neutral-100 px-6 overflow-hidden  h-0", {
+            "h-auto": isToggle,
         })
     );
-
-    const getDateString = (date: Timestamp) =>
-        new Date(
-            date.seconds * 1000 + date.nanoseconds / 1000000
-        ).toLocaleDateString();
 
     useEffect(() => {
         setSprintTicketsSetters(
             (prev) =>
                 ({
                     ...prev,
-                    [`sprintTickets-${index}`]: setSprintTickets,
+                    [`sprintTickets-${index}`]: {
+                        state: sprintTickets,
+                        setter: setSprintTickets,
+                    },
                 } as {
-                    [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
+                    [key: string]: {
+                        state: TicketFace[];
+                        setter: Dispatch<SetStateAction<TicketFace[]>>;
+                    };
                 })
         );
-    }, []);
+    }, [sprintTickets]);
 
     return (
         <div>
@@ -71,30 +77,34 @@ export const SprintPanel: React.FC<{
             >
                 {({ innerRef, placeholder }) => (
                     <div>
-                        <div className="sticky top-0 bg-neutral-100 w-full px-6 pt-4 flex flex-col gap-3 ">
-                            <div className="text-neutral-600 flex gap-2 items-end">
-                                <div>
+                        <div className=" sticky top-0 bg-neutral-100 w-full px-6 pt-4 flex flex-col gap-3 ">
+                            <div className="text-neutral-600 flex flex-col gap-1">
+                                <div className="flex justify-between items-baseline">
                                     <div className="font-bold text-3xl">
                                         {sprintInfo.name}
                                     </div>
-                                    <span className="text-sm ">
+                                    <span className="text-sm">
                                         # Sprint {index}
                                     </span>
                                 </div>
-
-                                <span className="text-sm ml-auto flex gap-2">
-                                    <span>
-                                        {getDateString(
-                                            sprintInfo.cycle[0] as Timestamp
-                                        )}
+                                <div className="flex justify-between items-baseline text-sm text-neutral-500">
+                                    <span className="">
+                                        {sprintTickets.length} tickets inside
                                     </span>
-                                    -
-                                    <span>
-                                        {getDateString(
-                                            sprintInfo.cycle[1] as Timestamp
-                                        )}
+                                    <span className=" flex gap-2">
+                                        <span>
+                                            {getDateString(
+                                                sprintInfo.cycle[0] as Timestamp
+                                            )}
+                                        </span>
+                                        -
+                                        <span>
+                                            {getDateString(
+                                                sprintInfo.cycle[1] as Timestamp
+                                            )}
+                                        </span>
                                     </span>
-                                </span>
+                                </div>
                             </div>
                             <div className="flex gap-4 items-center">
                                 <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200  h-3">
@@ -118,15 +128,16 @@ export const SprintPanel: React.FC<{
                             </div>
                         </div>
                         <div className={ticketsWrapClass} ref={innerRef}>
-                            <div className="flex flex-col gap-2 p-1">
+                            <div className="flex flex-col">
                                 {isTicketLoading && <div>Loading</div>}
                                 {sprintTickets.length === 0 ? (
                                     <div className="text-neutral-300 text-sm">
                                         It's empty, drop some tickets here
                                     </div>
                                 ) : (
-                                    sprintTickets.map((ticket) => (
+                                    sprintTickets.map((ticket, index) => (
                                         <TicketStatusRow
+                                            index={index}
                                             ticketInfo={ticket}
                                             key={`${ticket.ticketID}-${ticket.order}`}
                                         />

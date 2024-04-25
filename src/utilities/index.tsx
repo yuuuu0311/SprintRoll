@@ -305,6 +305,19 @@ export const addSprint = async (sprintInfo: SprintFace) => {
     });
 };
 
+export const toAnotherSprint = async (
+    ticketId: string,
+    sprintIndex: number
+) => {
+    console.log(ticketId);
+
+    const ticketRef = doc(db, ticketId);
+
+    updateDoc(ticketRef, {
+        inSprint: sprintIndex,
+    });
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = (fn: any, delay: number) => {
     let timer: number;

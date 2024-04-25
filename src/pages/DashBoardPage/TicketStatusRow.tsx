@@ -1,13 +1,14 @@
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
-// import { Droppable } from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 // icons
 
 import { TicketFace } from "@/interface";
 
 export const TicketStatusRow: React.FC<{
     ticketInfo: TicketFace;
-}> = ({ ticketInfo }) => {
+    index: number;
+}> = ({ ticketInfo, index }) => {
     const renderLabel = (labels: object) => {
         const labelArr = [];
         for (const key in labels) {
@@ -39,17 +40,23 @@ export const TicketStatusRow: React.FC<{
     );
 
     return (
-        <div key={ticketInfo.ticketID} className="flex justify-between">
-            <div className="flex gap-4 items-center">
-                <span className={ticketStatusLight}></span>
-                <span>{ticketInfo.title}</span>
-            </div>
-            <div className="flex justify-end gap-2">
-                {renderLabel(ticketInfo.label as object)}
-                <div className="bg-neutral-400/50 grid place-items-center text-neutral-700 rounded-full px-2 text-sm">
-                    {ticketInfo.domain}
+        <Draggable index={index} draggableId={ticketInfo.ticketID as string}>
+            {({ innerRef, draggableProps, dragHandleProps }) => (
+                <div ref={innerRef} {...draggableProps} {...dragHandleProps}>
+                    <div className="flex justify-between bg-stone-100 hover:pl-5 p-2 hover:bg-stone-200/80 transition-all rounded-full">
+                        <div className="flex gap-4 items-center">
+                            <span className={ticketStatusLight}></span>
+                            <span>{ticketInfo.title}</span>
+                        </div>
+                        <div className="flex justify-end gap-2">
+                            {renderLabel(ticketInfo.label as object)}
+                            <div className="bg-neutral-400/50 grid place-items-center text-neutral-700 rounded-full px-2 text-sm">
+                                {ticketInfo.domain}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            )}
+        </Draggable>
     );
 };
