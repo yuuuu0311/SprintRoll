@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface TicketFace {
     id: number;
     name?: string;
@@ -38,5 +40,5 @@ export interface SprintFace {
     index?: number;
     name: string;
     description: string;
-    cycle: [Date, Date | undefined];
+    cycle: [Timestamp | Date, Timestamp | Date | undefined];
 }

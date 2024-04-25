@@ -16,13 +16,12 @@ export const SprintPanel: React.FC<{
     setSprintTicketsSetters: Dispatch<
         SetStateAction<
             | {
-                  [key: string]: {
-                      [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
-                  };
+                  [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
               }
             | undefined
         >
     >;
+
     index: number;
 }> = ({ sprintInfo, index, setSprintTicketsSetters }) => {
     const [isToggle, setIsToggle] = useState(true);
@@ -47,11 +46,10 @@ export const SprintPanel: React.FC<{
         })
     );
 
-    const getDateString = (date: Timestamp | Date) => {
-        return new Date(
+    const getDateString = (date: Timestamp) =>
+        new Date(
             date.seconds * 1000 + date.nanoseconds / 1000000
         ).toLocaleDateString();
-    };
 
     useEffect(() => {
         setSprintTicketsSetters(
@@ -60,9 +58,7 @@ export const SprintPanel: React.FC<{
                     ...prev,
                     [`sprintTickets-${index}`]: setSprintTickets,
                 } as {
-                    [key: string]: {
-                        [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
-                    };
+                    [key: string]: Dispatch<SetStateAction<TicketFace[]>>;
                 })
         );
     }, []);
@@ -88,12 +84,14 @@ export const SprintPanel: React.FC<{
 
                                 <span className="text-sm ml-auto flex gap-2">
                                     <span>
-                                        {getDateString(sprintInfo.cycle[0])}
+                                        {getDateString(
+                                            sprintInfo.cycle[0] as Timestamp
+                                        )}
                                     </span>
                                     -
                                     <span>
                                         {getDateString(
-                                            sprintInfo.cycle[1] as Date
+                                            sprintInfo.cycle[1] as Timestamp
                                         )}
                                     </span>
                                 </span>

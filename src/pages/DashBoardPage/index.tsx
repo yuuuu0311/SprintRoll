@@ -53,6 +53,7 @@ export const DashBoardPage: React.FC = () => {
     const [newSprintInfo, setNewSprintInfo] = useState<SprintFace>({
         name: "GGGG",
         description: "",
+
         cycle: [new Date(), undefined],
     });
 
