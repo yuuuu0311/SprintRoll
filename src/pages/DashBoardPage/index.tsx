@@ -18,7 +18,12 @@ import { Button } from "@/components/Button";
 import { DateRangePicker } from "rsuite";
 
 // utilities
-import { toSprint, addSprint, toAnotherSprint } from "@/utilities";
+import {
+    toSprint,
+    addSprint,
+    toAnotherSprint,
+    resetTicketStatus,
+} from "@/utilities";
 import { useAllTickets, useSprint } from "@/utilities/hook";
 import { useDialog } from "@/utilities/store";
 
@@ -38,9 +43,10 @@ const getSprintNum = (droppableId: string) => {
     return parseInt(index);
 };
 
-// const getMovedTicket = () => {
-//     return;
-// };
+const getMovedTicket = (sourceState: TicketFace[], sourceIndex: number) => {
+    const [movedTicket] = sourceState.splice(sourceIndex, 1);
+    return movedTicket;
+};
 
 export const DashBoardPage: React.FC = () => {
     const { isLoading, allTickets, setAllTickets } = useAllTickets();
@@ -68,6 +74,7 @@ export const DashBoardPage: React.FC = () => {
         const { source, destination } = result;
 
         if (!destination) return;
+        if (sprintTicketsSetters === undefined) return;
 
         // if (backlog to sprint) { }
         // else if (sprint to itself) { }
@@ -78,9 +85,8 @@ export const DashBoardPage: React.FC = () => {
             source.droppableId === "collections" &&
             toSprintPanel(destination.droppableId)
         ) {
-            if (sprintTicketsSetters === undefined) return;
-
             const ticketsCopy = [...allTickets];
+
             const [movedTicket] = ticketsCopy.splice(source.index, 1);
 
             setAllTickets(ticketsCopy);
@@ -102,16 +108,12 @@ export const DashBoardPage: React.FC = () => {
 
             return;
         } else if (toSprintPanel(destination.droppableId)) {
-            if (sprintTicketsSetters === undefined) return;
-
             const { state: sourceState, setter: sourceSetter } =
                 sprintTicketsSetters[source.droppableId];
             const { setter: destSetter } =
                 sprintTicketsSetters[destination.droppableId];
 
-            const [movedTicket] = sourceState.splice(source.index, 1);
-
-            console.log(result);
+            const movedTicket = getMovedTicket(sourceState, source.index);
 
             sourceSetter((prev) => {
                 prev.splice(source.index, 1);
@@ -123,7 +125,7 @@ export const DashBoardPage: React.FC = () => {
             });
 
             destSetter((prev) => {
-                prev.splice(source.index, 0, movedTicket);
+                prev.splice(destination.index, 0, movedTicket);
 
                 return prev.sort(
                     (a: TicketFace, b: TicketFace) =>
@@ -135,6 +137,18 @@ export const DashBoardPage: React.FC = () => {
                 movedTicket.ticketID as string,
                 getSprintNum(destination.droppableId)
             );
+        } else {
+            const { state: sourceState } =
+                sprintTicketsSetters[source.droppableId];
+            const movedTicket = getMovedTicket(sourceState, source.index);
+
+            setAllTickets((prev) => {
+                prev.splice(destination.index, 0, movedTicket);
+                console.log(prev);
+                return prev;
+            });
+
+            resetTicketStatus(movedTicket.ticketID as string);
         }
     };
 
@@ -154,10 +168,6 @@ export const DashBoardPage: React.FC = () => {
         });
         toggleDialog(isActive);
     };
-
-    // useEffect(() => {
-    //     console.log(sprintTicketsSetters);
-    // }, [sprintTicketsSetters]);
 
     return (
         <Layout>
