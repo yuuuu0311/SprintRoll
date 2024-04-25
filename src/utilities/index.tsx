@@ -298,11 +298,9 @@ export const updateTicketStatus = async (
 
 export const resetTicketStatus = async (ticketID: string) => {
     const docRef = doc(db, ticketID);
-    const docSnap = await getDoc(docRef);
 
-    await setDoc(docRef, {
-        ...docSnap.data(),
-        status: -1,
+    await updateDoc(docRef, {
+        inSprint: null,
     });
 };
 
