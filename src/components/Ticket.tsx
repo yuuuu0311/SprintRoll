@@ -2,9 +2,11 @@ import { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
+import { Draggable } from "react-beautiful-dnd";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 import { useDebounce } from "use-debounce";
+
 // interface
 import { TicketFace, UserFace } from "@/interface";
 
@@ -170,15 +172,35 @@ export const Ticket: React.FC<{
     return (
         <>
             {ticketInfo.ticketID !== undefined && (
-                <div className={ticketsClass} onClick={handleDialogToggle}>
-                    <div className={ticketsDomainClass}></div>
-                    <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
-                        <div className="">{ticketInfo.title}</div>
-                        <div className="flex justify-end gap-2">
-                            {renderLabel(ticketInfo.label as object)}
+                <Draggable
+                    // isDragging={snapshot.isDragging}
+                    index={index}
+                    draggableId={ticketInfo.ticketID as string}
+                    isDragDisabled={dialogActive}
+                >
+                    {({ innerRef, draggableProps, dragHandleProps }) => (
+                        <div
+                            ref={innerRef}
+                            {...draggableProps}
+                            {...dragHandleProps}
+                        >
+                            <div
+                                className={ticketsClass}
+                                onClick={handleDialogToggle}
+                            >
+                                <div className={ticketsDomainClass}></div>
+                                <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
+                                    <div className="">{ticketInfo.title}</div>
+                                    <div className="flex justify-end gap-2">
+                                        {renderLabel(
+                                            ticketInfo.label as object
+                                        )}
+                                    </div>
+                                </div>
+                            </div>{" "}
                         </div>
-                    </div>
-                </div>
+                    )}
+                </Draggable>
             )}
             {dialogActive && (
                 <Dialog

@@ -180,33 +180,14 @@ export const TicketList: React.FC<{
                                     {isLoading && <Loader />}
                                     {(ticketsData as CollectionFace[])?.map(
                                         (ticket: TicketFace, index: number) => (
-                                            <Draggable
+                                            <Ticket
+                                                ticketInfo={ticket}
                                                 index={index}
-                                                draggableId={
-                                                    ticket.ticketID as string
-                                                }
                                                 key={ticket.ticketID}
-                                                isDragDisabled={dialogActive}
-                                            >
-                                                {(provided, snapshot) => (
-                                                    <div
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                    >
-                                                        <Ticket
-                                                            ticketInfo={ticket}
-                                                            index={index}
-                                                            isDragging={
-                                                                snapshot.isDragging
-                                                            }
-                                                            isInCollection={
-                                                                collectionInfo.collectionID
-                                                            }
-                                                        />
-                                                    </div>
-                                                )}
-                                            </Draggable>
+                                                isInCollection={
+                                                    collectionInfo.collectionID
+                                                }
+                                            />
                                         )
                                     )}
 
