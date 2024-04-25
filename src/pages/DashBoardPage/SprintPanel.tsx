@@ -77,7 +77,7 @@ export const SprintPanel: React.FC<{
             >
                 {({ innerRef, placeholder }) => (
                     <div>
-                        <div className=" sticky top-0 bg-neutral-100 w-full px-6 pt-4 flex flex-col gap-3 ">
+                        <div className=" sticky top-0 bg-neutral-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3 ">
                             <div className="text-neutral-600 flex flex-col gap-1">
                                 <div className="flex justify-between items-baseline">
                                     <div className="font-bold text-3xl">
@@ -106,11 +106,19 @@ export const SprintPanel: React.FC<{
                                     </span>
                                 </div>
                             </div>
+                            {sprintInfo.description.length === 0 ? (
+                                <></>
+                            ) : (
+                                <div className="text-neutral-500">
+                                    {sprintInfo.description}
+                                </div>
+                            )}
+
                             <div className="flex gap-4 items-center">
                                 <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200  h-3">
                                     {getProgressPercentage(sprintTickets) ? (
                                         <div
-                                            className={`animate-pulse transition origin-left bg-lime-500 rounded-full h-full `}
+                                            className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full `}
                                             style={{
                                                 width: `${getProgressPercentage(
                                                     sprintTickets
@@ -122,9 +130,6 @@ export const SprintPanel: React.FC<{
                                     )}
                                 </div>
                                 {`${getProgressPercentage(sprintTickets)}%`}
-                            </div>
-                            <div className="text-neutral-500">
-                                {sprintInfo.name}
                             </div>
                         </div>
                         <div className={ticketsWrapClass} ref={innerRef}>
