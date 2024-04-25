@@ -31,9 +31,12 @@ export const SprintPanel: React.FC<{
     };
 
     const ticketsWrapClass = twMerge(
-        classNames("transition-all overflow-y-auto no-scrollbar max-h-0", {
-            "max-h-[500px]": isToggle,
-        })
+        classNames(
+            "transition-all overflow-y-auto no-scrollbar max-h-0 bg-neutral-100 px-6 pt-1",
+            {
+                "max-h-[500px] py-2": isToggle,
+            }
+        )
     );
 
     return (
@@ -71,18 +74,24 @@ export const SprintPanel: React.FC<{
                             <div className="text-neutral-500">
                                 {sprintInfo.name}
                             </div>
-                            <div className={ticketsWrapClass} ref={innerRef}>
-                                <div className="flex flex-col gap-2">
-                                    {isTicketLoading && <div>Loading</div>}
-                                    {sprintTickets.map((ticket) => (
+                        </div>
+                        <div className={ticketsWrapClass} ref={innerRef}>
+                            <div className="flex flex-col gap-2 p-1">
+                                {isTicketLoading && <div>Loading</div>}
+                                {sprintTickets.length === 0 ? (
+                                    <div className="text-neutral-300 text-sm">
+                                        It's empty, drop some tickets here
+                                    </div>
+                                ) : (
+                                    sprintTickets.map((ticket) => (
                                         <TicketStatusRow
                                             ticketInfo={ticket}
                                             key={ticket.ticketID}
                                         />
-                                    ))}
-                                </div>
-                                {placeholder}
+                                    ))
+                                )}
                             </div>
+                            {placeholder}
                         </div>
                         <div
                             onClick={() =>

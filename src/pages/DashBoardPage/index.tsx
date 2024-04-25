@@ -1,5 +1,7 @@
 // import { useEffect, useState } from "react";
 
+import "rsuite/DateRangePicker/styles/index.css";
+
 // dependency
 import {
     DragDropContext,
@@ -8,14 +10,21 @@ import {
 } from "react-beautiful-dnd";
 
 // components
-import { Layout } from "@/components/Layout";
 import { Ticket } from "@/components/Ticket";
+import { Layout } from "@/components/Layout";
 import { Loader } from "@/components/Loader";
 import { SprintPanel } from "./SprintPanel";
+import { Button } from "@/components/Button";
+import { DateRangePicker } from "rsuite";
 
 // utilities
-import { useAllTickets, useSprint } from "@/utilities/hook";
 import { toSprint } from "@/utilities";
+import { useAllTickets, useSprint } from "@/utilities/hook";
+import { useDialog } from "@/utilities/store";
+
+// interface
+import { DialogState } from "@/interface";
+import { Dialog } from "@/components/Dialog";
 
 const toSprintPanel = (droppableId: string) => {
     const sprintIndexRegex = /sprintTickets-[0-9]/;
@@ -32,6 +41,7 @@ const getSprintNum = (droppableId: string) => {
 export const DashBoardPage: React.FC = () => {
     const { isLoading, allTickets } = useAllTickets();
     const { isSprintLoading, sprintInfo } = useSprint();
+    const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
@@ -45,7 +55,9 @@ export const DashBoardPage: React.FC = () => {
         }
     };
 
-    console.log(isSprintLoading);
+    const handleAddSprint = () => {
+        console.log(sprintInfo);
+    };
 
     return (
         <Layout>
@@ -89,9 +101,52 @@ export const DashBoardPage: React.FC = () => {
                                 />
                             ))}
                         </div>
+                        <Button
+                            rounded
+                            addonStyle="hover:bg-neutral-400 hover:text-neutral-600 w-full mt-5 bg-neutral-400/50 text-neutral-500 active:bg-neutral-400/50"
+                            onClickFun={() => toggleDialog(isActive)}
+                        >
+                            + sprint
+                        </Button>
                     </div>
                 </div>
             </DragDropContext>
+
+            {isActive && (
+                <Dialog
+                    handleDialogToggle={() => toggleDialog(isActive)}
+                    title="add category"
+                >
+                    <div>
+                        <div>sprint cycle</div>
+                        <DateRangePicker />
+                    </div>
+                    <div>
+                        <div>description</div>
+                        <textarea
+                            className="p-2 text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-neutral-300 outline-none transition "
+                            placeholder="add some description here"
+                            // onChange={(e) => {
+                            //     handleTextAreaChange(e, ticketInfo);
+                            // }}
+                            // defaultValue={ticketInfo.description}
+                        ></textarea>
+                    </div>
+
+                    <div className="flex gap-2 justify-end mt-auto">
+                        <Button
+                            secondary
+                            rounded
+                            onClickFun={() => toggleDialog(isActive)}
+                        >
+                            close
+                        </Button>
+                        <Button success rounded onClickFun={handleAddSprint}>
+                            add
+                        </Button>
+                    </div>
+                </Dialog>
+            )}
         </Layout>
     );
 };
