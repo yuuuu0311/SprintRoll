@@ -53,7 +53,7 @@ const LabelTypeArray = [
 export const Label: React.FC<{
     ticketInfo: TicketFace;
     labelName: string;
-    isCheck: { [key: string]: boolean } | undefined;
+    isCheck: object | undefined;
     changeHandler: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
 }> = ({ ticketInfo, labelName, isCheck, changeHandler }) => {
     const labelClass = twMerge(
@@ -190,7 +190,7 @@ export const Ticket: React.FC<{
     const [dialogActive, setDialogActive] = useState(false);
     const [ticketLabel, setTicketLabel] = useState<{
         [key: string]: boolean;
-    }>();
+    }>(() => ticketInfo.label);
 
     useEffect(() => {
         console.log(ticketLabel);
