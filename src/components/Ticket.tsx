@@ -1,10 +1,4 @@
-import {
-    ChangeEvent,
-    useState,
-    Dispatch,
-    SetStateAction,
-    useEffect,
-} from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 // dependency
@@ -14,7 +8,7 @@ import classNames from "classnames";
 import { useDebounce } from "use-debounce";
 
 // interface
-import { TicketFace, UserFace } from "@/interface";
+import { TicketFace, UserFace, LabelInputFace, LabelFace } from "@/interface";
 
 // components
 import { Button } from "@/components/Button";
@@ -31,9 +25,7 @@ import {
     assignDeveloper,
     removeFromAssigned,
     debounce,
-    updateDescription,
-    updateTicketStatus,
-    updateTicketLabel,
+    updateTicketInfo,
 } from "@/utilities";
 
 enum LabelType {
@@ -50,12 +42,12 @@ const LabelTypeArray = [
     LabelType.ASAP,
 ];
 
-export const Label: React.FC<{
-    ticketInfo: TicketFace;
-    labelName: string;
-    isCheck: object | undefined;
-    changeHandler: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
-}> = ({ ticketInfo, labelName, isCheck, changeHandler }) => {
+export const Label: React.FC<LabelInputFace> = ({
+    ticketInfo,
+    labelName,
+    isCheck,
+    changeHandler,
+}) => {
     const labelClass = twMerge(
         classNames(
             "bg-lime-500/50 rounded-full px-2 leading-none bg-neutral-300 py-1 px-3 transition",
@@ -82,14 +74,16 @@ export const Label: React.FC<{
                 hidden
                 defaultChecked={isCheck?.[labelName]}
                 onChange={(e) => {
+                    if (changeHandler === undefined) return;
                     changeHandler((prev) => {
-                        updateTicketLabel(
-                            {
+                        updateTicketInfo(ticketInfo, {
+                            target: "label",
+                            value: {
                                 ...prev,
                                 [e.target.name]: e.target.checked,
                             },
-                            ticketInfo
-                        );
+                        });
+
                         return {
                             ...prev,
                             [e.target.name]: e.target.checked,
@@ -188,9 +182,9 @@ export const Ticket: React.FC<{
     });
 
     const [dialogActive, setDialogActive] = useState(false);
-    const [ticketLabel, setTicketLabel] = useState<{
-        [key: string]: boolean;
-    }>(() => ticketInfo.label);
+    const [ticketLabel, setTicketLabel] = useState<LabelFace>(
+        ticketInfo.label as LabelFace
+    );
 
     useEffect(() => {
         console.log(ticketLabel);
@@ -243,12 +237,18 @@ export const Ticket: React.FC<{
     };
 
     const handleTicketChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        updateTicketStatus(e.target.value, ticketInfo);
+        updateTicketInfo(ticketInfo, {
+            target: "status",
+            value: e.target.value,
+        });
     };
 
     const handleTextAreaChange = debounce(
         (e: ChangeEvent<HTMLTextAreaElement>, ticketInfo: TicketFace) => {
-            updateDescription(e.target.value, ticketInfo);
+            updateTicketInfo(ticketInfo, {
+                target: "description",
+                value: e.target.value,
+            });
         },
         1000
     );
@@ -311,15 +311,13 @@ export const Ticket: React.FC<{
                                         <Label
                                             labelName={label}
                                             key={label}
-                                            isCheck={ticketInfo.label}
-                                            ticketInfo={ticketInfo}
-                                            changeHandler={
-                                                setTicketLabel as Dispatch<
-                                                    SetStateAction<{
-                                                        [key: string]: boolean;
-                                                    }>
-                                                >
+                                            isCheck={
+                                                ticketInfo.label as {
+                                                    [key: string]: boolean;
+                                                }
                                             }
+                                            ticketInfo={ticketInfo}
+                                            changeHandler={setTicketLabel}
                                         ></Label>
                                     ))}
                                 </div>

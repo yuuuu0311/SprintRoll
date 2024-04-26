@@ -57,9 +57,6 @@ export const TicketList: React.FC<{
     const [dialogActive, setDialogActive] = useState(false);
     const [newTickInfo, setNewTickInfo] = useState(() => ({
         title: "",
-        // description: "",
-        // assignedDeveloper: [],
-        // label: {},
     }));
 
     const handleAddTicket: () => void = async () => {
@@ -82,10 +79,6 @@ export const TicketList: React.FC<{
 
         setNewTickInfo(() => ({
             title: "",
-            // description: "",
-            // domain: domain,
-            // assignedDeveloper: [],
-            // label: {},
         }));
     };
 

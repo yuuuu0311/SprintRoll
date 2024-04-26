@@ -1,6 +1,8 @@
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
+import { LabelFace } from "@/interface";
+
 const Label: React.FC<{
     children: string;
 }> = ({ children }) => {
@@ -16,11 +18,12 @@ const Label: React.FC<{
     return <div className={labelClass}>{children}</div>;
 };
 
-export const renderLabel = (labels: object) => {
+export const renderLabel = (labels: LabelFace) => {
     const labelArr = [];
 
     for (const key in labels) {
-        if (labels[key]) labelArr.push(key);
+        const labelCheck = labels[key as keyof LabelFace];
+        if (labelCheck) labelArr.push(key);
     }
 
     return labelArr

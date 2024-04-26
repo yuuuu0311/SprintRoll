@@ -264,9 +264,9 @@ export const toSprint = async (draggableId: string, index: number) => {
     });
 };
 
-export const updateDescription = async (
-    value: string,
-    ticketInfo: TicketFace
+export const updateTicketInfo = async (
+    ticketInfo: TicketFace,
+    obj: { target: string; value: string | object }
 ) => {
     const docRef = doc(
         db,
@@ -276,37 +276,7 @@ export const updateDescription = async (
 
     await setDoc(docRef, {
         ...docSnap.data(),
-        description: value,
-    });
-};
-
-export const updateTicketStatus = async (
-    value: string,
-    ticketInfo: TicketFace
-) => {
-    const docRef = doc(
-        db,
-        `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
-    );
-    const docSnap = await getDoc(docRef);
-
-    await setDoc(docRef, {
-        ...docSnap.data(),
-        status: value,
-    });
-};
-
-export const updateTicketLabel = async (
-    value: object,
-    ticketInfo: TicketFace
-) => {
-    const ticketRef = doc(
-        db,
-        `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
-    );
-
-    await updateDoc(ticketRef, {
-        label: value,
+        [obj.target]: obj.value,
     });
 };
 

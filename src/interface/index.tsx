@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { Timestamp } from "firebase/firestore";
 
 export interface TicketFace {
@@ -10,7 +11,7 @@ export interface TicketFace {
     collectionID?: string;
     domain?: string;
     assignedDeveloper?: [];
-    label?: object;
+    label?: LabelFace;
     status?: string | number | undefined;
     createdTime: {
         seconds: number;
@@ -41,4 +42,15 @@ export interface SprintFace {
     name: string;
     description: string;
     cycle: [Timestamp | Date, Timestamp | Date | undefined];
+}
+
+export interface LabelFace {
+    isCheck?: { [key: string]: boolean };
+}
+
+export interface LabelInputFace extends LabelFace {
+    ticketInfo: TicketFace;
+    labelName: string;
+    // isCheck: object | undefined;
+    changeHandler?: Dispatch<SetStateAction<LabelFace>>;
 }
