@@ -4,7 +4,6 @@ import { db } from "@/utilities/firebase";
 import { addDoc, collection } from "firebase/firestore";
 
 // components
-import { Dialog } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 
 // interface
@@ -40,43 +39,31 @@ export const AddCategoryDialog: React.FC<{
     };
 
     return (
-        <>
-            {isActive && (
-                <Dialog
-                    handleDialogToggle={() => toggleDialog(isActive)}
-                    title="add category"
+        <div className="flex flex-col gap-2 bg-neutral-200 p-4 rounded-lg w-56">
+            <div className="mb-2">
+                <input
+                    type="text"
+                    name="title"
+                    id="title"
+                    value={collectionName}
+                    placeholder="Collection Title"
+                    autoFocus
+                    onChange={(e) => handleChange(e)}
+                    className="text-md px-3 py-2 w-full rounded-md overflow-hidden leading-none outline-none transition focus:bg-neutral-300 bg-neutral-300"
+                />
+            </div>
+            <div className="flex justify-end gap-2">
+                <Button
+                    rounded
+                    secondary
+                    onClickFun={() => toggleDialog(isActive)}
                 >
-                    <div>
-                        <div>
-                            <label htmlFor="name">title</label>
-                            <input
-                                type="text"
-                                name="name"
-                                id="name"
-                                placeholder="title goes here"
-                                value={collectionName}
-                                onChange={(e) => handleChange(e)}
-                            />
-                        </div>
-                    </div>
-                    <div className="flex gap-2">
-                        <Button
-                            secondary
-                            rounded
-                            onClickFun={() => toggleDialog(isActive)}
-                        >
-                            close
-                        </Button>
-                        <Button
-                            success
-                            rounded
-                            onClickFun={handleAddCollection}
-                        >
-                            add
-                        </Button>
-                    </div>
-                </Dialog>
-            )}
-        </>
+                    Close
+                </Button>
+                <Button success rounded onClickFun={handleAddCollection}>
+                    Add
+                </Button>
+            </div>
+        </div>
     );
 };

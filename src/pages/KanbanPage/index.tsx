@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 // dependency
 import {
@@ -114,7 +114,7 @@ export const KanbanPage: React.FC = () => {
 
     return (
         <Layout>
-            {!collectionsData === undefined && (
+            {collectionsData === undefined && (
                 <div className="p-12 ">
                     <Loader />
                 </div>
@@ -151,21 +151,21 @@ export const KanbanPage: React.FC = () => {
                                 )}
                             </Droppable>
                         </DragDropContext>
-                        <Button
-                            rounded
-                            onClickFun={() => toggleDialog(isActive)}
-                        >
-                            + add category
-                        </Button>
+                        {isActive ? (
+                            <AddCategoryDialog
+                                collectionsData={collectionsData}
+                                domain={domain}
+                            />
+                        ) : (
+                            <Button
+                                rounded
+                                onClickFun={() => toggleDialog(isActive)}
+                            >
+                                + add category
+                            </Button>
+                        )}
                     </div>
                 </div>
-            )}
-
-            {isActive && (
-                <AddCategoryDialog
-                    collectionsData={collectionsData}
-                    domain={domain}
-                />
             )}
         </Layout>
     );

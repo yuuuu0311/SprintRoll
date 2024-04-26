@@ -190,8 +190,6 @@ export const TicketList: React.FC<{
                                             />
                                         )
                                     )}
-
-                                    {placeholder}
                                     {dialogActive && (
                                         <div>
                                             <div className="mb-2">
@@ -205,7 +203,7 @@ export const TicketList: React.FC<{
                                                     onChange={(e) =>
                                                         handleChange(e)
                                                     }
-                                                    className="text-md px-3 py-2 w-full rounded-md overflow-hidden leading-none outline-none transition focus:bg-stone-100 "
+                                                    className="text-md px-3 py-2 w-full rounded-md overflow-hidden leading-none outline-none transition focus:bg-neutral-300 "
                                                 />
                                             </div>
                                             <div className="flex justify-end gap-2">
@@ -228,6 +226,8 @@ export const TicketList: React.FC<{
                                             </div>
                                         </div>
                                     )}
+                                    {placeholder}
+
                                     {!dialogActive && (
                                         <Button
                                             rounded
