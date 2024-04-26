@@ -13,11 +13,10 @@ import {
     addDoc,
     collection,
     Timestamp,
+    getDocs,
     deleteDoc,
     doc,
 } from "firebase/firestore";
-import { twMerge } from "tailwind-merge";
-import classNames from "classnames";
 
 // interface
 import { CollectionFace, TicketFace } from "@/interface";
@@ -34,52 +33,6 @@ import { db } from "@/utilities/firebase";
 
 // icons
 import { MdOutlineDelete } from "react-icons/md";
-
-enum LabelType {
-    BUG = "bug",
-    FEATURE = "feature",
-    REFACTOR = "refactor",
-    ASAP = "ASAP",
-}
-
-const LabelTypeArray = [
-    LabelType.BUG,
-    LabelType.FEATURE,
-    LabelType.REFACTOR,
-    LabelType.ASAP,
-];
-
-export const Label: React.FC<{
-    labelName: string;
-    changeHandler: Dispatch<SetStateAction<TicketFace>>;
-}> = ({ labelName, changeHandler }) => {
-    const labelClass = twMerge(
-        classNames(
-            `transition bg-neutral-400 rounded-full py-1 px-3  [&:has(input:checked)]:bg-lime-500 `
-        )
-    );
-
-    return (
-        <label htmlFor={labelName} className={labelClass}>
-            <span>{labelName}</span>
-            <input
-                type="checkbox"
-                name={labelName}
-                id={labelName}
-                hidden
-                onChange={(e) =>
-                    changeHandler((prev) => ({
-                        ...prev,
-                        label: {
-                            ...prev.label,
-                            [e.target.name]: e.target.checked,
-                        },
-                    }))
-                }
-            />
-        </label>
-    );
-};
 
 export const TicketList: React.FC<{
     collectionInfo: CollectionFace;
@@ -100,19 +53,20 @@ export const TicketList: React.FC<{
         collectionInfo.collectionID
     );
 
+    const [addCollectionActive, setAddCollectionActive] = useState(false);
     const [dialogActive, setDialogActive] = useState(false);
     const [newTickInfo, setNewTickInfo] = useState(() => ({
         title: "",
-        description: "",
-        assignedDeveloper: [],
-        label: {},
+        // description: "",
+        // assignedDeveloper: [],
+        // label: {},
     }));
 
     const handleAddTicket: () => void = async () => {
         if (newTickInfo.title === "") return;
         if (ticketsData === undefined) return;
 
-        handleDialogToggle();
+        setAddCollectionActive((prev) => !prev);
 
         const ticketsRef = collection(
             db,
@@ -128,15 +82,30 @@ export const TicketList: React.FC<{
 
         setNewTickInfo(() => ({
             title: "",
-            description: "",
-            domain: domain,
-            assignedDeveloper: [],
-            label: {},
+            // description: "",
+            // domain: domain,
+            // assignedDeveloper: [],
+            // label: {},
         }));
     };
 
     const handleDeleteCollection = async (collectionInfo: CollectionFace) => {
-        await deleteDoc(doc(db, `collections/${collectionInfo.collectionID}`));
+        const docRef = doc(db, `collections/${collectionInfo.collectionID}`);
+        const ticketsRef = collection(
+            db,
+            `collections/${collectionInfo.collectionID}/tickets`
+        );
+
+        try {
+            const snapshot = await getDocs(ticketsRef);
+            snapshot.forEach((doc) => {
+                deleteDoc(doc.ref);
+            });
+
+            await deleteDoc(docRef);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const handleDialogToggle = () => {
@@ -208,7 +177,7 @@ export const TicketList: React.FC<{
                                             />
                                         )
                                     )}
-                                    {dialogActive && (
+                                    {addCollectionActive && (
                                         <div>
                                             <div className="mb-2">
                                                 <input
@@ -228,8 +197,10 @@ export const TicketList: React.FC<{
                                                 <Button
                                                     rounded
                                                     secondary
-                                                    onClickFun={
-                                                        handleDialogToggle
+                                                    onClickFun={() =>
+                                                        setAddCollectionActive(
+                                                            (prev) => !prev
+                                                        )
                                                     }
                                                 >
                                                     Close
@@ -246,12 +217,16 @@ export const TicketList: React.FC<{
                                     )}
                                     {placeholder}
 
-                                    {!dialogActive && (
+                                    {!addCollectionActive && (
                                         <Button
                                             rounded
                                             link
                                             secondary
-                                            onClickFun={handleDialogToggle}
+                                            onClickFun={() =>
+                                                setAddCollectionActive(
+                                                    (prev) => !prev
+                                                )
+                                            }
                                             addonStyle="text-left"
                                         >
                                             + add ticket
@@ -297,56 +272,6 @@ export const TicketList: React.FC<{
                     </div>
                 </Dialog>
             )}
-
-            {/* {dialogActive && (
-                <Dialog
-                    handleDialogToggle={handleDialogToggle}
-                    title=""
-                >
-                    <div className="flex-1 flex flex-col gap-2">
-                        <InputRow
-                            label="title"
-                            value={newTickInfo.title}
-                            placeholder="title goes here"
-                            changeHandler={(e) => handleChange(e)}
-                        />
-                        <div>
-                            <div>Label</div>
-                            <div className="flex gap-2 flex-wrap">
-                                {LabelTypeArray.map((label) => (
-                                    <Label
-                                        labelName={label}
-                                        key={label}
-                                        changeHandler={
-                                            setNewTickInfo as Dispatch<
-                                                SetStateAction<TicketFace>
-                                            >
-                                        }
-                                    ></Label>
-                                ))}
-                            </div>
-                        </div>
-                        <InputRow
-                            label="description"
-                            value={newTickInfo.description}
-                            placeholder="description"
-                            changeHandler={(e) => handleChange(e)}
-                        />
-                    </div>
-                    <div className="flex justify-end gap-2">
-                        <Button
-                            rounded
-                            secondary
-                            onClickFun={handleDialogToggle}
-                        >
-                            Close
-                        </Button>
-                        <Button success rounded onClickFun={handleAddTicket}>
-                            Add
-                        </Button>
-                    </div>
-                </Dialog>
-            )} */}
         </>
     );
 };

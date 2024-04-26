@@ -296,6 +296,22 @@ export const updateTicketStatus = async (
     });
 };
 
+export const updateTicketLabel = async (
+    value: object,
+    ticketInfo: TicketFace
+) => {
+    console.log(1);
+
+    const ticketRef = doc(
+        db,
+        `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
+    );
+
+    await updateDoc(ticketRef, {
+        label: value,
+    });
+};
+
 export const resetTicketStatus = async (ticketID: string) => {
     const docRef = doc(db, ticketID);
 
@@ -317,8 +333,6 @@ export const toAnotherSprint = async (
     ticketId: string,
     sprintIndex: number
 ) => {
-    console.log(ticketId);
-
     const ticketRef = doc(db, ticketId);
 
     updateDoc(ticketRef, {

@@ -5,16 +5,15 @@ import classNames from "classnames";
 export const Dialog: React.FC<{
     children: React.ReactNode;
     title: string;
+    danger?: boolean;
     size?: string;
-    danger: boolean;
     handleDialogToggle: () => void;
-}> = ({ children, handleDialogToggle, title, size, danger }) => {
+}> = ({ children, handleDialogToggle, title, danger, size }) => {
     const dialogClass = twMerge(
         classNames(
             `flex flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl overflow-hidden bg-neutral-200`,
             {
-                "w-34 h-24 ": size === "sm",
-                " w-1/2 h-1/2 ": size === "lg",
+                "w-1/2 min-h-58": size === "md",
             }
         )
     );
