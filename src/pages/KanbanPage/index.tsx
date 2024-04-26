@@ -32,7 +32,7 @@ import { CollectionFace, TicketFace, DialogState } from "@/interface";
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
-    const { isLoading, collectionsData, setCollectionsData } = useCollections(
+    const { collectionsData, setCollectionsData } = useCollections(
         domain as string
     );
 
@@ -114,7 +114,7 @@ export const KanbanPage: React.FC = () => {
 
     return (
         <Layout>
-            {isLoading && (
+            {!collectionsData === undefined && (
                 <div className="p-12 ">
                     <Loader />
                 </div>

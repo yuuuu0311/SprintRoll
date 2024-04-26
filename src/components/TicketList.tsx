@@ -17,10 +17,10 @@ import classNames from "classnames";
 import { CollectionFace, TicketFace } from "@/interface";
 
 // components
-import { Dialog } from "@/components/Dialog";
+
 import { Button } from "@/components/Button";
 import { Ticket } from "@/components/Ticket";
-import { InputRow } from "@/components/InputRow";
+
 import { Loader } from "@/components/Loader";
 
 // hook and utilities
@@ -88,7 +88,7 @@ export const TicketList: React.FC<{
     >;
 }> = ({ collectionInfo, setTicketsSetters }) => {
     const { domain } = useParams();
-    const { isLoading, ticketsData, setTicketsData } = useTickets(
+    const { ticketsData, setTicketsData } = useTickets(
         collectionInfo.collectionID
     );
 
@@ -177,7 +177,7 @@ export const TicketList: React.FC<{
                                         {collectionInfo.name}
                                     </h3>
 
-                                    {isLoading && <Loader />}
+                                    {ticketsData === undefined && <Loader />}
                                     {(ticketsData as CollectionFace[])?.map(
                                         (ticket: TicketFace, index: number) => (
                                             <Ticket
@@ -192,16 +192,53 @@ export const TicketList: React.FC<{
                                     )}
 
                                     {placeholder}
-
-                                    <Button
-                                        rounded
-                                        link
-                                        secondary
-                                        onClickFun={handleDialogToggle}
-                                        addonStyle="text-left"
-                                    >
-                                        + add ticket
-                                    </Button>
+                                    {dialogActive && (
+                                        <div>
+                                            <div className="mb-2">
+                                                <input
+                                                    type="text"
+                                                    name="title"
+                                                    id="title"
+                                                    value={newTickInfo.title}
+                                                    placeholder="Ticket Title"
+                                                    autoFocus
+                                                    onChange={(e) =>
+                                                        handleChange(e)
+                                                    }
+                                                    className="text-md px-3 py-2 w-full rounded-md overflow-hidden leading-none outline-none transition focus:bg-stone-100 "
+                                                />
+                                            </div>
+                                            <div className="flex justify-end gap-2">
+                                                <Button
+                                                    rounded
+                                                    secondary
+                                                    onClickFun={
+                                                        handleDialogToggle
+                                                    }
+                                                >
+                                                    Close
+                                                </Button>
+                                                <Button
+                                                    success
+                                                    rounded
+                                                    onClickFun={handleAddTicket}
+                                                >
+                                                    Add
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {!dialogActive && (
+                                        <Button
+                                            rounded
+                                            link
+                                            secondary
+                                            onClickFun={handleDialogToggle}
+                                            addonStyle="text-left"
+                                        >
+                                            + add ticket
+                                        </Button>
+                                    )}
                                 </div>
                             )}
                         </Droppable>
@@ -209,7 +246,7 @@ export const TicketList: React.FC<{
                 )}
             </Draggable>
 
-            {dialogActive && (
+            {/* {dialogActive && (
                 <Dialog
                     handleDialogToggle={handleDialogToggle}
                     title="add Ticket"
@@ -257,7 +294,7 @@ export const TicketList: React.FC<{
                         </Button>
                     </div>
                 </Dialog>
-            )}
+            )} */}
         </>
     );
 };

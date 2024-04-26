@@ -49,7 +49,8 @@ const getMovedTicket = (sourceState: TicketFace[], sourceIndex: number) => {
 };
 
 export const DashBoardPage: React.FC = () => {
-    const { isLoading, allTickets, setAllTickets } = useAllTickets();
+    const { allTickets, setAllTickets } = useAllTickets();
+
     const { isSprintLoading, sprintInfo, setSprintInfo } = useSprint();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
 
@@ -66,7 +67,6 @@ export const DashBoardPage: React.FC = () => {
     const [newSprintInfo, setNewSprintInfo] = useState<SprintFace>({
         name: "",
         description: "",
-
         cycle: [new Date(), undefined],
     });
 
@@ -85,7 +85,7 @@ export const DashBoardPage: React.FC = () => {
             source.droppableId === "collections" &&
             toSprintPanel(destination.droppableId)
         ) {
-            const ticketsCopy = [...allTickets];
+            const ticketsCopy = [...(allTickets as TicketFace[])];
 
             const [movedTicket] = ticketsCopy.splice(source.index, 1);
 
@@ -143,8 +143,7 @@ export const DashBoardPage: React.FC = () => {
             const movedTicket = getMovedTicket(sourceState, source.index);
 
             setAllTickets((prev) => {
-                prev.splice(destination.index, 0, movedTicket);
-                console.log(prev);
+                prev?.splice(destination.index, 0, movedTicket);
                 return prev;
             });
 
@@ -176,13 +175,13 @@ export const DashBoardPage: React.FC = () => {
                     <Droppable droppableId="collections" type="droppableItem">
                         {({ innerRef, placeholder }) => (
                             <div
-                                className="flex flex-col gap-3 p-4 rounded-md w-56 bg-neutral-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-blue-300 h-full overflow-y-auto"
+                                className="flex flex-col gap-3 p-4 rounded-md w-56 no-scrollbar bg-neutral-200  h-full overflow-y-auto"
                                 ref={innerRef}
                             >
                                 <div className="font-bold text-neutral-800">
                                     Product Backlog
                                 </div>
-                                {isLoading && <Loader />}
+                                {allTickets === undefined && <Loader />}
                                 {allTickets?.map((ticket, index) => (
                                     <Ticket
                                         key={ticket.ticketID}

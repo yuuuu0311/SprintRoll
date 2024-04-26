@@ -60,7 +60,7 @@ export const useTickets = (id?: string) => {
 
 export const useAllTickets = (index?: number) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [allTickets, setAllTickets] = useState<TicketFace[]>([]);
+    const [allTickets, setAllTickets] = useState<TicketFace[]>();
     const [isTicketLoading, setIsTicketLoading] = useState(false);
     const [sprintTickets, setSprintTickets] = useState<TicketFace[]>([]);
 
