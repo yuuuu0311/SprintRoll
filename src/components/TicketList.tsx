@@ -9,7 +9,13 @@ import { useParams } from "react-router-dom";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import { addDoc, collection, Timestamp } from "firebase/firestore";
+import {
+    addDoc,
+    collection,
+    Timestamp,
+    deleteDoc,
+    doc,
+} from "firebase/firestore";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
@@ -17,15 +23,17 @@ import classNames from "classnames";
 import { CollectionFace, TicketFace } from "@/interface";
 
 // components
-
 import { Button } from "@/components/Button";
 import { Ticket } from "@/components/Ticket";
-
+import { Dialog } from "@/components/Dialog";
 import { Loader } from "@/components/Loader";
 
 // hook and utilities
 import { useTickets } from "@/utilities/hook";
 import { db } from "@/utilities/firebase";
+
+// icons
+import { MdOutlineDelete } from "react-icons/md";
 
 enum LabelType {
     BUG = "bug",
@@ -127,6 +135,10 @@ export const TicketList: React.FC<{
         }));
     };
 
+    const handleDeleteCollection = async (collectionInfo: CollectionFace) => {
+        await deleteDoc(doc(db, `collections/${collectionInfo.collectionID}`));
+    };
+
     const handleDialogToggle = () => {
         setDialogActive((prev) => (prev ? false : true));
     };
@@ -173,9 +185,15 @@ export const TicketList: React.FC<{
                                     {...droppableProps}
                                     {...dragHandleProps}
                                 >
-                                    <h3 className="text-lg text-neutral-700 font-bold capitalize">
-                                        {collectionInfo.name}
-                                    </h3>
+                                    <div className="flex justify-between items-center">
+                                        <h3 className="text-lg text-neutral-700 font-bold capitalize">
+                                            {collectionInfo.name}
+                                        </h3>
+                                        <MdOutlineDelete
+                                            className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500"
+                                            onClick={handleDialogToggle}
+                                        />
+                                    </div>
 
                                     {ticketsData === undefined && <Loader />}
                                     {(ticketsData as CollectionFace[])?.map(
@@ -246,10 +264,44 @@ export const TicketList: React.FC<{
                 )}
             </Draggable>
 
+            {dialogActive && (
+                <Dialog
+                    handleDialogToggle={handleDialogToggle}
+                    danger
+                    title="caution"
+                >
+                    <div className="flex flex-col mb-6 text-neutral-600">
+                        <div className="text-lg">
+                            Are you sure you want to delete this collection ?
+                        </div>
+                        <div>This action can not be undone</div>
+                    </div>
+
+                    <div className="flex justify-end gap-2">
+                        <Button
+                            danger
+                            rounded
+                            onClickFun={() =>
+                                handleDeleteCollection(collectionInfo)
+                            }
+                        >
+                            delete
+                        </Button>
+                        <Button
+                            rounded
+                            secondary
+                            onClickFun={handleDialogToggle}
+                        >
+                            Close
+                        </Button>
+                    </div>
+                </Dialog>
+            )}
+
             {/* {dialogActive && (
                 <Dialog
                     handleDialogToggle={handleDialogToggle}
-                    title="add Ticket"
+                    title=""
                 >
                     <div className="flex-1 flex flex-col gap-2">
                         <InputRow
