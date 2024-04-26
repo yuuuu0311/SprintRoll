@@ -18,8 +18,9 @@ const Label: React.FC<{
 
 export const renderLabel = (labels: object) => {
     const labelArr = [];
+
     for (const key in labels) {
-        labelArr.push(key);
+        if (labels[key]) labelArr.push(key);
     }
 
     return labelArr

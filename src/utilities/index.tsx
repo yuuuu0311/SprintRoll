@@ -300,8 +300,6 @@ export const updateTicketLabel = async (
     value: object,
     ticketInfo: TicketFace
 ) => {
-    console.log(1);
-
     const ticketRef = doc(
         db,
         `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
@@ -322,7 +320,6 @@ export const resetTicketStatus = async (ticketID: string) => {
 
 export const addSprint = async (sprintInfo: SprintFace) => {
     const sprintsRef = collection(db, "sprints");
-    console.log(sprintsRef);
 
     await addDoc(sprintsRef, {
         ...sprintInfo,
