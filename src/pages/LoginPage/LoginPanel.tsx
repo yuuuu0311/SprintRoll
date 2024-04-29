@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 
 // dependency
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
-
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 // utilities
+import { UserFace } from "@/interface";
+import { useUser } from "@/utilities/store";
 
 // component
 import { Button } from "@/components/Button";
 import { Loader } from "@/components/Loader";
 
-export const LoginPanel: React.FC<{ setIsLoginPanel }> = ({
-    setIsLoginPanel,
-}) => {
+export const LoginPanel: React.FC<{
+    setIsLoginPanel: Dispatch<SetStateAction<boolean>>;
+}> = ({ setIsLoginPanel }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState<Error>();
-
     const [isLogin, setIsLogin] = useState(false);
     const [userInfo, setUserInfo] = useState<{
         email: string;
@@ -28,7 +28,7 @@ export const LoginPanel: React.FC<{ setIsLoginPanel }> = ({
         password: "",
     }));
 
-    const navigate = useNavigate();
+    const { setUser } = useUser<UserFace>((state) => state);
 
     const inputClass = twMerge(
         classNames(
@@ -40,11 +40,14 @@ export const LoginPanel: React.FC<{ setIsLoginPanel }> = ({
         try {
             setIsLoading(true);
             const auth = getAuth();
-            await signInWithEmailAndPassword(
+
+            const { user } = await signInWithEmailAndPassword(
                 auth,
                 userInfo.email,
                 userInfo.password
             );
+
+            setUser({ uid: user.uid, email: user.email } as UserFace);
 
             setIsLoading(false);
             setIsLogin(true);
@@ -52,6 +55,8 @@ export const LoginPanel: React.FC<{ setIsLoginPanel }> = ({
             setIsError(error as Error);
         }
     };
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isLogin) navigate("/profile");

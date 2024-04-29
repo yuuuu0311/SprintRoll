@@ -17,7 +17,7 @@ export const LoginPage: React.FC = () => {
                     {isLoginPanel ? (
                         <LoginPanel setIsLoginPanel={setIsLoginPanel} />
                     ) : (
-                        <SigninPanel />
+                        <SigninPanel setIsLoginPanel={setIsLoginPanel} />
                     )}
                 </div>
             </div>

@@ -1,5 +1,6 @@
 // import { useHistory } from "react";
 // import { useNavigate } from "react-router-dom";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 
 // dependency
 import { twMerge } from "tailwind-merge";
@@ -12,11 +13,11 @@ import { db } from "@/utilities/firebase";
 
 // component
 import { Button } from "@/components/Button";
-import { useState } from "react";
 
-export const SigninPanel: React.FC = () => {
+export const SigninPanel: React.FC<{
+    setIsLoginPanel: Dispatch<SetStateAction<boolean>>;
+}> = ({ setIsLoginPanel }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState<Error>();
     const [isSignIn, setIsSignIn] = useState(false);
 
     const [userInfo, setUserInfo] = useState<{
@@ -27,11 +28,9 @@ export const SigninPanel: React.FC = () => {
         password: "",
     }));
 
-    // const navigate = useNavigate();
-
     const inputClass = twMerge(
         classNames(
-            `text-md px-3 py-2 rounded-md overflow-hidden leading-none  transition `
+            `text-md px-3 py-2 rounded-md overflow-hidden leading-none  transition w-full`
         )
     );
 
@@ -52,18 +51,15 @@ export const SigninPanel: React.FC = () => {
 
             setIsLoading(false);
             setIsSignIn(true);
+            setIsLoginPanel((prev) => !prev);
         } catch (error) {
             setIsLoading(false);
-            setIsError(error as Error);
+            // setIsError(error as Error);
         }
     };
 
-    // useEffect(() => {
-    //     if (isLogin) navigate("/all");
-    // }, [isLogin, navigate]);
-
     return (
-        <div className="">
+        <div>
             <div className="flex flex-col gap-4">
                 <div>
                     <input
@@ -94,19 +90,22 @@ export const SigninPanel: React.FC = () => {
                     />
                 </div>
                 {isLoading && <div>loading</div>}
-                {isError && (
+                {/* {isError && (
                     <div className="text-red-500">
                         {isError.message ===
                             "Firebase: Error (auth/email-already-in-use)." &&
                             "email has been used"}
                     </div>
-                )}
+                )} */}
                 {isSignIn && (
                     <div className="text-green-500">signIn success</div>
                 )}
-            </div>
-            <div className="flex  gap-2 justify-end ">
-                <Button rounded primary onClickFun={handleSignIn}>
+                <Button
+                    rounded
+                    primary
+                    onClickFun={handleSignIn}
+                    addonStyle="w-full"
+                >
                     signIn
                 </Button>
             </div>

@@ -26,10 +26,11 @@ export interface CollectionFace extends TicketFace {
 }
 
 export interface UserFace {
-    domain: string;
-    email: string;
-    name: string;
-    uid: string;
+    domain?: string;
+    name?: string;
+    email: string | null;
+    uid: string | null;
+    setUser: (userInfo: UserFace) => void;
 }
 
 export interface DialogState {

@@ -1,10 +1,13 @@
+import { useEffect, useState } from "react";
+
 // dependency
 import { useParams } from "react-router-dom";
 import { collection, onSnapshot, collectionGroup } from "firebase/firestore";
 
 // utilities
 import { db } from "@/utilities/firebase";
-import { useEffect, useState } from "react";
+import { useUser } from "@/utilities/store";
+import { UserFace } from "@/interface";
 
 // interface
 import {
@@ -155,6 +158,7 @@ export const useSprint = () => {
 
 export const useProject = () => {
     const { project } = useParams();
+    const { uid } = useUser<UserFace>((state) => state);
     const [isProjectLoading, setIsProjectLoading] = useState(false);
     const [projectInfo, setProjectInfo] = useState<ProjectFace[]>([]);
 
@@ -165,14 +169,13 @@ export const useProject = () => {
             setProjectInfo(
                 () =>
                     collection.docs
-                        // .filter((doc) => doc.data().project === project)
+                        .filter((doc) => doc.data().owner === uid)
                         .map((doc) => ({ ...doc.data(), id: doc.id })) as []
-                // .sort((a, b) => a.index - b.index) as []
             );
         });
 
         return () => unsubscribe();
-    }, [project]);
+    }, [project, uid]);
 
     return { isProjectLoading, projectInfo, setIsProjectLoading };
 };

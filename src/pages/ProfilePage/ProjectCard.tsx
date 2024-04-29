@@ -33,17 +33,18 @@ export const ProfileCard: React.FC<{ projectInfo: ProjectFace }> = ({
 
     return (
         <>
-            <div className="cursor-pointer hover:bg-blue-200 transition bg-stone-100 w-48 h-48 rounded p-5 flex flex-col">
-                <div className="flex justify-between">
-                    <NavLink to={`/${projectInfo.name}/all`}>
-                        {projectInfo.name}
-                    </NavLink>
+            <div className="cursor-pointer flex-1 hover:bg-blue-200 transition bg-stone-100 w-48 h-48 rounded p-5 flex flex-col gap-2">
+                <NavLink to={`/${projectInfo.name}/all`} className="flex-1">
+                    {projectInfo.name}
+                </NavLink>
+
+                <div className="mt-auto text-right flex gap-2 items-center">
+                    <span>+</span>
                     <MdOutlineDelete
                         className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500"
                         onClick={handleDialogToggle}
                     />
                 </div>
-                <div className="mt-auto text-right">+</div>
             </div>
 
             {dialogActive && (
