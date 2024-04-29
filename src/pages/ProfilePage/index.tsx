@@ -18,7 +18,7 @@ export const ProfilePage = () => {
     const titleClass = twMerge(classNames("text-3xl"));
     const { uid } = useUser<UserFace>((state) => state);
     const { projectInfo } = useProject();
-    const { collaborativeProjectInfo } = useCollaborativeProject();
+    const { collaborativeProject } = useCollaborativeProject();
     const [isAddProject, setIsAddProject] = useState(false);
     const [projectName, setProjectName] = useState("");
 
@@ -99,6 +99,14 @@ export const ProfilePage = () => {
                 </div>
                 <div className="flex flex-col gap-4">
                     <h3 className={titleClass}>collaborative project</h3>
+                    <div className="flex flex-wrap gap-3">
+                        {collaborativeProject?.map((project) => (
+                            <ProfileCard
+                                key={project.id}
+                                projectInfo={project}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

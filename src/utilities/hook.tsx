@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 
 // dependency
 import { useParams } from "react-router-dom";
-import { collection, onSnapshot, collectionGroup } from "firebase/firestore";
+import {
+    collection,
+    onSnapshot,
+    collectionGroup,
+    doc,
+    getDoc,
+} from "firebase/firestore";
 
 // utilities
 import { db } from "@/utilities/firebase";
@@ -185,33 +191,58 @@ export const useCollaborativeProject = () => {
     const { uid } = useUser<UserFace>((state) => state);
     const [isCollaborativeProjectLoading, setIsCollaborativeProjectLoading] =
         useState(false);
-    const [collaborativeProjectInfo, setCollaborativeProjectInfo] = useState<
-        ProjectFace[]
-    >([]);
+    const [collaborativeProjectID, setCollaborativeProjectID] =
+        useState<string[]>();
+    const [collaborativeProject, setCollaborativeProject] =
+        useState<ProjectFace[]>();
 
     useEffect(() => {
-        const projectRef = collection(db, "projects");
         const collaborativeProjectRef = collectionGroup(db, "collaborators");
 
         const unsubscribe = onSnapshot(
             collaborativeProjectRef,
             (collection) => {
-                collection.forEach((element) => {
-                    const modifyPath = element.ref.path.split("/");
-                    console.log(modifyPath);
+                const colProjectID: string[] = [];
+                collection.forEach(async (doc) => {
+                    const modifyPath = doc.ref.path.split("/");
+                    if (modifyPath[3] === uid) {
+                        colProjectID.push(modifyPath[1]);
+                    }
                 });
 
-                // setProjectInfo(
-                //     () =>
-                //         collection.docs
-                //             .filter((doc) => doc.data().owner === uid)
-                //             .map((doc) => ({ ...doc.data(), id: doc.id })) as []
-                // );
+                setCollaborativeProjectID(colProjectID);
             }
         );
 
         return () => unsubscribe();
     }, [project, uid]);
 
-    return { isCollaborativeProjectLoading, collaborativeProjectInfo };
+    useEffect(() => {
+        const collaborativeProjectRef = collection(db, "projects");
+
+        const unsubscribe = onSnapshot(
+            collaborativeProjectRef,
+            (collection) => {
+                setCollaborativeProject(
+                    () =>
+                        collection.docs
+                            .filter(
+                                (doc) =>
+                                    collaborativeProjectID?.indexOf(doc.id) !==
+                                    -1
+                            )
+                            .map((doc) => ({ ...doc.data(), id: doc.id })) as []
+                );
+            }
+        );
+
+        return () => unsubscribe();
+    }, [collaborativeProjectID]);
+
+    return {
+        isCollaborativeProjectLoading,
+        setIsCollaborativeProjectLoading,
+        collaborativeProject,
+        setCollaborativeProject,
+    };
 };
