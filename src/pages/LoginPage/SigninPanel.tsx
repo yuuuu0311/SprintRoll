@@ -1,6 +1,6 @@
 // import { useHistory } from "react";
 // import { useNavigate } from "react-router-dom";
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 
 // dependency
 import { twMerge } from "tailwind-merge";

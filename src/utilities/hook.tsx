@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 
 // dependency
 import { useParams } from "react-router-dom";
-import {
-    collection,
-    onSnapshot,
-    collectionGroup,
-    doc,
-    getDoc,
-} from "firebase/firestore";
+import { collection, onSnapshot, collectionGroup } from "firebase/firestore";
 
 // utilities
 import { db } from "@/utilities/firebase";

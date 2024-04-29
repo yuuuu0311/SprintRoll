@@ -118,7 +118,7 @@ const Developer: React.FC<{
     ticketInfo: TicketFace;
 }> = ({ developerInfo, isInCollection, ticketInfo }) => {
     const assignedDeveloperArr = [
-        ...(ticketInfo.assignedDeveloper as string[]),
+        ...(ticketInfo.assignedDeveloper as string | undefined[]),
     ];
     const isInAssigned =
         assignedDeveloperArr.indexOf(developerInfo.name) !== -1;
