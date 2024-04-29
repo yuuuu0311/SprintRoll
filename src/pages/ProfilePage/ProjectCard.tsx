@@ -38,7 +38,7 @@ export const ProfileCard: React.FC<{ projectInfo: ProjectFace }> = ({
                     {projectInfo.name}
                 </NavLink>
 
-                <div className="mt-auto text-right flex gap-2 items-center">
+                <div className="mt-auto justify-end flex gap-2 items-center">
                     <span>+</span>
                     <MdOutlineDelete
                         className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500"

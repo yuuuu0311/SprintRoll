@@ -179,3 +179,39 @@ export const useProject = () => {
 
     return { isProjectLoading, projectInfo, setIsProjectLoading };
 };
+
+export const useCollaborativeProject = () => {
+    const { project } = useParams();
+    const { uid } = useUser<UserFace>((state) => state);
+    const [isCollaborativeProjectLoading, setIsCollaborativeProjectLoading] =
+        useState(false);
+    const [collaborativeProjectInfo, setCollaborativeProjectInfo] = useState<
+        ProjectFace[]
+    >([]);
+
+    useEffect(() => {
+        const projectRef = collection(db, "projects");
+        const collaborativeProjectRef = collectionGroup(db, "collaborators");
+
+        const unsubscribe = onSnapshot(
+            collaborativeProjectRef,
+            (collection) => {
+                collection.forEach((element) => {
+                    const modifyPath = element.ref.path.split("/");
+                    console.log(modifyPath);
+                });
+
+                // setProjectInfo(
+                //     () =>
+                //         collection.docs
+                //             .filter((doc) => doc.data().owner === uid)
+                //             .map((doc) => ({ ...doc.data(), id: doc.id })) as []
+                // );
+            }
+        );
+
+        return () => unsubscribe();
+    }, [project, uid]);
+
+    return { isCollaborativeProjectLoading, collaborativeProjectInfo };
+};
