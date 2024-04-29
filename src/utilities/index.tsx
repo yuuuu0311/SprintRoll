@@ -18,7 +18,13 @@ import {
 import { db } from "@/utilities/firebase";
 
 // interface
-import { CollectionFace, SprintFace, TicketFace, UserFace } from "@/interface";
+import {
+    CollectionFace,
+    SprintFace,
+    TicketFace,
+    UserFace,
+    ProjectFace,
+} from "@/interface";
 
 export const rearange: (
     arr: (CollectionFace | TicketFace)[],
@@ -304,6 +310,14 @@ export const toAnotherSprint = async (
 
     updateDoc(ticketRef, {
         inSprint: sprintIndex,
+    });
+};
+
+export const addProject = async (projectInfo: ProjectFace) => {
+    const projectsRef = collection(db, "projects");
+
+    await addDoc(projectsRef, {
+        ...projectInfo,
     });
 };
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 // dependency
 import { twMerge } from "tailwind-merge";
@@ -7,6 +7,9 @@ import classNames from "classnames";
 
 // icon
 import { MdExpandMore } from "react-icons/md";
+
+// interface
+import { ProjectFace } from "@/interface";
 
 enum NavigationLabel {
     // PERSON = "Personal",
@@ -27,9 +30,12 @@ const NavigationLabelArray = [
 ];
 
 export const TabAccordion: React.FC<{
-    project: string;
-}> = ({ project }) => {
-    const [isActive, setIsActive] = useState(false);
+    projectInfo: ProjectFace;
+}> = ({ projectInfo }) => {
+    const { project } = useParams();
+    const [isActive, setIsActive] = useState<boolean>(
+        () => projectInfo.name === project
+    );
 
     const navLinkClass = (isActive: boolean) =>
         twMerge(
@@ -66,14 +72,14 @@ export const TabAccordion: React.FC<{
                 onClick={() => setIsActive((prev) => !prev)}
                 className={navigationTitleClass}
             >
-                <span>{project}</span>
+                <span>{projectInfo.name}</span>
                 <MdExpandMore className={navigationTitleIconClass} />
             </div>
             <ul className={navigationWrapClass}>
-                {NavigationLabelArray.map((label, index) => (
-                    <li key={`${project}-${label}-${index}`}>
+                {NavigationLabelArray.map((label) => (
+                    <li key={`${projectInfo.id}-${label}`}>
                         <NavLink
-                            to={`/${project.toLocaleLowerCase()}/${label.toLowerCase()}`}
+                            to={`/${projectInfo.name.toLocaleLowerCase()}/${label.toLowerCase()}`}
                             className={({ isActive }) => navLinkClass(isActive)}
                         >
                             {label}

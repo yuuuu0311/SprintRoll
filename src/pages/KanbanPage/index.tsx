@@ -31,9 +31,7 @@ import { CollectionFace, TicketFace, DialogState } from "@/interface";
 export const KanbanPage: React.FC = () => {
     const { domain } = useParams();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
-    const { collectionsData, setCollectionsData } = useCollections(
-        domain as string
-    );
+    const { collectionsData, setCollectionsData } = useCollections();
 
     const [ticketsSetters, setTicketsSetters] = useState<
         | {

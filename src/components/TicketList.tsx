@@ -48,7 +48,7 @@ export const TicketList: React.FC<{
         >
     >;
 }> = ({ collectionInfo, setTicketsSetters }) => {
-    const { domain } = useParams();
+    const { project, domain } = useParams();
     const { ticketsData, setTicketsData } = useTickets(
         collectionInfo.collectionID
     );
@@ -73,6 +73,7 @@ export const TicketList: React.FC<{
             ...newTickInfo,
             order: ticketsData.length,
             domain: domain,
+            project: project,
             createdTime: Timestamp.fromDate(new Date()),
             status: -1,
         });

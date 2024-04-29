@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import { useState, Dispatch, SetStateAction } from "react";
 
 import "rsuite/DateRangePicker/styles/index.css";
@@ -48,8 +49,8 @@ const getMovedTicket = (sourceState: TicketFace[], sourceIndex: number) => {
 };
 
 export const DashBoardPage: React.FC = () => {
+    const { project } = useParams();
     const { allTickets, setAllTickets } = useAllTickets();
-
     const { isSprintLoading, sprintInfo, setSprintInfo } = useSprint();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
 
@@ -162,6 +163,7 @@ export const DashBoardPage: React.FC = () => {
         });
         addSprint({
             index: sprintInfo.length,
+            project: project,
             ...newSprintInfo,
         });
         toggleDialog(isActive);

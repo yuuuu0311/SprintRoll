@@ -1,3 +1,6 @@
+// router
+import { NavLink } from "react-router-dom";
+
 // dependency
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
@@ -5,7 +8,12 @@ import classNames from "classnames";
 // components
 import { TabAccordion } from "@/components/TabAccordion";
 
+// hooks
+import { useProject } from "@/utilities/hook";
+
 export const TabNavigation = () => {
+    const { projectInfo } = useProject();
+
     const wrapperClass = twMerge(
         classNames("relative flex flex-col bg-stone-200 w-48 transition z-50")
     );
@@ -15,9 +23,12 @@ export const TabNavigation = () => {
     return (
         <div className={wrapperClass}>
             <div className={navigationWrapClass}>
-                <TabAccordion project={"sprintroll-0"} />
-                <TabAccordion project={"sprintroll-1"} />
-                <TabAccordion project={"sprintroll-2"} />
+                {projectInfo.map((project) => (
+                    <TabAccordion projectInfo={project} key={project.id} />
+                ))}
+            </div>
+            <div className="mt-auto">
+                <NavLink to={`/profile`}>profile</NavLink>
             </div>
         </div>
     );

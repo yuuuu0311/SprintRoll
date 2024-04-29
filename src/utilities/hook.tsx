@@ -1,4 +1,5 @@
 // dependency
+import { useParams } from "react-router-dom";
 import { collection, onSnapshot, collectionGroup } from "firebase/firestore";
 
 // utilities
@@ -6,9 +7,15 @@ import { db } from "@/utilities/firebase";
 import { useEffect, useState } from "react";
 
 // interface
-import { CollectionFace, SprintFace, TicketFace } from "@/interface";
+import {
+    CollectionFace,
+    SprintFace,
+    TicketFace,
+    ProjectFace,
+} from "@/interface";
 
-export const useCollections = (domain: string) => {
+export const useCollections = () => {
+    const { project, domain } = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [collectionsData, setCollectionsData] = useState<CollectionFace[]>();
 
@@ -18,7 +25,11 @@ export const useCollections = (domain: string) => {
         const unsubscribe = onSnapshot(collectionsRef, (collection) => {
             setCollectionsData(() =>
                 collection.docs
-                    .filter((doc) => doc.data().domain === domain)
+                    .filter(
+                        (doc) =>
+                            doc.data().domain === domain &&
+                            doc.data().project === project
+                    )
                     .map((doc) => ({
                         ...(doc.data() as CollectionFace),
                         collectionID: doc.id,
@@ -28,7 +39,7 @@ export const useCollections = (domain: string) => {
         });
 
         return () => unsubscribe();
-    }, [domain]);
+    }, [domain, project]);
 
     return { isLoading, collectionsData, setCollectionsData, setIsLoading };
 };
@@ -59,6 +70,7 @@ export const useTickets = (id?: string) => {
 };
 
 export const useAllTickets = (index?: number) => {
+    const { project } = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [allTickets, setAllTickets] = useState<TicketFace[]>();
     const [isTicketLoading, setIsTicketLoading] = useState(false);
@@ -73,7 +85,9 @@ export const useAllTickets = (index?: number) => {
             const allTicketCopy = tickets.docs
                 .filter(
                     (ticket) =>
-                        !ticket.data().inSprint && ticket.data().inSprint !== 0
+                        !ticket.data().inSprint &&
+                        ticket.data().inSprint !== 0 &&
+                        ticket.data().project === project
                 )
                 .map((ticket) => ({
                     ...(ticket.data() as TicketFace),
@@ -81,7 +95,11 @@ export const useAllTickets = (index?: number) => {
                 }));
 
             const sprintTicketsCopy = tickets.docs
-                .filter((ticket) => ticket.data().inSprint == index)
+                .filter(
+                    (ticket) =>
+                        ticket.data().inSprint == index &&
+                        ticket.data().project === project
+                )
                 .map((ticket) => ({
                     ...(ticket.data() as TicketFace),
                     ticketID: ticket.ref.path,
@@ -98,7 +116,7 @@ export const useAllTickets = (index?: number) => {
         });
 
         return () => unsubscribe();
-    }, [index]);
+    }, [index, project]);
 
     return {
         isLoading,
@@ -112,29 +130,49 @@ export const useAllTickets = (index?: number) => {
 };
 
 export const useSprint = () => {
+    const { project } = useParams();
     const [isSprintLoading, setIsSprintLoading] = useState(false);
     const [sprintInfo, setSprintInfo] = useState<SprintFace[]>([]);
 
     useEffect(() => {
         const sprintsRef = collection(db, "sprints");
-        // setIsSprintLoading(true);
 
         const unsubscribe = onSnapshot(sprintsRef, (collection) => {
             setSprintInfo(
                 () =>
                     collection.docs
+                        .filter((doc) => doc.data().project === project)
                         .map((doc) => doc.data())
                         .sort((a, b) => a.index - b.index) as []
             );
         });
-        // setIsSprintLoading(false);
 
         return () => unsubscribe();
-    }, []);
-
-    // useEffect(() => {
-    //     setIsSprintLoading((prev) => !prev);
-    // }, [sprintInfo]);
+    }, [project]);
 
     return { isSprintLoading, setIsSprintLoading, sprintInfo, setSprintInfo };
+};
+
+export const useProject = () => {
+    const { project } = useParams();
+    const [isProjectLoading, setIsProjectLoading] = useState(false);
+    const [projectInfo, setProjectInfo] = useState<ProjectFace[]>([]);
+
+    useEffect(() => {
+        const projectRef = collection(db, "projects");
+
+        const unsubscribe = onSnapshot(projectRef, (collection) => {
+            setProjectInfo(
+                () =>
+                    collection.docs
+                        // .filter((doc) => doc.data().project === project)
+                        .map((doc) => ({ ...doc.data(), id: doc.id })) as []
+                // .sort((a, b) => a.index - b.index) as []
+            );
+        });
+
+        return () => unsubscribe();
+    }, [project]);
+
+    return { isProjectLoading, projectInfo, setIsProjectLoading };
 };

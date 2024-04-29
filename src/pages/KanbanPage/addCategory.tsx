@@ -1,5 +1,6 @@
 // dependency
 import { ChangeEvent, useState } from "react";
+import { useParams } from "react-router-dom";
 import { db } from "@/utilities/firebase";
 import { addDoc, collection } from "firebase/firestore";
 
@@ -14,6 +15,7 @@ export const AddCategoryDialog: React.FC<{
     collectionsData: CollectionFace[] | undefined;
     domain: string | undefined;
 }> = ({ collectionsData, domain }) => {
+    const { project } = useParams();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
     const [collectionName, setCollectionName] = useState("");
 
@@ -27,6 +29,7 @@ export const AddCategoryDialog: React.FC<{
         await addDoc(collectionsRef, {
             domain: domain?.toLowerCase(),
             order: collectionsData.length,
+            project: project,
             product: "SprintRoll",
             name: collectionName,
         });

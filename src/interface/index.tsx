@@ -39,6 +39,7 @@ export interface DialogState {
 
 export interface SprintFace {
     index?: number;
+    project?: string;
     name: string;
     description: string;
     cycle: [Timestamp | Date, Timestamp | Date | undefined];
@@ -53,4 +54,11 @@ export interface LabelInputFace extends LabelFace {
     labelName: string;
     // isCheck: object | undefined;
     changeHandler?: Dispatch<SetStateAction<LabelFace>>;
+}
+
+export interface ProjectFace {
+    id?: string;
+    name: string;
+    domain: string[];
+    owner: string;
 }
