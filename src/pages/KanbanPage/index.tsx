@@ -9,7 +9,6 @@ import {
 } from "react-beautiful-dnd";
 
 // components
-import { Layout } from "@/components/Layout.tsx";
 import { TicketList } from "@/components/TicketList";
 import { AddCategoryDialog } from "./addCategory";
 import { Button } from "@/components/Button";
@@ -113,7 +112,7 @@ export const KanbanPage: React.FC = () => {
     };
 
     return (
-        <Layout>
+        <>
             {collectionsData === undefined && (
                 <div className="p-12 ">
                     <Loader />
@@ -167,6 +166,6 @@ export const KanbanPage: React.FC = () => {
                     </div>
                 </div>
             )}
-        </Layout>
+        </>
     );
 };

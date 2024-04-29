@@ -11,7 +11,6 @@ import {
 
 // components
 import { Ticket } from "@/components/Ticket";
-import { Layout } from "@/components/Layout";
 import { Loader } from "@/components/Loader";
 import { SprintPanel } from "./SprintPanel";
 import { Button } from "@/components/Button";
@@ -169,7 +168,7 @@ export const DashBoardPage: React.FC = () => {
     };
 
     return (
-        <Layout>
+        <>
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className="relative flex h-full items-start p-6 gap-6">
                     <Droppable droppableId="collections" type="droppableItem">
@@ -294,6 +293,6 @@ export const DashBoardPage: React.FC = () => {
                     </div>
                 </Dialog>
             )}
-        </Layout>
+        </>
     );
 };
