@@ -1,6 +1,3 @@
-// router
-import { NavLink } from "react-router-dom";
-
 // dependency
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
@@ -9,10 +6,12 @@ import classNames from "classnames";
 import { addProject } from "@/utilities";
 import { useProject } from "@/utilities/hook";
 
+// component
+import { ProfileCard } from "./ProjectCard";
+
 export const ProfilePage = () => {
     const titleClass = twMerge(classNames("text-3xl"));
     const { projectInfo } = useProject();
-
     const mockProject = {
         domain: [],
         name: `sprintroll-${projectInfo.length}`,
@@ -24,23 +23,30 @@ export const ProfilePage = () => {
     };
 
     return (
-        <div>
+        <div className="flex flex-col gap-6 p-8 mx-auto">
             <h3>ProfilePage</h3>
-            <div>
+            <div className="flex flex-col gap-4">
                 <h3 className={titleClass}>owned project</h3>
-                <ul>
+                <div className="flex flex-wrap gap-3">
                     {projectInfo.map((project) => (
-                        <li key={project.id}>
-                            <NavLink to={`/${project.name}/all`}>
-                                {project.name}
-                            </NavLink>
-                        </li>
+                        <ProfileCard key={project.id} projectInfo={project} />
                     ))}
-                </ul>
-                <button onClick={handleAddProject}>add project</button>
+
+                    <button
+                        className="bg-neutral-200 w-48 h-48 rounded p-5 flex flex-col"
+                        onClick={handleAddProject}
+                    >
+                        + add project
+                    </button>
+                </div>
             </div>
-            <div>
+            <div className="flex flex-col gap-4">
                 <h3 className={titleClass}>collaborative project</h3>
+                {/* <div className="flex flex-wrap gap-3">
+                    {projectInfo.map((project) => (
+                        <ProfileCard key={project.id} projectInfo={project} />
+                    ))}
+                </div> */}
             </div>
         </div>
     );

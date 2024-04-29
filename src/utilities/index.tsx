@@ -321,6 +321,10 @@ export const addProject = async (projectInfo: ProjectFace) => {
     });
 };
 
+export const deleteProject = async (projectInfo: ProjectFace) => {
+    await deleteDoc(doc(db, `projects/${projectInfo.id}`));
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = (fn: any, delay: number) => {
     let timer: number;

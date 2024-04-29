@@ -27,7 +27,7 @@ export const TabNavigation = () => {
                     <TabAccordion projectInfo={project} key={project.id} />
                 ))}
             </div>
-            <div className="mt-auto">
+            <div className="mt-auto px-4 py-2">
                 <NavLink to={`/profile`}>profile</NavLink>
             </div>
         </div>
