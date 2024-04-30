@@ -9,10 +9,11 @@ import classNames from "classnames";
 import { TabAccordion } from "@/components/TabAccordion";
 
 // hooks
-import { useProject } from "@/utilities/hook";
+import { useProject, useCollaborativeProject } from "@/utilities/hook";
 
 export const TabNavigation = () => {
     const { projectInfo } = useProject();
+    const { collaborativeProject } = useCollaborativeProject();
 
     const wrapperClass = twMerge(
         classNames("relative flex flex-col bg-stone-200 w-48 transition z-50")
@@ -23,7 +24,10 @@ export const TabNavigation = () => {
     return (
         <div className={wrapperClass}>
             <div className={navigationWrapClass}>
-                {projectInfo.map((project) => (
+                {projectInfo?.map((project) => (
+                    <TabAccordion projectInfo={project} key={project.id} />
+                ))}
+                {collaborativeProject?.map((project) => (
                     <TabAccordion projectInfo={project} key={project.id} />
                 ))}
             </div>

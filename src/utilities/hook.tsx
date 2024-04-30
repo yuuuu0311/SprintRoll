@@ -160,7 +160,7 @@ export const useProject = () => {
     const { project } = useParams();
     const { uid } = useUser<UserFace>((state) => state);
     const [isProjectLoading, setIsProjectLoading] = useState(false);
-    const [projectInfo, setProjectInfo] = useState<ProjectFace[]>([]);
+    const [projectInfo, setProjectInfo] = useState<ProjectFace[] | undefined>();
 
     useEffect(() => {
         const projectRef = collection(db, "projects");
@@ -238,5 +238,38 @@ export const useCollaborativeProject = () => {
         setIsCollaborativeProjectLoading,
         collaborativeProject,
         setCollaborativeProject,
+    };
+};
+
+export const useCollaborators = (projectID: string | undefined) => {
+    const [isCollaboratorsLoading, setCollaboratorsLoading] = useState(false);
+    const [collaborators, setCollaborators] = useState<[] | undefined>();
+
+    useEffect(() => {
+        const collaboratorsRef = collection(
+            db,
+            `projects/${projectID}/collaborators`
+        );
+
+        const unsubscribe = onSnapshot(collaboratorsRef, (collection) => {
+            setCollaborators(
+                () =>
+                    collection.docs.map((doc) => ({
+                        ...doc.data(),
+                        uid: doc.id,
+                    })) as []
+            );
+        });
+
+        return () => unsubscribe();
+        // NZFKoR4Ax4V8wuoE304eiOXXWwq2; // Davis
+        // tOva1aVU5XZpTsB3pb9ruELmzlr2; // Test User
+    }, [projectID]);
+
+    return {
+        isCollaboratorsLoading,
+        setCollaboratorsLoading,
+        collaborators,
+        setCollaborators,
     };
 };
