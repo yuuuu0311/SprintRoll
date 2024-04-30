@@ -325,6 +325,24 @@ export const deleteProject = async (projectInfo: ProjectFace) => {
     await deleteDoc(doc(db, `projects/${projectInfo.id}`));
 };
 
+export const removeCollaborator = async (
+    projectID: string | undefined,
+    uid: string
+) => {
+    await deleteDoc(doc(db, `projects/${projectID}/collaborators/${uid}`));
+};
+
+export const addCollaborator = async (
+    projectID: string | undefined,
+    uid: string,
+    data: {
+        name: string;
+        role: number;
+    }
+) => {
+    await setDoc(doc(db, `projects/${projectID}/collaborators/`, uid), data);
+};
+
 export const searchViaEmail = async (email: string) => {
     const regex = new RegExp(email);
     const userRef = collection(db, `users`);

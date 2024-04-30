@@ -9,8 +9,8 @@ export const useDialog = create<DialogState>()((set) => ({
 }));
 
 export const useUser = create<UserFace>()((set) => ({
-    uid: "",
-    email: "",
+    uid: localStorage.getItem("userID"),
+    email: localStorage.getItem("userEmail"),
     setUser: (userInfo: UserFace) =>
         set({
             uid: userInfo.uid,

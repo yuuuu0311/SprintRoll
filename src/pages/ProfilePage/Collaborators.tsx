@@ -1,5 +1,7 @@
 import { useCollaborators } from "@/utilities/hook";
 
+import { removeCollaborator } from "@/utilities";
+
 interface collaborator {
     uid: string;
     name: string;
@@ -23,7 +25,12 @@ export const Collaborators: React.FC<{ projectID: string | undefined }> = ({
                         <div>{collaborator.uid}</div>
                     </div>
 
-                    <div className="ml-auto bg-rose-500 text-white rounded-full cursor-pointer hover:bg-rose-600 transition flex items-center justify-center w-6 h-6">
+                    <div
+                        className="ml-auto bg-rose-500 text-white rounded-full cursor-pointer hover:bg-rose-600 transition flex items-center justify-center w-6 h-6"
+                        onClick={() =>
+                            removeCollaborator(projectID, collaborator.uid)
+                        }
+                    >
                         -
                     </div>
                 </div>

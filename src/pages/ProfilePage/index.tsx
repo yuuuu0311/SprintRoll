@@ -16,9 +16,10 @@ import { Button } from "@/components/Button";
 import { Loader } from "@/components/Loader";
 
 export const ProfilePage = () => {
-    const titleClass = twMerge(classNames("text-3xl"));
     const { uid } = useUser<UserFace>((state) => state);
+
     const { projectInfo } = useProject();
+
     const { collaborativeProject } = useCollaborativeProject();
     const [isAddProject, setIsAddProject] = useState(false);
     const [projectName, setProjectName] = useState("");
@@ -31,24 +32,30 @@ export const ProfilePage = () => {
         });
     };
 
+    const titleClass = twMerge(classNames("text-3xl capitalize tracking-wide"));
+    const cardWrapClass = twMerge(classNames("grid gap-3 grid-cols-5"));
+
+    // useEffect(() => {
+    //     console.log(uid, projectInfo);
+    // }, [projectInfo, uid]);
+
     return (
-        <div className="flex gap-4">
-            <div>panel</div>
-            <div className="flex flex-col gap-6 p-8 mx-auto">
-                <h3>ProfilePage</h3>
-                <div className="flex flex-col gap-4">
+        <div className="flex items-stretch h-full">
+            <div className="w-48 py-2 bg-stone-200">user info panel</div>
+            <div className="flex flex-col gap-6 py-12 px-24 flex-1">
+                <div className="flex flex-col gap-4 flex-1">
                     <h3 className={titleClass}>owned project</h3>
                     {projectInfo === undefined ? (
                         <Loader />
                     ) : (
-                        <div className="flex flex-wrap gap-3">
+                        <div className={cardWrapClass}>
                             {projectInfo?.map((project) => (
                                 <ProfileCard
                                     key={project.id}
                                     projectInfo={project}
                                 />
                             ))}
-                            <div className="bg-neutral-200 w-48 h-48 rounded p-5 flex flex-col">
+                            <div className="bg-neutral-200 rounded-md p-5 flex flex-col hover:bg-neutral-400/50 transition w-full h-auto aspect-square">
                                 {isAddProject ? (
                                     <div className="flex flex-col gap-4">
                                         <input
@@ -103,12 +110,12 @@ export const ProfilePage = () => {
                         </div>
                     )}
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 flex-1">
                     <h3 className={titleClass}>collaborative project</h3>
                     {collaborativeProject === undefined ? (
                         <Loader />
                     ) : (
-                        <div className="flex flex-wrap gap-3">
+                        <div className={cardWrapClass}>
                             {collaborativeProject?.map((project) => (
                                 <ProfileCard
                                     isCollaborative

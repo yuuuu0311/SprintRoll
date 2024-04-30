@@ -159,6 +159,7 @@ export const useSprint = () => {
 export const useProject = () => {
     const { project } = useParams();
     const { uid } = useUser<UserFace>((state) => state);
+
     const [isProjectLoading, setIsProjectLoading] = useState(false);
     const [projectInfo, setProjectInfo] = useState<ProjectFace[] | undefined>();
 
@@ -183,6 +184,7 @@ export const useProject = () => {
 export const useCollaborativeProject = () => {
     const { project } = useParams();
     const { uid } = useUser<UserFace>((state) => state);
+
     const [isCollaborativeProjectLoading, setIsCollaborativeProjectLoading] =
         useState(false);
     const [collaborativeProjectID, setCollaborativeProjectID] =

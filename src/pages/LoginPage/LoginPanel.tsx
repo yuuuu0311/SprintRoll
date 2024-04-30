@@ -47,6 +47,11 @@ export const LoginPanel: React.FC<{
                 userInfo.password
             );
 
+            if (user.uid === null || user.email === null) return;
+
+            localStorage.setItem("userID", user.uid);
+            localStorage.setItem("userEmail", user.email);
+
             setUser({ uid: user.uid, email: user.email } as UserFace);
 
             setIsLoading(false);
