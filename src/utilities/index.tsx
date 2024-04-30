@@ -325,6 +325,16 @@ export const deleteProject = async (projectInfo: ProjectFace) => {
     await deleteDoc(doc(db, `projects/${projectInfo.id}`));
 };
 
+export const searchViaEmail = async (email: string) => {
+    const regex = new RegExp(email);
+    const userRef = collection(db, `users`);
+    const userSnapshot = await getDocs(userRef);
+
+    return userSnapshot.docs
+        .filter((doc) => regex.test(doc.data().email))
+        .map((doc) => doc.data());
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = (fn: any, delay: number) => {
     let timer: number;

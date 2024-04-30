@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 // dependency
@@ -10,12 +10,15 @@ import { MdOutlineDelete, MdPeople } from "react-icons/md";
 
 // utilities
 import { ProjectFace } from "@/interface";
-import { deleteProject } from "@/utilities";
+import { deleteProject, searchViaEmail, debounce } from "@/utilities";
 
 //components
 import { Collaborators } from "./Collaborators";
 import { Button } from "@/components/Button";
 import { Dialog } from "@/components/Dialog";
+
+//interface
+import { UserFace } from "@/interface";
 
 export const ProfileCard: React.FC<{
     projectInfo: ProjectFace;
@@ -28,12 +31,17 @@ export const ProfileCard: React.FC<{
         invite: false,
     });
 
+    const [searchCollaborators, setSearchCollaborators] = useState<
+        UserFace[] | undefined
+    >([]);
+
     const handleDialogToggle = (
         type: keyof {
             delete: false;
             invite: false;
         }
     ) => {
+        setSearchCollaborators(undefined);
         setDialogActive((prev) => ({
             ...prev,
             [type]: !prev[type],
@@ -43,6 +51,14 @@ export const ProfileCard: React.FC<{
     const handleDeleteProject = (projectInfo: ProjectFace) => {
         deleteProject(projectInfo);
     };
+
+    const handleSearchCollaborators = debounce(
+        async (e: ChangeEvent<HTMLInputElement>) => {
+            const result = await searchViaEmail(e.target.value);
+            setSearchCollaborators(result as UserFace[]);
+        },
+        500
+    );
 
     return (
         <>
@@ -106,33 +122,47 @@ export const ProfileCard: React.FC<{
                     handleDialogToggle={() => handleDialogToggle("invite")}
                     title="collaborators"
                 >
-                    <div>
+                    <div className="flex flex-col gap-4">
                         <Collaborators projectID={projectInfo.id} />
+                        <hr className="border-b-2 border-b-solid border-b-neutral-300" />
+                        <div className="flex flex-col text-neutral-600">
+                            <input
+                                type="text"
+                                placeholder="search email to invite collaborators"
+                                className="py-1 px-2 w-full rounded-md"
+                                onChange={(e) => handleSearchCollaborators(e)}
+                            />
+                        </div>
+                        <div>
+                            {searchCollaborators?.length === 0 ? (
+                                <div>user no found</div>
+                            ) : (
+                                searchCollaborators?.map((collaborator) => (
+                                    <div
+                                        key={collaborator.uid}
+                                        className="flex gap-8 items-center py-2"
+                                    >
+                                        <div className="flex gap-2 items-center">
+                                            <div>{collaborator.email}</div>
+                                            {/* <div>{collaborator.uid}</div> */}
+                                        </div>
+
+                                        <div className="ml-auto bg-lime-500 text-white rounded-full cursor-pointer hover:bg-lime-600 transition flex items-center justify-center w-6 h-6">
+                                            +
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
                     </div>
 
-                    <div className="flex flex-col mb-6 text-neutral-600">
-                        invite
-                        <input
-                            type="text"
-                            placeholder="email"
-                            className="py-1 px-2 w-full"
-                        />
-                    </div>
-
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-2 mt-6">
                         <Button
                             secondary
                             rounded
                             onClickFun={() => handleDialogToggle("invite")}
                         >
                             close
-                        </Button>
-                        <Button
-                            rounded
-                            success
-                            onClickFun={() => handleDialogToggle("invite")}
-                        >
-                            invite
                         </Button>
                     </div>
                 </Dialog>
