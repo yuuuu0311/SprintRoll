@@ -146,7 +146,7 @@ export const useSprint = () => {
                     collection.docs
                         .filter((doc) => doc.data().project === project)
                         .map((doc) => ({
-                            ...doc.data(),
+                            ...(doc.data() as SprintFace),
                             id: doc.id,
                         }))
                         .sort((a, b) => a.index - b.index) as SprintFace[]

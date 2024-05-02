@@ -67,6 +67,7 @@ export const DashBoardPage: React.FC = () => {
     >();
 
     const [newSprintInfo, setNewSprintInfo] = useState<SprintFace>({
+        index: 0,
         name: "",
         description: "",
         cycle: [new Date(), undefined],
@@ -176,18 +177,19 @@ export const DashBoardPage: React.FC = () => {
             return [
                 ...prev,
                 {
-                    index: sprintInfo.length,
                     ...newSprintInfo,
+                    index: sprintInfo.length,
                 },
             ] as SprintFace[];
         });
         addSprint({
+            ...newSprintInfo,
             index: sprintInfo.length,
             project: project,
-            ...newSprintInfo,
         });
 
         setNewSprintInfo({
+            index: 0,
             name: "",
             description: "",
             cycle: [new Date(), undefined],
@@ -284,6 +286,7 @@ export const DashBoardPage: React.FC = () => {
                     handleDialogToggle={() => {
                         toggleDialog(isActive);
                         setNewSprintInfo({
+                            index: 0,
                             name: "",
                             description: "",
                             cycle: [new Date(), undefined],
@@ -347,6 +350,7 @@ export const DashBoardPage: React.FC = () => {
                             onClickFun={() => {
                                 toggleDialog(isActive);
                                 setNewSprintInfo({
+                                    index: 0,
                                     name: "",
                                     description: "",
                                     cycle: [new Date(), undefined],

@@ -58,6 +58,7 @@ export const SprintPanel: React.FC<{
         useAllTickets(index);
 
     const [newSprintInfo, setNewSprintInfo] = useState<SprintFace>({
+        index: sprintInfo.index,
         name: sprintInfo.name,
         description: sprintInfo.description,
         cycle: sprintInfo.cycle,
