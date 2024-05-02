@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 import "rsuite/DateRangePicker/styles/index.css";
 
@@ -30,6 +30,8 @@ import { useDialog } from "@/utilities/store";
 // interface
 import { DialogState, SprintFace, TicketFace } from "@/interface";
 import { Dialog } from "@/components/Dialog";
+import { twMerge } from "tailwind-merge";
+import classNames from "classnames";
 
 const toSprintPanel = (droppableId: string) => {
     const sprintIndexRegex = /sprintTickets-[0-9]/;
@@ -68,6 +70,14 @@ export const DashBoardPage: React.FC = () => {
         name: "",
         description: "",
         cycle: [new Date(), undefined],
+    });
+
+    const [sprintInfoError, setSprintInfoError] = useState<{
+        name: boolean;
+        cycle: boolean;
+    }>({
+        name: false,
+        cycle: false,
     });
 
     const onDragEnd: OnDragEndResponder = (result) => {
@@ -152,6 +162,16 @@ export const DashBoardPage: React.FC = () => {
     };
 
     const handleAddSprint = () => {
+        // //check
+        if (newSprintInfo.name === "") {
+            setSprintInfoError((prev) => ({ ...prev, name: true }));
+            return;
+        }
+        if (newSprintInfo.cycle[1] === undefined) {
+            setSprintInfoError((prev) => ({ ...prev, cycle: true }));
+            return;
+        }
+
         setSprintInfo((prev) => {
             return [
                 ...prev,
@@ -168,6 +188,25 @@ export const DashBoardPage: React.FC = () => {
         });
         toggleDialog(isActive);
     };
+
+    useEffect(() => {
+        setSprintInfoError({
+            name: false,
+            cycle: false,
+        });
+    }, [isActive]);
+
+    const inputWrapClass = twMerge(classNames("flex flex-col gap-2"));
+    const inputTitleClass = twMerge(
+        classNames("rounded w-full py-1 px-2", {
+            "outline outline-2 outline-rose-500": sprintInfoError.name,
+        })
+    );
+    const inputCycleClass = twMerge(
+        classNames("rounded", {
+            "outline outline-2 outline-rose-500": sprintInfoError.name,
+        })
+    );
 
     return (
         <>
@@ -238,49 +277,51 @@ export const DashBoardPage: React.FC = () => {
                     handleDialogToggle={() => toggleDialog(isActive)}
                     title="add category"
                 >
-                    <div>
-                        <div>sprint cycle</div>
-                        <input
-                            type="text"
-                            placeholder="title"
-                            onChange={(e) => {
-                                setNewSprintInfo((prev) => ({
-                                    ...prev,
-                                    name: e.target.value,
-                                }));
-                            }}
-                        />
+                    <div className="flex flex-col gap-2 mb-6">
+                        <div className={inputWrapClass}>
+                            <div className="text-neutral-500">title</div>
+                            <input
+                                type="text"
+                                placeholder="title"
+                                className={inputTitleClass}
+                                onChange={(e) => {
+                                    setNewSprintInfo((prev) => ({
+                                        ...prev,
+                                        name: e.target.value,
+                                    }));
+                                }}
+                            />
+                        </div>
+                        <div className={inputWrapClass}>
+                            <div className="text-neutral-500">cycle</div>
+                            <DateRangePicker
+                                className={inputCycleClass}
+                                onChange={(dateVal) => {
+                                    setNewSprintInfo(
+                                        (prev) =>
+                                            ({
+                                                ...prev,
+                                                cycle: dateVal,
+                                            } as SprintFace)
+                                    );
+                                }}
+                            />
+                        </div>
+                        <div className={inputWrapClass}>
+                            <div className="text-neutral-500">description</div>
+                            <textarea
+                                className="p-2 text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-neutral-300 outline-none transition "
+                                placeholder="add some description here"
+                                onChange={(e) => {
+                                    setNewSprintInfo((prev) => ({
+                                        ...prev,
+                                        description: e.target.value,
+                                    }));
+                                }}
+                                defaultValue={newSprintInfo.description}
+                            ></textarea>
+                        </div>
                     </div>
-                    <div>
-                        <div>sprint cycle</div>
-                        <DateRangePicker
-                            // value={newSprintInfo.cycle as [Date, Date]}
-                            onChange={(dateVal) => {
-                                setNewSprintInfo(
-                                    (prev) =>
-                                        ({
-                                            ...prev,
-                                            cycle: dateVal,
-                                        } as SprintFace)
-                                );
-                            }}
-                        />
-                    </div>
-                    <div>
-                        <div>description</div>
-                        <textarea
-                            className="p-2 text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-neutral-300 outline-none transition "
-                            placeholder="add some description here"
-                            onChange={(e) => {
-                                setNewSprintInfo((prev) => ({
-                                    ...prev,
-                                    description: e.target.value,
-                                }));
-                            }}
-                            defaultValue={newSprintInfo.description}
-                        ></textarea>
-                    </div>
-
                     <div className="flex gap-2 justify-end mt-auto">
                         <Button
                             secondary
