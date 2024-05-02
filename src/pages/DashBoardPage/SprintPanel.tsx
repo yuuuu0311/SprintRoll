@@ -10,6 +10,15 @@ import { useAllTickets } from "@/utilities/hook";
 // components
 import { TicketStatusRow } from "./TicketStatusRow";
 import { SprintFace, TicketFace } from "@/interface";
+import { Dialog } from "@/components/Dialog";
+import { Button } from "@/components/Button";
+import { DateRangePicker } from "rsuite";
+
+// icon
+import { MdOutlineEdit, MdOutlineDelete } from "react-icons/md";
+
+// utilities
+import { handleDeleteSprint, updateSprint } from "@/utilities";
 
 const getProgressPercentage = (sprintTickets: TicketFace[]) => {
     const havingStatus = sprintTickets.filter((ticket) => ticket.status !== -1);
@@ -41,15 +50,39 @@ export const SprintPanel: React.FC<{
     index: number;
 }> = ({ sprintInfo, index, setSprintTicketsSetters }) => {
     const [isToggle, setIsToggle] = useState(true);
-
+    const [dialogActive, setDialogActive] = useState({
+        delete: false,
+        edit: false,
+    });
     const { isTicketLoading, sprintTickets, setSprintTickets } =
         useAllTickets(index);
 
+    const [newSprintInfo, setNewSprintInfo] = useState<SprintFace>({
+        name: sprintInfo.name,
+        description: sprintInfo.description,
+        cycle: sprintInfo.cycle,
+    });
+
+    const handleDialogToggle = (
+        type: keyof {
+            delete: false;
+            edit: false;
+        }
+    ) => {
+        setDialogActive((prev) => ({
+            ...prev,
+            [type]: !prev[type],
+        }));
+    };
+
     const ticketsWrapClass = twMerge(
-        classNames("transition-all bg-neutral-100 px-6 overflow-hidden  h-0", {
+        classNames("transition-all px-6 overflow-hidden  h-0", {
             "h-auto": isToggle,
         })
     );
+    const inputWrapClass = twMerge(classNames("flex flex-col gap-2"));
+    const inputTitleClass = twMerge(classNames("rounded w-full py-1 px-2"));
+    const inputCycleClass = twMerge(classNames("rounded"));
 
     useEffect(() => {
         setSprintTicketsSetters(
@@ -76,12 +109,22 @@ export const SprintPanel: React.FC<{
                 type="droppableItem"
             >
                 {({ innerRef, placeholder }) => (
-                    <div>
-                        <div className=" sticky top-0 bg-neutral-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3 ">
+                    <div className="transition hover:brightness-95 bg-neutral-100">
+                        <div className="sticky top-0  w-full px-6 pt-4 pb-2 flex flex-col gap-3 ">
+                            <div className="flex justify-end gap-2">
+                                <MdOutlineEdit
+                                    className="text-lg hover:text-lime-500 transition"
+                                    onClick={() => handleDialogToggle("edit")}
+                                />
+                                <MdOutlineDelete
+                                    className="text-lg hover:text-rose-500 transition"
+                                    onClick={() => handleDialogToggle("delete")}
+                                />
+                            </div>
                             <div className="text-neutral-600 flex flex-col gap-1">
                                 <div className="flex justify-between items-baseline">
-                                    <div className="font-bold text-3xl">
-                                        {sprintInfo.name}
+                                    <div className="font-bold text-3xl flex gap-2 items-center">
+                                        <span>{sprintInfo.name}</span>
                                     </div>
                                     <span className="text-sm">
                                         # Sprint {index}
@@ -155,13 +198,128 @@ export const SprintPanel: React.FC<{
                             onClick={() =>
                                 setIsToggle((prev) => (prev ? false : true))
                             }
-                            className="flex justify-center transition bg-neutral-100 hover:bg-neutral-200 py-2 text-neutral-400"
+                            className="flex justify-center transition hover:bg-neutral-200 py-2 text-neutral-400"
                         >
                             {isToggle ? "less" : "more"}
                         </div>
                     </div>
                 )}
             </Droppable>
+
+            {dialogActive.delete && (
+                <Dialog
+                    handleDialogToggle={() => handleDialogToggle("delete")}
+                    danger
+                    title="caution"
+                >
+                    <div className="flex flex-col mb-6 text-neutral-600">
+                        <div className="text-lg">
+                            Are you sure you want to delete this sprint ?
+                        </div>
+                        <div>This action can not be undone</div>
+                    </div>
+
+                    <div className="flex justify-end gap-2">
+                        <Button
+                            danger
+                            rounded
+                            onClickFun={() => {
+                                handleDeleteSprint(sprintInfo);
+                                handleDialogToggle("delete");
+                            }}
+                        >
+                            delete
+                        </Button>
+                        <Button
+                            rounded
+                            secondary
+                            onClickFun={() => handleDialogToggle("delete")}
+                        >
+                            Close
+                        </Button>
+                    </div>
+                </Dialog>
+            )}
+
+            {dialogActive.edit && (
+                <Dialog
+                    handleDialogToggle={() => {
+                        handleDialogToggle("edit");
+                    }}
+                    title="add category"
+                >
+                    <div className="flex flex-col gap-2 mb-6">
+                        <div className={inputWrapClass}>
+                            <div className="text-neutral-500">title</div>
+                            <input
+                                type="text"
+                                placeholder="title"
+                                value={newSprintInfo.name}
+                                className={inputTitleClass}
+                                onChange={(e) => {
+                                    setNewSprintInfo((prev) => ({
+                                        ...prev,
+                                        name: e.target.value,
+                                    }));
+                                }}
+                            />
+                        </div>
+                        <div className={inputWrapClass}>
+                            <div className="text-neutral-500">cycle</div>
+                            <DateRangePicker
+                                className={inputCycleClass}
+                                onChange={(dateVal) => {
+                                    setNewSprintInfo(
+                                        (prev) =>
+                                            ({
+                                                ...prev,
+                                                cycle: dateVal,
+                                            } as SprintFace)
+                                    );
+                                }}
+                            />
+                        </div>
+                        <div className={inputWrapClass}>
+                            <div className="text-neutral-500">description</div>
+                            <textarea
+                                className="p-2 text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-neutral-300 outline-none transition "
+                                placeholder="add some description here"
+                                onChange={(e) => {
+                                    setNewSprintInfo((prev) => ({
+                                        ...prev,
+                                        description: e.target.value,
+                                    }));
+                                }}
+                                defaultValue={newSprintInfo.description}
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div className="flex gap-2 justify-end mt-auto">
+                        <Button
+                            secondary
+                            rounded
+                            onClickFun={() => {
+                                handleDialogToggle("edit");
+                            }}
+                        >
+                            close
+                        </Button>
+                        <Button
+                            success
+                            rounded
+                            onClickFun={() => {
+                                updateSprint({
+                                    ...newSprintInfo,
+                                    id: sprintInfo.id,
+                                });
+                                handleDialogToggle("edit");
+                            }}
+                        >
+                            save
+                        </Button>
+                    </div>
+                </Dialog>
+            )}
         </div>
     );
 };

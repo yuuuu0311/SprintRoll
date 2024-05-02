@@ -145,8 +145,11 @@ export const useSprint = () => {
                 () =>
                     collection.docs
                         .filter((doc) => doc.data().project === project)
-                        .map((doc) => doc.data())
-                        .sort((a, b) => a.index - b.index) as []
+                        .map((doc) => ({
+                            ...doc.data(),
+                            id: doc.id,
+                        }))
+                        .sort((a, b) => a.index - b.index) as SprintFace[]
             );
         });
 

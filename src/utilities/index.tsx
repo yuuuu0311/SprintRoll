@@ -343,6 +343,10 @@ export const addCollaborator = async (
     await setDoc(doc(db, `projects/${projectID}/collaborators/`, uid), data);
 };
 
+export const updateSprint = async (sprintInfo: SprintFace) => {
+    await updateDoc(doc(db, `sprints/${sprintInfo.id}`), { ...sprintInfo });
+};
+
 export const searchViaEmail = async (email: string) => {
     const regex = new RegExp(email);
     const userRef = collection(db, `users`);
@@ -351,6 +355,16 @@ export const searchViaEmail = async (email: string) => {
     return userSnapshot.docs
         .filter((doc) => regex.test(doc.data().email))
         .map((doc) => doc.data());
+};
+
+export const handleDeleteSprint = async (sprintInfo: SprintFace) => {
+    const docRef = doc(db, `sprints/${sprintInfo.id}/`);
+
+    try {
+        await deleteDoc(docRef);
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

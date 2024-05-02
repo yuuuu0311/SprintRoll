@@ -40,6 +40,7 @@ export interface DialogState {
 
 export interface SprintFace {
     index?: number;
+    id?: string;
     project?: string;
     name: string;
     description: string;
