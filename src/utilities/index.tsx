@@ -361,8 +361,6 @@ export const handleDeleteSprint = async (
     project: string | undefined,
     sprintInfo: SprintFace
 ) => {
-    console.log(sprintInfo.index, project);
-
     const sprintTicketsRef = query(
         collectionGroup(db, "tickets"),
         where("inSprint", "==", sprintInfo.index),

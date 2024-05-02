@@ -252,7 +252,7 @@ export const DashBoardPage: React.FC = () => {
                         )}
                         <div className="rounded-md max-h-full overflow-y-auto no-scrollbar [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200 shadow-lg">
                             {sprintInfo.length === 0 ? (
-                                <div className="text-neutral-400 text-center text-sm">
+                                <div className="text-neutral-400 text-center text-sm bg-stone-100 py-4">
                                     SprintRoll Your Product now !
                                 </div>
                             ) : (
