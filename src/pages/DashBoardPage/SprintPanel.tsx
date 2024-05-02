@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 import { Droppable } from "react-beautiful-dnd";
 import { Timestamp } from "firebase/firestore";
+import { useParams } from "react-router-dom";
 
 // hook
 import { useAllTickets } from "@/utilities/hook";
@@ -49,6 +50,7 @@ export const SprintPanel: React.FC<{
 
     index: number;
 }> = ({ sprintInfo, index, setSprintTicketsSetters }) => {
+    const { project } = useParams();
     const [isToggle, setIsToggle] = useState(true);
     const [dialogActive, setDialogActive] = useState({
         delete: false,
@@ -225,7 +227,7 @@ export const SprintPanel: React.FC<{
                             danger
                             rounded
                             onClickFun={() => {
-                                handleDeleteSprint(sprintInfo);
+                                handleDeleteSprint(project, sprintInfo);
                                 handleDialogToggle("delete");
                             }}
                         >

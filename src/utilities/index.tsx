@@ -357,11 +357,27 @@ export const searchViaEmail = async (email: string) => {
         .map((doc) => doc.data());
 };
 
-export const handleDeleteSprint = async (sprintInfo: SprintFace) => {
+export const handleDeleteSprint = async (
+    project: string | undefined,
+    sprintInfo: SprintFace
+) => {
+    console.log(sprintInfo.index, project);
+
+    const sprintTicketsRef = query(
+        collectionGroup(db, "tickets"),
+        where("inSprint", "==", sprintInfo.index),
+        where("project", "==", project)
+    );
+
     const docRef = doc(db, `sprints/${sprintInfo.id}/`);
+    const ticketsSnap = await getDocs(sprintTicketsRef);
 
     try {
         await deleteDoc(docRef);
+
+        ticketsSnap.forEach(async (doc) => {
+            await updateDoc(doc.ref, { ...doc.data(), inSprint: null });
+        });
     } catch (error) {
         console.log(error);
     }
