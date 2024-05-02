@@ -51,7 +51,7 @@ const getMovedTicket = (sourceState: TicketFace[], sourceIndex: number) => {
 };
 
 export const DashBoardPage: React.FC = () => {
-    const { project, domain } = useParams();
+    const { project } = useParams();
     const { allTickets, setAllTickets } = useAllTickets();
     const { isSprintLoading, sprintInfo, setSprintInfo } = useSprint();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
@@ -218,7 +218,7 @@ export const DashBoardPage: React.FC = () => {
     );
 
     return (
-        <div>
+        <div className="h-full flex flex-col">
             <div className="px-12 py-4 flex gap-2 text-neutral-500">
                 <span>{project}</span>
                 <span>/</span>

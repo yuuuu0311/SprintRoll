@@ -3,6 +3,7 @@ import "./App.css";
 
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { LandingPage } from "@/pages/LandingPage";
 import { LoginPage } from "@/pages/LoginPage";
 import { DashBoardPage } from "@/pages/DashBoardPage";
 import { KanbanPage } from "@/pages/KanbanPage";
@@ -17,7 +18,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <main className="relative flex-1 overflow-hidden">
             <BrowserRouter>
                 <Routes>
-                    <Route index path="/login" element={<LoginPage />} />
+                    <Route index path="/" element={<LandingPage />} />
+                    <Route path="/login" element={<LoginPage />} />
                     <Route path="profile" element={<ProfilePage />}>
                         <Route path="overview" element={<OverviewPage />} />
                         {/* <Route path="setting" element={<SettingPage />} /> */}
@@ -27,10 +29,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                         <Route path="all" element={<DashBoardPage />} />
                         <Route path=":domain" element={<KanbanPage />} />
                     </Route>
-                    <Route
-                        path="*"
-                        element={<Navigate to="/login" replace />}
-                    />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </BrowserRouter>
         </main>

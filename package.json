@@ -15,6 +15,7 @@
     "classnames": "^2.5.1",
     "firebase": "^10.10.0",
     "firebaseui": "^6.1.0",
+    "framer-motion": "^11.1.7",
     "immer": "^10.0.4",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
