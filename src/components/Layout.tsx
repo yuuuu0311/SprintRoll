@@ -35,7 +35,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
                 </div>
                 <div className="mt-auto px-4 py-3 border-t-2 border-t-solid border-t-neutral-300/50 text-neutral-500 hover:bg-neutral-400/50 transition">
                     <NavLink
-                        to={`/profile`}
+                        to={`/profile/overview`}
                         className="w-full h-full flex justify-between items-center"
                     >
                         <span>profile</span>
