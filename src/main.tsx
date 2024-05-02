@@ -27,7 +27,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                         <Route path="all" element={<DashBoardPage />} />
                         <Route path=":domain" element={<KanbanPage />} />
                     </Route>
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route
+                        path="*"
+                        element={<Navigate to="/login" replace />}
+                    />
                 </Routes>
             </BrowserRouter>
         </main>

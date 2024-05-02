@@ -64,7 +64,7 @@ export const LoginPanel: React.FC<{
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLogin) navigate("/profile");
+        if (isLogin) navigate("/profile/overview");
     }, [isLogin, navigate]);
 
     return (
@@ -98,14 +98,24 @@ export const LoginPanel: React.FC<{
                         }
                     />
                 </div>
+
+                <div className="flex gap-3">
+                    <span>Don't have an account ?</span>
+                    <span
+                        className="text-blue-500 cursor-pointer"
+                        onClick={() => setIsLoginPanel((prev) => !prev)}
+                    >
+                        Sign up
+                    </span>
+                </div>
                 <div>
                     <Button
                         rounded
                         primary
                         onClickFun={handleLogin}
-                        addonStyle="w-full"
+                        addonStyle="w-full flex justify-center"
                     >
-                        {isLoading ? <Loader /> : "Login"}
+                        {isLoading ? <Loader addonStyle="h-6 w-6" /> : "Login"}
                     </Button>
                 </div>
                 {isError && (
@@ -115,16 +125,6 @@ export const LoginPanel: React.FC<{
                             "email has been used"}
                     </div>
                 )}
-            </div>
-
-            <div className="flex gap-3">
-                <span>Don't have an account?</span>
-                <span
-                    className="text-blue-500 cursor-pointer"
-                    onClick={() => setIsLoginPanel((prev) => !prev)}
-                >
-                    Sign up
-                </span>
             </div>
         </div>
     );

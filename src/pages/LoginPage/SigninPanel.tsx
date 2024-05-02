@@ -13,13 +13,14 @@ import { db } from "@/utilities/firebase";
 
 // component
 import { Button } from "@/components/Button";
+import { Loader } from "@/components/Loader";
 
 export const SigninPanel: React.FC<{
     setIsLoginPanel: Dispatch<SetStateAction<boolean>>;
 }> = ({ setIsLoginPanel }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState<Error>();
     const [isSignIn, setIsSignIn] = useState(false);
-
     const [userInfo, setUserInfo] = useState<{
         email: string;
         password: string;
@@ -54,7 +55,7 @@ export const SigninPanel: React.FC<{
             setIsLoginPanel((prev) => !prev);
         } catch (error) {
             setIsLoading(false);
-            // setIsError(error as Error);
+            setIsError(error as Error);
         }
     };
 
@@ -89,25 +90,36 @@ export const SigninPanel: React.FC<{
                         }
                     />
                 </div>
-                {isLoading && <div>loading</div>}
-                {/* {isError && (
+                <div className="flex gap-3">
+                    <span>
+                        Back to{" "}
+                        <span
+                            className="text-blue-500 cursor-pointer"
+                            onClick={() => setIsLoginPanel((prev) => !prev)}
+                        >
+                            Login
+                        </span>
+                    </span>
+                </div>
+
+                <Button
+                    rounded
+                    primary
+                    onClickFun={handleSignIn}
+                    addonStyle="w-full flex justify-center"
+                >
+                    {isLoading ? <Loader addonStyle="h-6 w-6" /> : "signIn"}
+                </Button>
+                {isError && (
                     <div className="text-red-500">
                         {isError.message ===
                             "Firebase: Error (auth/email-already-in-use)." &&
                             "email has been used"}
                     </div>
-                )} */}
+                )}
                 {isSignIn && (
                     <div className="text-green-500">signIn success</div>
                 )}
-                <Button
-                    rounded
-                    primary
-                    onClickFun={handleSignIn}
-                    addonStyle="w-full"
-                >
-                    signIn
-                </Button>
             </div>
         </div>
     );
