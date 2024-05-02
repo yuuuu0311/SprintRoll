@@ -1,14 +1,38 @@
+// router
 import { Outlet, NavLink } from "react-router-dom";
+
+// dependency
+import { twMerge } from "tailwind-merge";
+import classNames from "classnames";
 
 // components
 import { TabNavigation } from "@/components/TabNavigation";
 
 export const ProfilePage = () => {
+    const navigationTitleClass = twMerge(
+        classNames(
+            "bg-neutral-400/50 text-neutral-500 flex justify-between items-center capitalize hover:bg-neutral-400 hover:text-neutral-600 transition"
+        )
+    );
+    const navigationLinkClass = twMerge(
+        classNames(
+            "inline-block w-full h-full [&.active]:bg-neutral-400 [&.active]:text-neutral-600 px-7 py-2 transition"
+        )
+    );
+
     return (
         <div className="flex items-stretch h-full">
             <TabNavigation>
-                <NavLink to="overview">overview</NavLink>
-                <NavLink to="setting">setting</NavLink>
+                <div className={navigationTitleClass}>
+                    <NavLink to="overview" className={navigationLinkClass}>
+                        overview
+                    </NavLink>
+                </div>
+                <div className={navigationTitleClass}>
+                    <NavLink to="setting" className={navigationLinkClass}>
+                        setting
+                    </NavLink>
+                </div>
             </TabNavigation>
             <Outlet />
         </div>
