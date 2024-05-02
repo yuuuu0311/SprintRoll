@@ -7,7 +7,9 @@ import { LoginPage } from "@/pages/LoginPage";
 import { DashBoardPage } from "@/pages/DashBoardPage";
 import { KanbanPage } from "@/pages/KanbanPage";
 import { ProjectPage } from "@/pages/ProjectPage";
-import { ProfilePage } from "@/pages/ProfilePage";
+import { ProfilePage } from "./pages/ProfilePage";
+import { OverviewPage } from "@/pages/OverviewPage";
+import { SettingPage } from "@/pages/SettingPage";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     // <React.StrictMode>
@@ -16,13 +18,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <BrowserRouter>
                 <Routes>
                     <Route index path="/login" element={<LoginPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="profile" element={<ProfilePage />}>
+                        <Route path="overview" element={<OverviewPage />} />
+                        <Route path="setting" element={<SettingPage />} />
+                    </Route>
 
                     <Route path=":project" element={<ProjectPage />}>
                         <Route path="all" element={<DashBoardPage />} />
                         <Route path=":domain" element={<KanbanPage />} />
                     </Route>
-
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </BrowserRouter>
