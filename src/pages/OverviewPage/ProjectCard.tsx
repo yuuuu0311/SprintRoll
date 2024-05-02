@@ -61,7 +61,7 @@ export const ProfileCard: React.FC<{
 
     return (
         <>
-            <div className="cursor-pointer flex-1 hover:bg-neutral-200 transition bg-stone-100 w-full h-auto aspect-square rounded-md overflow-hidden p-5 flex flex-col gap-2">
+            <div className="cursor-pointer flex-1 hover:bg-neutral-200 transition bg-stone-100 w-full h-auto aspect-square rounded-md overflow-hidden p-5 flex flex-col gap-2 shadow-lg">
                 <NavLink
                     to={`/${projectInfo.name}/all`}
                     className="flex-1 text-xl"
@@ -70,7 +70,7 @@ export const ProfileCard: React.FC<{
                 </NavLink>
 
                 {isCollaborative ? (
-                    <span>owner : {projectInfo.owner}</span>
+                    <span>project owner : {projectInfo.ownerEmail}</span>
                 ) : (
                     <div className="mt-auto justify-end flex gap-2 items-center">
                         <MdOutlinePeopleOutline
@@ -118,6 +118,7 @@ export const ProfileCard: React.FC<{
             )}
             {dialogActive.invite && (
                 <Dialog
+                    size="md"
                     handleDialogToggle={() => handleDialogToggle("invite")}
                     title="collaborators"
                 >

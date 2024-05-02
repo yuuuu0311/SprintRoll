@@ -163,7 +163,7 @@ export const DashBoardPage: React.FC = () => {
 
     const handleAddSprint = () => {
         // //check
-        if (newSprintInfo.name === "") {
+        if (newSprintInfo.name.length === 0) {
             setSprintInfoError((prev) => ({ ...prev, name: true }));
             return;
         }
@@ -186,6 +186,13 @@ export const DashBoardPage: React.FC = () => {
             project: project,
             ...newSprintInfo,
         });
+
+        setNewSprintInfo({
+            name: "",
+            description: "",
+            cycle: [new Date(), undefined],
+        });
+
         toggleDialog(isActive);
     };
 
@@ -215,7 +222,7 @@ export const DashBoardPage: React.FC = () => {
                     <Droppable droppableId="collections" type="droppableItem">
                         {({ innerRef, placeholder }) => (
                             <div
-                                className="flex flex-col gap-3 p-4 rounded-md w-56 no-scrollbar bg-neutral-200  h-full overflow-y-auto"
+                                className="flex flex-col gap-3 p-4 rounded-md w-56 no-scrollbar bg-neutral-200  h-full overflow-y-auto shadow-lg"
                                 ref={innerRef}
                             >
                                 <div className="font-bold text-neutral-800">
@@ -235,13 +242,13 @@ export const DashBoardPage: React.FC = () => {
                         )}
                     </Droppable>
 
-                    <div className="flex-1 h-full flex flex-col gap-5">
+                    <div className="flex-1 h-full flex flex-col gap-7 ">
                         {isSprintLoading && (
                             <div className="w-full h-full grid place-items-center p-6">
                                 <Loader />
                             </div>
                         )}
-                        <div className="rounded-md max-h-full overflow-y-auto no-scrollbar [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200">
+                        <div className="rounded-md max-h-full overflow-y-auto no-scrollbar [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200 shadow-lg">
                             {sprintInfo.length === 0 ? (
                                 <div className="text-neutral-400 text-center text-sm">
                                     SprintRoll Your Product now !
@@ -274,12 +281,21 @@ export const DashBoardPage: React.FC = () => {
 
             {isActive && (
                 <Dialog
-                    handleDialogToggle={() => toggleDialog(isActive)}
+                    handleDialogToggle={() => {
+                        toggleDialog(isActive);
+                        setNewSprintInfo({
+                            name: "",
+                            description: "",
+                            cycle: [new Date(), undefined],
+                        });
+                    }}
                     title="add category"
                 >
                     <div className="flex flex-col gap-2 mb-6">
                         <div className={inputWrapClass}>
-                            <div className="text-neutral-500">title</div>
+                            <div className="text-neutral-500">
+                                <span className="text-rose-500">*</span> title
+                            </div>
                             <input
                                 type="text"
                                 placeholder="title"
@@ -293,7 +309,9 @@ export const DashBoardPage: React.FC = () => {
                             />
                         </div>
                         <div className={inputWrapClass}>
-                            <div className="text-neutral-500">cycle</div>
+                            <div className="text-neutral-500">
+                                <span className="text-rose-500">*</span> cycle
+                            </div>
                             <DateRangePicker
                                 className={inputCycleClass}
                                 onChange={(dateVal) => {
@@ -326,7 +344,14 @@ export const DashBoardPage: React.FC = () => {
                         <Button
                             secondary
                             rounded
-                            onClickFun={() => toggleDialog(isActive)}
+                            onClickFun={() => {
+                                toggleDialog(isActive);
+                                setNewSprintInfo({
+                                    name: "",
+                                    description: "",
+                                    cycle: [new Date(), undefined],
+                                });
+                            }}
                         >
                             close
                         </Button>

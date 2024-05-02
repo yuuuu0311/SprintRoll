@@ -16,7 +16,7 @@ import { Button } from "@/components/Button";
 import { Loader } from "@/components/Loader";
 
 export const OverviewPage = () => {
-    const { uid } = useUser<UserFace>((state) => state);
+    const { uid, email } = useUser<UserFace>((state) => state);
 
     const { projectInfo } = useProject();
 
@@ -29,10 +29,13 @@ export const OverviewPage = () => {
             domain: [],
             name: projectName,
             owner: uid as string,
+            ownerEmail: email as string,
         });
     };
 
-    const titleClass = twMerge(classNames("text-3xl capitalize tracking-wide"));
+    const titleClass = twMerge(
+        classNames("text-3xl capitalize tracking-wide text-neutral-500")
+    );
     const cardWrapClass = twMerge(classNames("grid gap-3 grid-cols-5"));
 
     return (
@@ -49,7 +52,7 @@ export const OverviewPage = () => {
                                 projectInfo={project}
                             />
                         ))}
-                        <div className="bg-neutral-200 rounded-md p-5 flex flex-col hover:bg-neutral-400/50 transition w-full h-auto aspect-square">
+                        <div className="bg-neutral-200 rounded-md p-5 flex flex-col hover:bg-neutral-400/50 transition w-full h-auto aspect-square shadow-lg">
                             {isAddProject ? (
                                 <div className="flex flex-col gap-4">
                                     <input
@@ -91,6 +94,7 @@ export const OverviewPage = () => {
                                 </div>
                             ) : (
                                 <span
+                                    className="inline-block w-full h-full cursor-pointer"
                                     onClick={() =>
                                         setIsAddProject((prev) => !prev)
                                     }

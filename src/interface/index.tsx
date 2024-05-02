@@ -62,4 +62,5 @@ export interface ProjectFace {
     name: string;
     domain: string[];
     owner: string;
+    ownerEmail: string;
 }

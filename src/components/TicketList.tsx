@@ -143,7 +143,7 @@ export const TicketList: React.FC<{
                         <Droppable droppableId={collectionInfo.collectionID}>
                             {({ innerRef, droppableProps, placeholder }) => (
                                 <div
-                                    className="flex flex-col gap-2 bg-neutral-200 p-4 rounded-lg w-56"
+                                    className="flex flex-col gap-2 bg-neutral-200 p-4 rounded-lg w-56 shadow-lg"
                                     ref={innerRef}
                                     {...droppableProps}
                                     {...dragHandleProps}
