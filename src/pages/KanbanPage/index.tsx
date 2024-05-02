@@ -29,7 +29,7 @@ import { useDialog } from "@/utilities/store";
 import { CollectionFace, TicketFace, DialogState } from "@/interface";
 
 export const KanbanPage: React.FC = () => {
-    const { domain } = useParams();
+    const { project, domain } = useParams();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
     const { collectionsData, setCollectionsData } = useCollections();
 
@@ -119,7 +119,12 @@ export const KanbanPage: React.FC = () => {
 
             {collectionsData !== undefined && (
                 <div className="h-full">
-                    <div className="flex gap-2 items-start p-12 overflow-x-auto overflow-y-hidden w-full h-full">
+                    <div className="px-12 py-4 flex gap-2 text-neutral-500">
+                        <span>{project}</span>
+                        <span>/</span>
+                        <span>{domain}</span>
+                    </div>
+                    <div className="flex gap-2 items-start px-12 pb-12 overflow-x-auto overflow-y-hidden w-full h-full">
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable
                                 droppableId="collections"
@@ -157,6 +162,7 @@ export const KanbanPage: React.FC = () => {
                             <Button
                                 rounded
                                 onClickFun={() => toggleDialog(isActive)}
+                                addonStyle="dark:text-stone-200"
                             >
                                 + add category
                             </Button>

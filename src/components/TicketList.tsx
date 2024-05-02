@@ -143,17 +143,17 @@ export const TicketList: React.FC<{
                         <Droppable droppableId={collectionInfo.collectionID}>
                             {({ innerRef, droppableProps, placeholder }) => (
                                 <div
-                                    className="flex flex-col gap-2 bg-neutral-200 p-4 rounded-lg w-56 shadow-lg"
+                                    className="flex flex-col gap-2 bg-neutral-200 p-4 rounded-lg w-56 shadow-lg dark:bg-neutral-600"
                                     ref={innerRef}
                                     {...droppableProps}
                                     {...dragHandleProps}
                                 >
                                     <div className="flex justify-between items-center">
-                                        <h3 className="text-lg text-neutral-700 font-bold capitalize">
+                                        <h3 className="text-lg text-neutral-700 font-bold capitalize dark:text-stone-200">
                                             {collectionInfo.name}
                                         </h3>
                                         <MdOutlineDelete
-                                            className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500"
+                                            className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500 dark:text-stone-200"
                                             onClick={handleDialogToggle}
                                         />
                                     </div>
@@ -221,7 +221,7 @@ export const TicketList: React.FC<{
                                                     (prev) => !prev
                                                 )
                                             }
-                                            addonStyle="text-left"
+                                            addonStyle="text-left dark:text-stone-200 hover:dark:text-neutral-800"
                                         >
                                             + add ticket
                                         </Button>

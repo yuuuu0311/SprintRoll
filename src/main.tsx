@@ -9,18 +9,18 @@ import { KanbanPage } from "@/pages/KanbanPage";
 import { ProjectPage } from "@/pages/ProjectPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { OverviewPage } from "@/pages/OverviewPage";
-import { SettingPage } from "@/pages/SettingPage";
+// import { SettingPage } from "@/pages/SettingPage";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     // <React.StrictMode>
-    <div className="flex h-screen w-screen bg-neutral-300">
+    <div className="flex h-screen w-screen bg-neutral-300 dark:bg-neutral-800">
         <main className="relative flex-1 overflow-hidden">
             <BrowserRouter>
                 <Routes>
                     <Route index path="/login" element={<LoginPage />} />
                     <Route path="profile" element={<ProfilePage />}>
                         <Route path="overview" element={<OverviewPage />} />
-                        <Route path="setting" element={<SettingPage />} />
+                        {/* <Route path="setting" element={<SettingPage />} /> */}
                     </Route>
 
                     <Route path=":project" element={<ProjectPage />}>

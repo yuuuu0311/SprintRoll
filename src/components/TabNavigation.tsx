@@ -7,7 +7,7 @@ export const TabNavigation: React.FC<{ children: React.ReactNode }> = ({
 }) => {
     const wrapperClass = twMerge(
         classNames(
-            "relative flex flex-col bg-stone-200 w-48 transition z-50 shadow-xl"
+            "relative flex flex-col bg-stone-200 w-48 transition z-50 shadow-xl dark:bg-neutral-500"
         )
     );
 

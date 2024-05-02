@@ -51,7 +51,7 @@ const getMovedTicket = (sourceState: TicketFace[], sourceIndex: number) => {
 };
 
 export const DashBoardPage: React.FC = () => {
-    const { project } = useParams();
+    const { project, domain } = useParams();
     const { allTickets, setAllTickets } = useAllTickets();
     const { isSprintLoading, sprintInfo, setSprintInfo } = useSprint();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
@@ -218,9 +218,15 @@ export const DashBoardPage: React.FC = () => {
     );
 
     return (
-        <>
+        <div>
+            <div className="px-12 py-4 flex gap-2 text-neutral-500">
+                <span>{project}</span>
+                <span>/</span>
+                <span>all</span>
+            </div>
+
             <DragDropContext onDragEnd={onDragEnd}>
-                <div className="relative flex h-full items-start p-6 gap-6">
+                <div className="relative flex h-full items-start px-6 pb-6 gap-6">
                     <Droppable droppableId="collections" type="droppableItem">
                         {({ innerRef, placeholder }) => (
                             <div
@@ -365,6 +371,6 @@ export const DashBoardPage: React.FC = () => {
                     </div>
                 </Dialog>
             )}
-        </>
+        </div>
     );
 };
