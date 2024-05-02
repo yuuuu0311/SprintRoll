@@ -21,8 +21,8 @@ export const LandingPage: React.FC = () => {
                     ))}
                 </div>
 
-                <div className="z-50 flex flex-col justify-center items-center">
-                    <div className="relative h-20 w-full flex overflow-hidden items-center">
+                <div className="z-50 flex flex-col gap-2 justify-center items-center">
+                    <div className="relative h-20 w-full flex overflow-hidden items-center scale-110 md:scale-100 sm:scale-90">
                         {Array.from("SprintRoll").map((word, index) => (
                             <motion.div
                                 key={`${word}-${index}`}
@@ -36,13 +36,15 @@ export const LandingPage: React.FC = () => {
                                     duration: 1,
                                     ease: [0, 0.71, 0.2, 1.01],
                                     delay: index / 12,
+                                    repeat: 2,
+                                    repeatType: "reverse",
                                 }}
                             >
                                 {word}
                             </motion.div>
                         ))}
                     </div>
-                    <div className="text-xl text-bold">
+                    <div className="text-xl text-bold scale-110">
                         your best rollup option
                     </div>
                 </div>
