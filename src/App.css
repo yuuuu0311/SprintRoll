@@ -6,6 +6,13 @@
     html {
         @apply text-neutral-700;
     }
+
+    .text-stroke-2 {
+        -webkit-text-stroke: 2px currentColor;
+    }
+    .text-stroke-4 {
+        -webkit-text-stroke: 4px currentColor;
+    }
 }
 
 @layer utilities {
