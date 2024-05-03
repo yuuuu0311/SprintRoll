@@ -226,16 +226,16 @@ export const DashBoardPage: React.FC = () => {
             </div>
 
             <div className="md:px-12 px-6 md:pb-12 md:pt-0 py-6 overflow-x-auto overflow-y-hidden w-full">
-                <div className="relative h-full w-full">
+                <div className="relative flex flex-col h-full w-full">
                     <DragDropContext onDragEnd={onDragEnd}>
-                        <div className="flex gap-6 h-full w-full">
+                        <div className="relative flex md:flex-row flex-col gap-6 h-full w-full">
                             <Droppable
                                 droppableId="collections"
                                 type="droppableItem"
                             >
                                 {({ innerRef, placeholder }) => (
                                     <div
-                                        className="flex flex-col gap-3 p-4 rounded-md md:w-56 bg-neutral-200 shadow-lg h-full"
+                                        className="flex flex-col gap-3 p-4 rounded-md md:w-56 bg-neutral-200 shadow-lg md:h-full h-1/3"
                                         ref={innerRef}
                                     >
                                         <div className="font-bold text-neutral-800">
@@ -265,7 +265,7 @@ export const DashBoardPage: React.FC = () => {
                                 )}
                             </Droppable>
 
-                            <div className="flex-1 flex flex-col gap-7 h-full">
+                            <div className="flex-1 flex flex-col gap-7 md:h-full h-1/3">
                                 {isSprintLoading && (
                                     <div className="w-full h-full grid place-items-center p-6">
                                         <Loader />
@@ -305,6 +305,7 @@ export const DashBoardPage: React.FC = () => {
                     </DragDropContext>
                 </div>
             </div>
+
             {isActive && (
                 <Dialog
                     handleDialogToggle={() => {
