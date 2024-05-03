@@ -10,7 +10,7 @@ export const LoginPage: React.FC = () => {
     const [isLoginPanel, setIsLoginPanel] = useState(true);
     return (
         <div className="grid place-items-center bg-neutral-300 h-full">
-            <div className="rounded-2xl overflow-hidden bg-stone-100 w-2/3 h-2/3 flex shadow-xl">
+            <div className="rounded-2xl overflow-hidden bg-stone-100 md:w-2/3 md:h-2/3 w-full h-full flex flex-col md:flex-row shadow-xl">
                 <div className="w-1/2 overflow-hidden relative bg-neutral-400">
                     <div className="absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                         <motion.div

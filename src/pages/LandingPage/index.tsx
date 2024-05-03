@@ -14,10 +14,8 @@ export const LandingPage: React.FC = () => {
                         className="opacity-50"
                         initial={{
                             scale: 1,
-                            rotate: 0,
                         }}
                         animate={{
-                            rotate: 30,
                             scale: 1.5,
                         }}
                         transition={{
@@ -25,25 +23,25 @@ export const LandingPage: React.FC = () => {
                             ease: "easeInOut",
                         }}
                     >
-                        {Array.from(Array(2)).map((ele, index) => (
+                        {Array.from(Array(4)).map((ele, index) => (
                             <FloatingTicket
                                 key={`${ele}+${index}`}
                                 domain={0}
                             />
                         ))}
-                        {Array.from(Array(3)).map((ele, index) => (
+                        {Array.from(Array(1)).map((ele, index) => (
                             <FloatingTicket
                                 key={`${ele}+${index}`}
                                 domain={1}
                             />
                         ))}
-                        {Array.from(Array(1)).map((ele, index) => (
+                        {Array.from(Array(2)).map((ele, index) => (
                             <FloatingTicket
                                 key={`${ele}+${index}`}
                                 domain={2}
                             />
                         ))}
-                        {Array.from(Array(2)).map((ele, index) => (
+                        {Array.from(Array(4)).map((ele, index) => (
                             <FloatingTicket
                                 key={`${ele}+${index}`}
                                 domain={3}
@@ -51,7 +49,7 @@ export const LandingPage: React.FC = () => {
                         ))}
                     </motion.div>
 
-                    <div className="z-50 flex flex-col gap-2 justify-center items-center scale-150 tracking-widest">
+                    <div className="z-50 flex flex-col gap-2 justify-center items-center md:scale-150 tracking-widest">
                         <div className="relative h-20 w-full flex overflow-hidden items-center text-stroke-4 ">
                             {Array.from("SprintRoll").map((word, index) => (
                                 <motion.div

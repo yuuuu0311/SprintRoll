@@ -11,9 +11,9 @@ export const Dialog: React.FC<{
 }> = ({ children, handleDialogToggle, title, danger, size }) => {
     const dialogClass = twMerge(
         classNames(
-            `flex flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl overflow-hidden bg-neutral-200`,
+            `flex flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl overflow-hidden bg-neutral-200 md:w-fit w-[80%]`,
             {
-                "w-1/2 min-h-58": size === "md",
+                "md:w-1/2 w-[80%] min-h-58": size === "md",
             }
         )
     );

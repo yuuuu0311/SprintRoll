@@ -34,12 +34,16 @@ export const OverviewPage = () => {
     };
 
     const titleClass = twMerge(
-        classNames("text-3xl capitalize tracking-wide text-neutral-500")
+        classNames(
+            "md:text-3xl text-xl capitalize tracking-wide text-neutral-500"
+        )
     );
-    const cardWrapClass = twMerge(classNames("grid gap-3 grid-cols-5"));
+    const cardWrapClass = twMerge(
+        classNames("grid gap-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-5")
+    );
 
     return (
-        <div className="flex flex-col gap-6 py-12 px-24 flex-1">
+        <div className="flex flex-col gap-6 py-6 md:py-12 px-6 md:px-24 flex-1">
             <div className="flex flex-col gap-4 flex-1">
                 <h3 className={titleClass}>owned project</h3>
                 {projectInfo === undefined ? (

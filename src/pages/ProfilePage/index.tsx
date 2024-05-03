@@ -21,7 +21,7 @@ export const ProfilePage = () => {
     );
 
     return (
-        <div className="flex items-stretch h-full">
+        <div className="flex flex-col md:flex-row items-stretch h-full">
             <TabNavigation>
                 <div className={navigationTitleClass}>
                     <NavLink to="overview" className={navigationLinkClass}>

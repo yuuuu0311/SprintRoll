@@ -219,7 +219,7 @@ export const DashBoardPage: React.FC = () => {
 
     return (
         <div className="h-full flex flex-col">
-            <div className="px-12 py-4 flex gap-2 text-neutral-500">
+            <div className="px-12 py-4 gap-2 text-neutral-500 hidden md:flex">
                 <span>{project}</span>
                 <span>/</span>
                 <span>all</span>

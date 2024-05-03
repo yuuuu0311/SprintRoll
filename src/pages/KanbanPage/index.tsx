@@ -119,12 +119,12 @@ export const KanbanPage: React.FC = () => {
 
             {collectionsData !== undefined && (
                 <div className="h-full">
-                    <div className="px-12 py-4 flex gap-2 text-neutral-500">
+                    <div className="px-12 py-4 gap-2 text-neutral-500 hidden md:flex">
                         <span>{project}</span>
                         <span>/</span>
                         <span>{domain}</span>
                     </div>
-                    <div className="flex gap-2 items-start px-12 pb-12 overflow-x-auto overflow-y-hidden w-full h-full">
+                    <div className="flex gap-2 items-start md:px-12 px-6 mb:pb-12 mb:pt-0 py-6 overflow-x-auto overflow-y-hidden w-full h-full">
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable
                                 droppableId="collections"

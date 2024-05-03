@@ -23,7 +23,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
     const navigationWrapClass = twMerge(classNames("flex flex-col"));
 
     return (
-        <div className="flex h-screen w-screen bg-neutral-300 dark:bg-neutral-800">
+        <div className="flex flex-col md:flex-row h-screen w-screen bg-neutral-300 dark:bg-neutral-800">
             <TabNavigation>
                 <div className={navigationWrapClass}>
                     {projectInfo?.map((project) => (
@@ -44,7 +44,9 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
                 </div>
             </TabNavigation>
 
-            <main className="relative flex-1 overflow-hidden">{children}</main>
+            <main className="relative flex-1 overflow-hidden md:mt-0 mt-[40px]">
+                {children}
+            </main>
         </div>
     );
 };
