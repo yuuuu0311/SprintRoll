@@ -82,7 +82,7 @@ export const LandingPage: React.FC = () => {
                         </div>
                         <NavLink to="/login">
                             <motion.button
-                                className="flex gap-2 items-center py-1 px-3 text-stone-100 bg-neutral-600 rounded-full mt-3 active:bg-neutral-500 hover:bg-neutral-600 transition"
+                                className="flex gap-2 items-center py-1 px-3 text-stone-100 bg-neutral-600 rounded-full mt-3 active:bg-neutral-600 active:scale-90 hover:bg-neutral-700 transition"
                                 initial={{
                                     opacity: 0,
                                 }}

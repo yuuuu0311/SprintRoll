@@ -218,75 +218,93 @@ export const DashBoardPage: React.FC = () => {
     );
 
     return (
-        <div className="h-full flex flex-col">
+        <div className="flex flex-col items-start w-full h-full">
             <div className="px-12 py-4 gap-2 text-neutral-500 hidden md:flex">
                 <span>{project}</span>
                 <span>/</span>
                 <span>all</span>
             </div>
 
-            <DragDropContext onDragEnd={onDragEnd}>
-                <div className="relative flex md:flex-row flex-col h-full items-start px-6 pt-6 pb-6 md:pt-0 md:pb-6 gap-6">
-                    <Droppable droppableId="collections" type="droppableItem">
-                        {({ innerRef, placeholder }) => (
-                            <div
-                                className="flex flex-col gap-3 p-4 rounded-md md:w-56 no-scrollbar w-full bg-neutral-200  md:h-full overflow-y-auto shadow-lg h-1/3"
-                                ref={innerRef}
+            <div className="md:px-12 px-6 md:pb-12 md:pt-0 py-6 overflow-x-auto overflow-y-hidden w-full">
+                <div className="relative h-full w-full">
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <div className="flex gap-6 h-full w-full">
+                            <Droppable
+                                droppableId="collections"
+                                type="droppableItem"
                             >
-                                <div className="font-bold text-neutral-800">
-                                    Product Backlog
-                                </div>
-                                {allTickets === undefined && <Loader />}
-                                {allTickets?.map((ticket, index) => (
-                                    <Ticket
-                                        key={ticket.ticketID}
-                                        ticketInfo={ticket}
-                                        index={index}
-                                        isInCollection={ticket.collectionID}
-                                    />
-                                ))}
-                                {placeholder}
-                            </div>
-                        )}
-                    </Droppable>
+                                {({ innerRef, placeholder }) => (
+                                    <div
+                                        className="flex flex-col gap-3 p-4 rounded-md md:w-56 bg-neutral-200 shadow-lg h-full"
+                                        ref={innerRef}
+                                    >
+                                        <div className="font-bold text-neutral-800">
+                                            Product Backlog
+                                        </div>
 
-                    <div className="flex-1 w-full md:h-full h-1/3 flex flex-col gap-7 ">
-                        {isSprintLoading && (
-                            <div className="w-full h-full grid place-items-center p-6">
-                                <Loader />
-                            </div>
-                        )}
-                        <div className="rounded-md max-h-full overflow-y-auto no-scrollbar [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200 shadow-lg">
-                            {sprintInfo.length === 0 ? (
-                                <div className="text-neutral-400 text-center text-sm bg-stone-100 py-4">
-                                    SprintRoll Your Product now !
+                                        <div className="flex flex-col gap-3 overflow-auto no-scrollbar">
+                                            {allTickets === undefined && (
+                                                <Loader />
+                                            )}
+                                            {allTickets?.map(
+                                                (ticket, index) => (
+                                                    <Ticket
+                                                        key={ticket.ticketID}
+                                                        ticketInfo={ticket}
+                                                        index={index}
+                                                        isInCollection={
+                                                            ticket.collectionID
+                                                        }
+                                                    />
+                                                )
+                                            )}
+                                        </div>
+
+                                        {placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+
+                            <div className="flex-1 flex flex-col gap-7 h-full">
+                                {isSprintLoading && (
+                                    <div className="w-full h-full grid place-items-center p-6">
+                                        <Loader />
+                                    </div>
+                                )}
+                                <div className="rounded-md max-h-full overflow-y-auto no-scrollbar [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200 shadow-lg">
+                                    {sprintInfo.length === 0 ? (
+                                        <div className="text-neutral-400 text-center text-sm bg-stone-100 py-4">
+                                            SprintRoll Your Product now !
+                                        </div>
+                                    ) : (
+                                        sprintInfo.map(
+                                            (sprint: object, index: number) => (
+                                                <SprintPanel
+                                                    setSprintTicketsSetters={
+                                                        setSprintTicketsSetters
+                                                    }
+                                                    sprintInfo={
+                                                        sprint as SprintFace
+                                                    }
+                                                    key={index}
+                                                    index={index}
+                                                />
+                                            )
+                                        )
+                                    )}
                                 </div>
-                            ) : (
-                                sprintInfo.map(
-                                    (sprint: object, index: number) => (
-                                        <SprintPanel
-                                            setSprintTicketsSetters={
-                                                setSprintTicketsSetters
-                                            }
-                                            sprintInfo={sprint as SprintFace}
-                                            key={index}
-                                            index={index}
-                                        />
-                                    )
-                                )
-                            )}
+                                <Button
+                                    rounded
+                                    addonStyle="hover:bg-neutral-400 hover:text-neutral-600 w-full  bg-neutral-400/50 text-neutral-500 active:bg-neutral-400/50"
+                                    onClickFun={() => toggleDialog(isActive)}
+                                >
+                                    + sprint
+                                </Button>
+                            </div>
                         </div>
-                        <Button
-                            rounded
-                            addonStyle="hover:bg-neutral-400 hover:text-neutral-600 w-full  bg-neutral-400/50 text-neutral-500 active:bg-neutral-400/50"
-                            onClickFun={() => toggleDialog(isActive)}
-                        >
-                            + sprint
-                        </Button>
-                    </div>
+                    </DragDropContext>
                 </div>
-            </DragDropContext>
-
+            </div>
             {isActive && (
                 <Dialog
                     handleDialogToggle={() => {

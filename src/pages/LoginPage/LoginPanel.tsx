@@ -69,7 +69,10 @@ export const LoginPanel: React.FC<{
 
     return (
         <div>
-            <div className="flex flex-col gap-4 mb-4">
+            <div className="flex flex-col gap-4">
+                <div className="text-3xl font-bold text-neutral-500 mb-4">
+                    Login
+                </div>
                 <div>
                     <input
                         className={inputClass}

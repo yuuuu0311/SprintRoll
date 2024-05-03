@@ -62,6 +62,9 @@ export const SigninPanel: React.FC<{
     return (
         <div>
             <div className="flex flex-col gap-4">
+                <div className="text-3xl font-bold text-neutral-500 mb-4">
+                    Signin
+                </div>
                 <div>
                     <input
                         className={inputClass}
