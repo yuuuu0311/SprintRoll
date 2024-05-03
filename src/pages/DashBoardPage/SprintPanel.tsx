@@ -113,7 +113,7 @@ export const SprintPanel: React.FC<{
             >
                 {({ innerRef, placeholder }) => (
                     <div className="transition hover:brightness-95 bg-neutral-100">
-                        <div className="sticky top-0  w-full px-6 pt-4 pb-2 flex flex-col gap-3 ">
+                        <div className="sticky top-0 bg-stone-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3 ">
                             <div className="flex justify-end gap-2">
                                 <MdOutlineEdit
                                     className="text-lg hover:text-lime-500 transition"

@@ -143,7 +143,7 @@ export const TicketList: React.FC<{
                         <Droppable droppableId={collectionInfo.collectionID}>
                             {({ innerRef, droppableProps, placeholder }) => (
                                 <div
-                                    className="flex flex-col gap-2 bg-neutral-200 p-4 rounded-lg w-56 shadow-lg dark:bg-neutral-600"
+                                    className="flex max-h-full flex-col gap-2 bg-neutral-200 p-4 rounded-lg w-56 shadow-lg dark:bg-neutral-600"
                                     ref={innerRef}
                                     {...droppableProps}
                                     {...dragHandleProps}
@@ -157,20 +157,26 @@ export const TicketList: React.FC<{
                                             onClick={handleDialogToggle}
                                         />
                                     </div>
-
-                                    {ticketsData === undefined && <Loader />}
-                                    {(ticketsData as CollectionFace[])?.map(
-                                        (ticket: TicketFace, index: number) => (
-                                            <Ticket
-                                                ticketInfo={ticket}
-                                                index={index}
-                                                key={ticket.ticketID}
-                                                isInCollection={
-                                                    collectionInfo.collectionID
-                                                }
-                                            />
-                                        )
-                                    )}
+                                    <div className="flex flex-col flex-1 overflow-auto no-scrollbar gap-2">
+                                        {ticketsData === undefined && (
+                                            <Loader />
+                                        )}
+                                        {(ticketsData as CollectionFace[])?.map(
+                                            (
+                                                ticket: TicketFace,
+                                                index: number
+                                            ) => (
+                                                <Ticket
+                                                    ticketInfo={ticket}
+                                                    index={index}
+                                                    key={ticket.ticketID}
+                                                    isInCollection={
+                                                        collectionInfo.collectionID
+                                                    }
+                                                />
+                                            )
+                                        )}
+                                    </div>
                                     {addCollectionActive && (
                                         <div>
                                             <div className="mb-2">

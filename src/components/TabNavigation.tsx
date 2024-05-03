@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 // dependency
 import { twMerge } from "tailwind-merge";
@@ -6,11 +7,14 @@ import classNames from "classnames";
 
 // icon
 import { MdMenu } from "react-icons/md";
+// import { useParams } from "react-router-dom";
 
 export const TabNavigation: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [isActive, setIsActive] = useState(false);
+    // const { domain } = useParams();
+    const isMobileDevice = window.matchMedia("(max-width: 767px)");
+    const [isActive, setIsActive] = useState(() => !isMobileDevice.matches);
 
     const wrapperClass = twMerge(
         classNames(
@@ -28,16 +32,25 @@ export const TabNavigation: React.FC<{ children: React.ReactNode }> = ({
     );
 
     const backdropClass = twMerge(
-        classNames(" opacity-0 transition", {
-            "block fixed w-screen h-screen bg-neutral-700 opacity-60": isActive,
+        classNames("md:hidden opacity-0 transition", {
+            "block md:hidden fixed w-screen h-screen bg-neutral-700 opacity-60":
+                isActive,
         })
     );
+
+    // useEffect(() => {
+    //     console.log(isActive);
+    // }, [isActive]);
+
+    // useEffect(() => {
+    //     if (domain !== undefined) setIsActive(false);
+    // }, [domain]);
 
     return (
         <div className={wrapperClass}>
             <div className="flex justify-between md:hidden px-4 py-2 z-50 bg-stone-200">
                 <div className="flex gap-2 text-neutral-500 font-bold">
-                    SprintRoll
+                    <NavLink to="/">SprintRoll</NavLink>
                 </div>
                 <MdMenu
                     className="w-6 h-6 aspect-square text-right"

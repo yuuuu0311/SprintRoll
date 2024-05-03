@@ -43,7 +43,7 @@ export const TicketStatusRow: React.FC<{
         <Draggable index={index} draggableId={ticketInfo.ticketID as string}>
             {({ innerRef, draggableProps, dragHandleProps }) => (
                 <div ref={innerRef} {...draggableProps} {...dragHandleProps}>
-                    <div className="flex justify-between bg-stone-100 hover:pl-5 p-2 hover:bg-stone-200/80 transition-all rounded-full">
+                    <div className="flex flex-wrap gap-2 md:gap-0 justify-between bg-stone-100 hover:pl-5 p-2 hover:bg-stone-200/80 transition-all rounded-full">
                         <div className="flex gap-4 items-center">
                             <span className={ticketStatusLight}></span>
                             <span>{ticketInfo.title}</span>

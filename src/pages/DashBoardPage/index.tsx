@@ -226,11 +226,11 @@ export const DashBoardPage: React.FC = () => {
             </div>
 
             <DragDropContext onDragEnd={onDragEnd}>
-                <div className="relative flex h-full items-start px-6 pb-6 gap-6">
+                <div className="relative flex md:flex-row flex-col h-full items-start px-6 pt-6 pb-6 md:pt-0 md:pb-6 gap-6">
                     <Droppable droppableId="collections" type="droppableItem">
                         {({ innerRef, placeholder }) => (
                             <div
-                                className="flex flex-col gap-3 p-4 rounded-md w-56 no-scrollbar bg-neutral-200  h-full overflow-y-auto shadow-lg"
+                                className="flex flex-col gap-3 p-4 rounded-md md:w-56 no-scrollbar w-full bg-neutral-200  md:h-full overflow-y-auto shadow-lg h-1/3"
                                 ref={innerRef}
                             >
                                 <div className="font-bold text-neutral-800">
@@ -250,7 +250,7 @@ export const DashBoardPage: React.FC = () => {
                         )}
                     </Droppable>
 
-                    <div className="flex-1 h-full flex flex-col gap-7 ">
+                    <div className="flex-1 w-full md:h-full h-1/3 flex flex-col gap-7 ">
                         {isSprintLoading && (
                             <div className="w-full h-full grid place-items-center p-6">
                                 <Loader />

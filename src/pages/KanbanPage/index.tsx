@@ -118,13 +118,13 @@ export const KanbanPage: React.FC = () => {
             )}
 
             {collectionsData !== undefined && (
-                <div className="h-full">
+                <div className="h-full flex flex-col">
                     <div className="px-12 py-4 gap-2 text-neutral-500 hidden md:flex">
                         <span>{project}</span>
                         <span>/</span>
                         <span>{domain}</span>
                     </div>
-                    <div className="flex gap-2 items-start md:px-12 px-6 mb:pb-12 mb:pt-0 py-6 overflow-x-auto overflow-y-hidden w-full h-full">
+                    <div className="flex flex-1 gap-2 items-start md:px-12 px-6 md:pb-12 md:pt-0 py-6 overflow-x-auto overflow-y-hidden w-full h-full">
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable
                                 droppableId="collections"
@@ -133,7 +133,7 @@ export const KanbanPage: React.FC = () => {
                             >
                                 {({ innerRef, placeholder }) => (
                                     <div
-                                        className="inline-flex gap-4 "
+                                        className="inline-flex relative h-full gap-4 "
                                         ref={innerRef}
                                     >
                                         {(
