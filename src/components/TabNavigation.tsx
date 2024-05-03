@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 // dependency
@@ -7,12 +7,12 @@ import classNames from "classnames";
 
 // icon
 import { MdMenu } from "react-icons/md";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export const TabNavigation: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    // const { domain } = useParams();
+    const { project, domain } = useParams();
     const isMobileDevice = window.matchMedia("(max-width: 767px)");
     const [isActive, setIsActive] = useState(() => !isMobileDevice.matches);
 
@@ -38,13 +38,13 @@ export const TabNavigation: React.FC<{ children: React.ReactNode }> = ({
         })
     );
 
-    // useEffect(() => {
-    //     console.log(isActive);
-    // }, [isActive]);
-
-    // useEffect(() => {
-    //     if (domain !== undefined) setIsActive(false);
-    // }, [domain]);
+    useEffect(() => {
+        if (isMobileDevice.matches) {
+            setIsActive(false);
+        } else {
+            return;
+        }
+    }, [domain, project]);
 
     return (
         <div className={wrapperClass}>

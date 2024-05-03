@@ -242,10 +242,12 @@ export const DashBoardPage: React.FC = () => {
                                             Product Backlog
                                         </div>
 
+                                        {allTickets === undefined && (
+                                            <div className="py-2 h-24">
+                                                <Loader addonStyle="py-2" />
+                                            </div>
+                                        )}
                                         <div className="flex flex-col gap-3 overflow-auto no-scrollbar">
-                                            {allTickets === undefined && (
-                                                <Loader />
-                                            )}
                                             {allTickets?.map(
                                                 (ticket, index) => (
                                                     <Ticket
