@@ -8,7 +8,7 @@ import React, {
 import { useParams } from "react-router-dom";
 
 // dependency
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import { Droppable, Draggable, Placeholder } from "react-beautiful-dnd";
 import {
     addDoc,
     collection,
@@ -157,7 +157,8 @@ export const TicketList: React.FC<{
                                             onClick={handleDialogToggle}
                                         />
                                     </div>
-                                    <div className="flex flex-col flex-1 overflow-auto no-scrollbar gap-3">
+
+                                    <div className="flex h-full overflow-auto  no-scrollbar flex-col gap-3">
                                         {ticketsData === undefined && (
                                             <Loader />
                                         )}
@@ -176,7 +177,10 @@ export const TicketList: React.FC<{
                                                 />
                                             )
                                         )}
+
+                                        {placeholder}
                                     </div>
+
                                     {addCollectionActive && (
                                         <div>
                                             <div className="mb-2">
@@ -215,7 +219,6 @@ export const TicketList: React.FC<{
                                             </div>
                                         </div>
                                     )}
-                                    {placeholder}
 
                                     {!addCollectionActive && (
                                         <Button

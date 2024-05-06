@@ -225,7 +225,7 @@ export const DashBoardPage: React.FC = () => {
                 <span>all</span>
             </div>
 
-            <div className="md:px-12 px-6 md:pb-12 md:pt-0 py-6 overflow-x-auto overflow-y-hidden w-full">
+            <div className="md:px-12 px-6 md:pb-12 md:pt-0 py-6 overflow-hidden h-full w-full">
                 <div className="relative flex flex-col h-full w-full">
                     <DragDropContext onDragEnd={onDragEnd}>
                         <div className="relative flex md:flex-row flex-col gap-6 h-full w-full">
@@ -247,7 +247,7 @@ export const DashBoardPage: React.FC = () => {
                                                 <Loader addonStyle="py-2" />
                                             </div>
                                         )}
-                                        <div className="flex flex-col gap-3 overflow-auto no-scrollbar">
+                                        <div className="flex flex-col gap-3 overflow-auto flex-1 no-scrollbar">
                                             {allTickets?.map(
                                                 (ticket, index) => (
                                                     <Ticket
@@ -273,7 +273,7 @@ export const DashBoardPage: React.FC = () => {
                                         <Loader />
                                     </div>
                                 )}
-                                <div className="rounded-md max-h-full overflow-y-auto no-scrollbar [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200 shadow-lg">
+                                <div className="relative rounded-md max-h-full overflow-y-auto no-scrollbar [&>:not(:last-child)]:border-b-2 [&>:not(:last-child)]:border-b-solid [&>:not(:last-child)]:border-b-neutral-200 shadow-lg">
                                     {sprintInfo.length === 0 ? (
                                         <div className="text-neutral-400 text-center text-sm bg-stone-100 py-4">
                                             SprintRoll Your Product now !

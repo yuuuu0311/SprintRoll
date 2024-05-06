@@ -79,7 +79,7 @@ export const SprintPanel: React.FC<{
     };
 
     const ticketsWrapClass = twMerge(
-        classNames("transition-all px-6 overflow-hidden  h-0", {
+        classNames("transition-all px-6 overflow-hidden relative h-0", {
             "h-auto": isToggle,
         })
     );

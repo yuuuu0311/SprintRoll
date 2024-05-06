@@ -52,7 +52,7 @@ export const Label: React.FC<LabelInputFace> = ({
         classNames(
             "bg-lime-500/50 rounded-full px-2 leading-none bg-neutral-300 py-1 px-3 transition",
             {
-                "[&:has(input:checked)]:bg-neutral-400/50 [&:has(input:checked)]:text-neutral-700 ":
+                "[&:has(input:checked)]:bg-yellow-400/50 [&:has(input:checked)]:text-yellow-700 ":
                     labelName === "bug",
                 "[&:has(input:checked)]:bg-blue-400/50 [&:has(input:checked)]:text-blue-700":
                     labelName === "feature",
