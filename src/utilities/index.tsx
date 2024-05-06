@@ -1,3 +1,5 @@
+import { useParams } from "react-router-dom";
+
 // dependency
 import {
     collection,
@@ -377,6 +379,31 @@ export const handleDeleteSprint = async (
 
         ticketsSnap.forEach(async (doc) => {
             await updateDoc(doc.ref, { ...doc.data(), inSprint: null });
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const addCollectionsViaTemplate: (
+    projectName: string
+) => Promise<void> = async (projectName: string) => {
+    const domainStructure = ["frontend", "backend", "data", "ios"];
+    const collectionStructure = ["to do", "doing", "done"];
+
+    try {
+        domainStructure.forEach(async (domain) => {
+            const collectionsRef = collection(db, "collections");
+
+            collectionStructure.forEach(async (collectionName, index) => {
+                await addDoc(collectionsRef, {
+                    domain: domain,
+                    order: index,
+                    project: projectName,
+                    product: "SprintRoll",
+                    name: collectionName,
+                });
+            });
         });
     } catch (error) {
         console.log(error);

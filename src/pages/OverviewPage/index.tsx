@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
 // utilities
-import { addProject } from "@/utilities";
+import { addProject, addCollectionsViaTemplate } from "@/utilities";
 import { useProject, useCollaborativeProject } from "@/utilities/hook";
 import { useUser } from "@/utilities/store";
 import { UserFace } from "@/interface";
@@ -14,6 +14,7 @@ import { UserFace } from "@/interface";
 import { ProfileCard } from "./ProjectCard";
 import { Button } from "@/components/Button";
 import { Loader } from "@/components/Loader";
+import { SwitchButton } from "@/components/SwitchButton";
 
 export const OverviewPage = () => {
     const { uid, email } = useUser<UserFace>((state) => state);
@@ -23,14 +24,23 @@ export const OverviewPage = () => {
     const { collaborativeProject } = useCollaborativeProject();
     const [isAddProject, setIsAddProject] = useState(false);
     const [projectName, setProjectName] = useState("");
+    const [usingTemplate, setUsingTemplate] = useState(false);
 
     const handleAddProject = () => {
-        addProject({
-            domain: [],
-            name: projectName,
-            owner: uid as string,
-            ownerEmail: email as string,
-        });
+        usingTemplate
+            ? (addProject({
+                  domain: ["frontend", "backend", "data", "ios"],
+                  name: projectName,
+                  owner: uid as string,
+                  ownerEmail: email as string,
+              }),
+              addCollectionsViaTemplate(projectName))
+            : addProject({
+                  domain: [],
+                  name: projectName,
+                  owner: uid as string,
+                  ownerEmail: email as string,
+              });
     };
 
     const titleClass = twMerge(
@@ -58,7 +68,7 @@ export const OverviewPage = () => {
                         ))}
                         <div className="bg-neutral-200 rounded-md p-5 flex flex-col hover:bg-neutral-400/50 transition w-full h-auto aspect-square shadow-lg">
                             {isAddProject ? (
-                                <div className="flex flex-col gap-4">
+                                <div className="flex flex-col gap-4 h-full">
                                     <input
                                         className="w-full rounded px-2 py-1"
                                         type="text"
@@ -69,7 +79,18 @@ export const OverviewPage = () => {
                                             setProjectName(e.target.value)
                                         }
                                     />
-                                    <div className="flex justify-end gap-2">
+                                    <label className="flex justify-between gap-2">
+                                        <span>add with template</span>
+                                        <SwitchButton
+                                            usingTemplate={usingTemplate}
+                                            changeHandler={() =>
+                                                setUsingTemplate(
+                                                    (prev) => !prev
+                                                )
+                                            }
+                                        />
+                                    </label>
+                                    <div className="flex justify-end gap-2 mt-auto">
                                         <Button
                                             rounded
                                             secondary

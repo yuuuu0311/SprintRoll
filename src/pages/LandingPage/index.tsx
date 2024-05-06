@@ -26,24 +26,28 @@ export const LandingPage: React.FC = () => {
                         {Array.from(Array(4)).map((ele, index) => (
                             <FloatingTicket
                                 key={`${ele}+${index}`}
+                                index={index}
                                 domain={0}
                             />
                         ))}
                         {Array.from(Array(1)).map((ele, index) => (
                             <FloatingTicket
                                 key={`${ele}+${index}`}
+                                index={index}
                                 domain={1}
                             />
                         ))}
                         {Array.from(Array(2)).map((ele, index) => (
                             <FloatingTicket
                                 key={`${ele}+${index}`}
+                                index={index}
                                 domain={2}
                             />
                         ))}
                         {Array.from(Array(4)).map((ele, index) => (
                             <FloatingTicket
                                 key={`${ele}+${index}`}
+                                index={index}
                                 domain={3}
                             />
                         ))}

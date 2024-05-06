@@ -11,23 +11,8 @@ import { MdExpandMore } from "react-icons/md";
 // interface
 import { ProjectFace } from "@/interface";
 
-enum NavigationLabel {
-    // PERSON = "Personal",
-    All = "All",
-    FE = "FrontEnd",
-    BE = "BackEnd",
-    DATA = "Data",
-    IOS = "iOS",
-}
-
-const NavigationLabelArray = [
-    // NavigationLabel.PERSON,
-    NavigationLabel.All,
-    NavigationLabel.FE,
-    NavigationLabel.BE,
-    NavigationLabel.DATA,
-    NavigationLabel.IOS,
-];
+import { db } from "@/utilities/firebase";
+import { doc, updateDoc } from "firebase/firestore";
 
 export const TabAccordion: React.FC<{
     projectInfo: ProjectFace;
@@ -36,6 +21,7 @@ export const TabAccordion: React.FC<{
     const [isActive, setIsActive] = useState<boolean>(
         () => projectInfo.name === project
     );
+    const [newDomain, setNewDomain] = useState<string>("");
 
     const navLinkClass = (isActive: boolean) =>
         twMerge(
@@ -70,6 +56,13 @@ export const TabAccordion: React.FC<{
         )
     );
 
+    const handleAddDomain = async (newDomain: string) => {
+        const projectRef = doc(db, `projects/${projectInfo.id}/`);
+        await updateDoc(projectRef, {
+            domain: [...projectInfo.domain, newDomain],
+        });
+    };
+
     return (
         <div>
             <div
@@ -80,7 +73,15 @@ export const TabAccordion: React.FC<{
                 <MdExpandMore className={navigationTitleIconClass} />
             </div>
             <ul className={navigationWrapClass}>
-                {NavigationLabelArray.map((label) => (
+                <li>
+                    <NavLink
+                        to={`/${projectInfo.name.toLocaleLowerCase()}/all`}
+                        className={({ isActive }) => navLinkClass(isActive)}
+                    >
+                        all
+                    </NavLink>
+                </li>
+                {projectInfo.domain.map((label) => (
                     <li key={`${projectInfo.id}-${label}`}>
                         <NavLink
                             to={`/${projectInfo.name.toLocaleLowerCase()}/${label.toLowerCase()}`}
@@ -90,6 +91,16 @@ export const TabAccordion: React.FC<{
                         </NavLink>
                     </li>
                 ))}
+                <div>
+                    <input
+                        type="text"
+                        value={newDomain}
+                        onChange={(e) => setNewDomain(e.target.value)}
+                    />
+                    <button onClick={() => handleAddDomain(newDomain)}>
+                        + add
+                    </button>
+                </div>
             </ul>
         </div>
     );

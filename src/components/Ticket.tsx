@@ -83,11 +83,11 @@ export const Ticket: React.FC<{
         })
     );
     const ticketsDomainClass = twMerge(
-        classNames("p-2", {
-            "bg-lime-500": ticketInfo.domain === "frontend",
-            "bg-red-500": ticketInfo.domain === "backend",
-            "bg-yellow-500": ticketInfo.domain === "data",
-            "bg-blue-500": ticketInfo.domain === "ios",
+        classNames({
+            "p-2 bg-lime-500": ticketInfo.domain === "frontend",
+            "p-2 bg-red-500": ticketInfo.domain === "backend",
+            "p-2 bg-yellow-500": ticketInfo.domain === "data",
+            "p-2 bg-blue-500": ticketInfo.domain === "ios",
         })
     );
 

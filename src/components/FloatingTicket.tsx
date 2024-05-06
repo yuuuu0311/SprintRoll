@@ -36,7 +36,9 @@ const Label: React.FC<{ domain: number }> = ({ domain }) => {
     return <div className={labelClass}>{getDomain(domain)}</div>;
 };
 
-export const FloatingTicket: React.FC<{ domain: number }> = ({ domain }) => {
+export const FloatingTicket: React.FC<{ domain: number; index: number }> = ({
+    domain,
+}) => {
     const ticketDomainClass = twMerge(
         classNames("h-10", {
             "bg-lime-500 ": domain == 0,

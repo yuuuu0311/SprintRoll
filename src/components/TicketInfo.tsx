@@ -5,7 +5,6 @@ import {
     Dispatch,
     SetStateAction,
 } from "react";
-import { useParams } from "react-router-dom";
 
 // dependency
 import { twMerge } from "tailwind-merge";
@@ -30,6 +29,7 @@ import {
     removeFromAssigned,
     debounce,
     updateTicketInfo,
+    searchViaEmail,
 } from "@/utilities";
 
 enum LabelType {
@@ -172,8 +172,6 @@ export const TicketInfo: React.FC<{
     isInCollection?: string;
     setDialogActive: Dispatch<SetStateAction<boolean>>;
 }> = ({ isInCollection, index, ticketInfo, setDialogActive }) => {
-    const { domain } = useParams();
-
     const [assignedDeveloper, setAssignedDeveloper] = useState<
         UserFace[] | void
     >();
@@ -216,9 +214,10 @@ export const TicketInfo: React.FC<{
             setAssignedDeveloper([]);
         } else {
             const developerInfo = await getDomainDeveloper(
-                domain as string,
+                ticketInfo.domain as string,
                 searchValue as string
             );
+
             setAssignedDeveloper(developerInfo);
         }
     };
@@ -309,7 +308,7 @@ export const TicketInfo: React.FC<{
                                 <div className="flex flex-col gap-2">
                                     <input
                                         type="text"
-                                        placeholder="Search Developer"
+                                        placeholder="Search Developer via email"
                                         className="w-full py-2 px-4 rounded-md focus:bg-neutral-300 bg-stone-100 focus:outline-none"
                                         onChange={(e) =>
                                             handelSearchDeveloper(e)

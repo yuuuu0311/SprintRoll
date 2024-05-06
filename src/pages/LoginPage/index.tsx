@@ -29,24 +29,28 @@ export const LoginPage: React.FC = () => {
                             {Array.from(Array(10)).map((ele, index) => (
                                 <FloatingTicket
                                     key={`${ele}+${index}`}
+                                    index={index}
                                     domain={0}
                                 />
                             ))}
                             {Array.from(Array(8)).map((ele, index) => (
                                 <FloatingTicket
                                     key={`${ele}+${index}`}
+                                    index={index}
                                     domain={1}
                                 />
                             ))}
                             {Array.from(Array(5)).map((ele, index) => (
                                 <FloatingTicket
                                     key={`${ele}+${index}`}
+                                    index={index}
                                     domain={2}
                                 />
                             ))}
                             {Array.from(Array(10)).map((ele, index) => (
                                 <FloatingTicket
                                     key={`${ele}+${index}`}
+                                    index={index}
                                     domain={3}
                                 />
                             ))}
