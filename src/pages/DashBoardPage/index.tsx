@@ -348,6 +348,8 @@ export const DashBoardPage: React.FC = () => {
                             <DateRangePicker
                                 className={inputCycleClass}
                                 onChange={(dateVal) => {
+                                    console.log(dateVal);
+
                                     setNewSprintInfo(
                                         (prev) =>
                                             ({

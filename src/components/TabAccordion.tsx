@@ -14,6 +14,8 @@ import { ProjectFace } from "@/interface";
 import { db } from "@/utilities/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
+import { Button } from "@/components/Button";
+
 export const TabAccordion: React.FC<{
     projectInfo: ProjectFace;
 }> = ({ projectInfo }) => {
@@ -21,6 +23,7 @@ export const TabAccordion: React.FC<{
     const [isActive, setIsActive] = useState<boolean>(
         () => projectInfo.name === project
     );
+    const [isAddDomain, setIsAddDomain] = useState<boolean>(false);
     const [newDomain, setNewDomain] = useState<string>("");
 
     const navLinkClass = (isActive: boolean) =>
@@ -91,16 +94,46 @@ export const TabAccordion: React.FC<{
                         </NavLink>
                     </li>
                 ))}
-                <div>
-                    <input
-                        type="text"
-                        value={newDomain}
-                        onChange={(e) => setNewDomain(e.target.value)}
-                    />
-                    <button onClick={() => handleAddDomain(newDomain)}>
+
+                {isAddDomain ? (
+                    <>
+                        <input
+                            className="rounded px-3 py-2 bg-neutral-300 "
+                            type="text"
+                            value={newDomain}
+                            onChange={(e) => setNewDomain(e.target.value)}
+                        />
+
+                        <div className="flex gap-2 mt-auto justify-end">
+                            <Button
+                                rounded
+                                secondary
+                                onClickFun={() => setIsAddDomain(false)}
+                            >
+                                close
+                            </Button>
+                            <Button
+                                rounded
+                                success
+                                onClickFun={() => {
+                                    handleAddDomain(newDomain);
+                                    setIsAddDomain(false);
+                                    setNewDomain("");
+                                }}
+                            >
+                                add
+                            </Button>
+                        </div>
+                    </>
+                ) : (
+                    <Button
+                        rounded
+                        secondary
+                        onClickFun={() => setIsAddDomain(true)}
+                    >
                         + add
-                    </button>
-                </div>
+                    </Button>
+                )}
             </ul>
         </div>
     );

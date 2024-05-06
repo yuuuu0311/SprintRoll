@@ -1,5 +1,3 @@
-import { useParams } from "react-router-dom";
-
 // dependency
 import {
     collection,

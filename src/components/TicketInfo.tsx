@@ -29,7 +29,6 @@ import {
     removeFromAssigned,
     debounce,
     updateTicketInfo,
-    searchViaEmail,
 } from "@/utilities";
 
 enum LabelType {

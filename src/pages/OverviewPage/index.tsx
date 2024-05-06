@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
 // utilities
-import { addProject, addCollectionsViaTemplate } from "@/utilities";
+import { addProject, addCollectionsViaTemplate, addSprint } from "@/utilities";
 import { useProject, useCollaborativeProject } from "@/utilities/hook";
 import { useUser } from "@/utilities/store";
 import { UserFace } from "@/interface";
@@ -33,6 +33,16 @@ export const OverviewPage = () => {
                   name: projectName,
                   owner: uid as string,
                   ownerEmail: email as string,
+              }),
+              addSprint({
+                  name: "sprint template",
+                  description: "create an ticket and drop it in sprint cycle",
+                  cycle: [
+                      new Date(),
+                      new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                  ],
+                  index: 0,
+                  project: projectName,
               }),
               addCollectionsViaTemplate(projectName))
             : addProject({
