@@ -94,7 +94,8 @@ export const useAllTickets = (index?: number) => {
                 )
                 .map((ticket) => ({
                     ...(ticket.data() as TicketFace),
-                    ticketID: ticket.ref.path,
+                    collectionID: ticket.ref.path.split("/")[1],
+                    ticketID: ticket.ref.path.split("/")[3],
                 }));
 
             const sprintTicketsCopy = tickets.docs
@@ -105,7 +106,8 @@ export const useAllTickets = (index?: number) => {
                 )
                 .map((ticket) => ({
                     ...(ticket.data() as TicketFace),
-                    ticketID: ticket.ref.path,
+                    collectionID: ticket.ref.path.split("/")[1],
+                    ticketID: ticket.ref.path.split("/")[3],
                 }))
                 .sort(
                     (a, b) =>

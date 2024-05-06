@@ -14,6 +14,7 @@ import {
 import { Ticket } from "@/components/Ticket";
 import { Loader } from "@/components/Loader";
 import { SprintPanel } from "./SprintPanel";
+
 import { Button } from "@/components/Button";
 import { DateRangePicker } from "rsuite";
 
@@ -83,6 +84,8 @@ export const DashBoardPage: React.FC = () => {
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
+
+        console.log(result);
 
         if (!destination) return;
         if (sprintTicketsSetters === undefined) return;

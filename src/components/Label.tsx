@@ -8,7 +8,7 @@ const Label: React.FC<{
 }> = ({ children }) => {
     const labelClass = twMerge(
         classNames("bg-lime-500/50 rounded-full px-2 leading-none text-sm", {
-            "bg-neutral-400/50 text-neutral-700 ": children === "bug",
+            "bg-yellow-400/50 text-yellow-700 ": children === "bug",
             "bg-blue-400/50 text-blue-700": children === "feature",
             "bg-lime-400/50 text-lime-700": children === "refactor",
             "bg-rose-400/50 text-rose-700": children === "ASAP",

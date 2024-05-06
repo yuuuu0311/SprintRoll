@@ -1,22 +1,8 @@
-import React, {
-    ChangeEvent,
-    useState,
-    Dispatch,
-    SetStateAction,
-    useEffect,
-} from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 // dependency
-import { Droppable, Draggable, Placeholder } from "react-beautiful-dnd";
-import {
-    addDoc,
-    collection,
-    Timestamp,
-    getDocs,
-    deleteDoc,
-    doc,
-} from "firebase/firestore";
+import { Droppable, Draggable } from "react-beautiful-dnd";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 
 // interface
 import { CollectionFace, TicketFace } from "@/interface";
@@ -25,6 +11,7 @@ import { CollectionFace, TicketFace } from "@/interface";
 import { Button } from "@/components/Button";
 import { Ticket } from "@/components/Ticket";
 import { Dialog } from "@/components/Dialog";
+import { AddTicketInput } from "@/components/AddTicketInput";
 import { Loader } from "@/components/Loader";
 
 // hook and utilities
@@ -48,40 +35,11 @@ export const TicketList: React.FC<{
         >
     >;
 }> = ({ collectionInfo, setTicketsSetters }) => {
-    const { project, domain } = useParams();
     const { ticketsData, setTicketsData } = useTickets(
         collectionInfo.collectionID
     );
 
-    const [addCollectionActive, setAddCollectionActive] = useState(false);
     const [dialogActive, setDialogActive] = useState(false);
-    const [newTickInfo, setNewTickInfo] = useState(() => ({
-        title: "",
-    }));
-
-    const handleAddTicket: () => void = async () => {
-        if (newTickInfo.title === "") return;
-        if (ticketsData === undefined) return;
-
-        setAddCollectionActive((prev) => !prev);
-
-        const ticketsRef = collection(
-            db,
-            `collections/${collectionInfo.collectionID}/tickets`
-        );
-        await addDoc(ticketsRef, {
-            ...newTickInfo,
-            order: ticketsData.length,
-            domain: domain,
-            project: project,
-            createdTime: Timestamp.fromDate(new Date()),
-            status: -1,
-        });
-
-        setNewTickInfo(() => ({
-            title: "",
-        }));
-    };
 
     const handleDeleteCollection = async (collectionInfo: CollectionFace) => {
         const docRef = doc(db, `collections/${collectionInfo.collectionID}`);
@@ -104,13 +62,6 @@ export const TicketList: React.FC<{
 
     const handleDialogToggle = () => {
         setDialogActive((prev) => (prev ? false : true));
-    };
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTickInfo((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
     };
 
     useEffect(() => {
@@ -181,60 +132,14 @@ export const TicketList: React.FC<{
                                         {placeholder}
                                     </div>
 
-                                    {addCollectionActive && (
-                                        <div>
-                                            <div className="mb-2">
-                                                <input
-                                                    type="text"
-                                                    name="title"
-                                                    id="title"
-                                                    value={newTickInfo.title}
-                                                    placeholder="Ticket Title"
-                                                    autoFocus
-                                                    onChange={(e) =>
-                                                        handleChange(e)
-                                                    }
-                                                    className="text-md px-3 py-2 w-full rounded-md overflow-hidden leading-none outline-none transition focus:bg-neutral-300 "
-                                                />
-                                            </div>
-                                            <div className="flex justify-end gap-2">
-                                                <Button
-                                                    rounded
-                                                    secondary
-                                                    onClickFun={() =>
-                                                        setAddCollectionActive(
-                                                            (prev) => !prev
-                                                        )
-                                                    }
-                                                >
-                                                    Close
-                                                </Button>
-                                                <Button
-                                                    success
-                                                    rounded
-                                                    onClickFun={handleAddTicket}
-                                                >
-                                                    Add
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {!addCollectionActive && (
-                                        <Button
-                                            rounded
-                                            link
-                                            secondary
-                                            onClickFun={() =>
-                                                setAddCollectionActive(
-                                                    (prev) => !prev
-                                                )
-                                            }
-                                            addonStyle="text-left dark:text-stone-200 hover:dark:text-neutral-800"
-                                        >
-                                            + add ticket
-                                        </Button>
-                                    )}
+                                    <AddTicketInput
+                                        collectionID={
+                                            collectionInfo.collectionID
+                                        }
+                                        ticketsLength={
+                                            ticketsData?.length as number
+                                        }
+                                    />
                                 </div>
                             )}
                         </Droppable>
