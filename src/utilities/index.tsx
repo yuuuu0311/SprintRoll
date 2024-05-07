@@ -40,7 +40,8 @@ export const rearange: (
 
 export const orderCollection = async (
     sourceIndex: number,
-    destIndex: number
+    destIndex: number,
+    domain: string
 ) => {
     const collectionsRef = collection(db, "collections");
     const destQuery = query(collectionsRef, where("order", "==", destIndex));
@@ -52,21 +53,23 @@ export const orderCollection = async (
     const destQuerySnapshot = await getDocs(destQuery);
     const sourceQuerySnapshot = await getDocs(sourceQuery);
 
-    destQuerySnapshot.forEach((doc) => {
-        const docRef = doc.ref;
-
-        updateDoc(docRef, {
-            order: sourceIndex,
+    destQuerySnapshot.docs
+        .filter((doc) => doc.data().domain === domain)
+        .forEach((doc) => {
+            const docRef = doc.ref;
+            updateDoc(docRef, {
+                order: sourceIndex,
+            });
         });
-    });
 
-    sourceQuerySnapshot.forEach((doc) => {
-        const docRef = doc.ref;
-
-        updateDoc(docRef, {
-            order: destIndex,
+    sourceQuerySnapshot.docs
+        .filter((doc) => doc.data().domain === domain)
+        .forEach((doc) => {
+            const docRef = doc.ref;
+            updateDoc(docRef, {
+                order: destIndex,
+            });
         });
-    });
 };
 
 export const orderTicket = async (

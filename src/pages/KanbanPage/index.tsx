@@ -58,7 +58,11 @@ export const KanbanPage: React.FC = () => {
                             destination.index
                         ) as CollectionFace[]
                 );
-                orderCollection(source.index, destination.index);
+                orderCollection(
+                    source.index,
+                    destination.index,
+                    domain as string
+                );
                 break;
             case source.droppableId:
                 if (ticketsSetters === undefined) return;
