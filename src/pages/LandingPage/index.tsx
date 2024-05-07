@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { NavLink } from "react-router-dom";
 
 import { FloatingTicket } from "@/components/FloatingTicket";
@@ -6,8 +7,18 @@ import { FloatingTicket } from "@/components/FloatingTicket";
 import { IoMdArrowRoundForward } from "react-icons/io";
 
 export const LandingPage: React.FC = () => {
+    const ref = useRef(null);
+
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end end"],
+    });
+    const opacity = useTransform(scrollYProgress, [0, 0, 0], [0, 1, 0]);
+
+    console.log(opacity);
+
     return (
-        <div className="h-screen w-full">
+        <div className="h-screen w-full" ref={ref}>
             <div className="h-screen bg-neutral-300">
                 <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
                     <motion.div
@@ -107,6 +118,12 @@ export const LandingPage: React.FC = () => {
                     </div>
                 </div>
             </div>
+            <motion.div
+                className="h-screen bg-white"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                // style={{ opacity: opacity }}
+            ></motion.div>
         </div>
     );
 };

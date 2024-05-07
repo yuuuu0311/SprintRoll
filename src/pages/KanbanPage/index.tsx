@@ -82,7 +82,9 @@ export const KanbanPage: React.FC = () => {
                 ticketsSetters[source.droppableId].setter(
                     (prev: TicketFace[]) => {
                         return prev.filter(
-                            (ticket) => ticket.ticketID !== result.draggableId
+                            (ticket) =>
+                                ticket.ticketID !==
+                                result.draggableId.split("/")[3]
                         );
                     }
                 );
@@ -96,7 +98,8 @@ export const KanbanPage: React.FC = () => {
                             0,
                             ticketsSetters[source.droppableId].state.filter(
                                 (ticket) =>
-                                    ticket.ticketID === result.draggableId
+                                    ticket.ticketID ===
+                                    result.draggableId.split("/")[3]
                             )[0]
                         );
 
@@ -104,7 +107,11 @@ export const KanbanPage: React.FC = () => {
                     }
                 );
 
-                toAnotherCollection(source, destination, result.draggableId);
+                toAnotherCollection(
+                    source,
+                    destination,
+                    result.draggableId.split("/")[3]
+                );
                 break;
         }
     };

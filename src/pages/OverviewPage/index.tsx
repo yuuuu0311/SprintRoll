@@ -44,7 +44,7 @@ export const OverviewPage = () => {
                   index: 0,
                   project: projectName,
               }),
-              addCollectionsViaTemplate(projectName))
+              addCollectionsViaTemplate(projectName.toLowerCase()))
             : addProject({
                   domain: [],
                   name: projectName,

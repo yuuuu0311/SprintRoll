@@ -15,7 +15,7 @@ import { OverviewPage } from "@/pages/OverviewPage";
 ReactDOM.createRoot(document.getElementById("root")!).render(
     // <React.StrictMode>
     <div className="flex h-screen w-screen bg-neutral-300 dark:bg-neutral-800">
-        <main className="relative flex-1 overflow-hidden">
+        <main className="relative flex-1 ">
             <BrowserRouter>
                 <Routes>
                     <Route index path="/" element={<LandingPage />} />
