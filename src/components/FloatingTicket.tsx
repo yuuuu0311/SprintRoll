@@ -57,7 +57,7 @@ export const FloatingTicket: React.FC<{ domain: number; index: number }> = ({
 
     return (
         <motion.div
-            className="w-64 h-28 rounded-xl  absolute flex flex-col shadow-2xl"
+            className="w-64 h-fit rounded-xl overflow-hidden absolute top-1/2 translate-x-1/2 left-1/2 translate-y-1/2 shadow-2xl  select-none pointer-events-none"
             initial={{
                 x: `${Math.floor((Math.random() - 0.5) * 400)}%`,
                 y: `${Math.floor((Math.random() - 0.5) * 400)}%`,
@@ -88,11 +88,13 @@ export const FloatingTicket: React.FC<{ domain: number; index: number }> = ({
                 },
             }}
         >
-            <div className={ticketDomainClass}></div>
-            <div className="bg-stone-100 flex-1 py-2 px-4 text-2xl text-neutral-700 select-none flex flex-col gap-2">
-                {contentArr[Math.floor(Math.random() * contentArr.length)]}
-                <div className="flex justify-end">
-                    <Label domain={domain} />
+            <div className="flex flex-col select-none pointer-events-none">
+                <div className={ticketDomainClass}></div>
+                <div className="bg-stone-100 flex-1 py-2 px-4 text-2xl text-neutral-700 select-none flex flex-col gap-2">
+                    {contentArr[Math.floor(Math.random() * contentArr.length)]}
+                    <div className="flex justify-end">
+                        <Label domain={domain} />
+                    </div>
                 </div>
             </div>
         </motion.div>
