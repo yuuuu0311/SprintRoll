@@ -1,10 +1,22 @@
-// import { useRef } from "react";
+import { useEffect, useState } from "react";
 
+// GSAP
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+// dnd
+import {
+    Droppable,
+    Draggable,
+    DragDropContext,
+    OnDragEndResponder,
+} from "react-beautiful-dnd";
+
+// style
+import { twMerge } from "tailwind-merge";
+import classNames from "classnames";
 
 // icon
 import { motion } from "framer-motion";
@@ -15,10 +27,202 @@ import { FloatingTicket } from "@/components/FloatingTicket";
 
 // icon
 import { IoMdArrowRoundForward } from "react-icons/io";
-import { twMerge } from "tailwind-merge";
-import classNames from "classnames";
+import { MdOutlineDelete, MdOutlineEdit } from "react-icons/md";
+
+// utilities
+import { rearange } from "@/utilities";
+
+import { mockTicketFace } from "@/interface";
+
+const Ticket: React.FC<{
+    ticketInfo: mockTicketFace;
+    index: number;
+}> = ({ ticketInfo, index }) => {
+    const ticketsClass = twMerge(
+        classNames("rounded-md overflow-hidden transition")
+    );
+    const ticketsDomainClass = twMerge(classNames("p-2 bg-lime-500"));
+
+    return (
+        <Draggable index={index} draggableId={ticketInfo.ticketTitle}>
+            {({ innerRef, draggableProps, dragHandleProps }) => (
+                <div ref={innerRef} {...draggableProps} {...dragHandleProps}>
+                    <div className={ticketsClass}>
+                        <div className={ticketsDomainClass}></div>
+                        <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
+                            <div className="">{ticketInfo.ticketTitle}</div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </Draggable>
+    );
+};
+
+const TicketList: React.FC<{ mockTickets: mockTicketFace[] }> = ({
+    mockTickets,
+}) => {
+    return (
+        <Droppable droppableId={"TicketList"}>
+            {({ innerRef, droppableProps, placeholder }) => (
+                <div
+                    className="flex max-h-full flex-col gap-3 bg-neutral-200 p-4 rounded-lg w-56 shadow-lg dark:bg-neutral-600"
+                    ref={innerRef}
+                    {...droppableProps}
+                >
+                    <div className="flex justify-between items-center">
+                        <h3 className="text-lg text-neutral-700 font-bold capitalize dark:text-stone-200">
+                            To Do
+                        </h3>
+                        <MdOutlineDelete className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500 dark:text-stone-200" />
+                    </div>
+
+                    <div className="flex h-full overflow-auto  no-scrollbar flex-col gap-3">
+                        {mockTickets.map((ticketInfo, index) => {
+                            return (
+                                <Ticket
+                                    ticketInfo={ticketInfo}
+                                    index={index}
+                                    key={`${ticketInfo.ticketTitle}-${index}`}
+                                />
+                            );
+                        })}
+
+                        {placeholder}
+                    </div>
+                </div>
+            )}
+        </Droppable>
+    );
+};
+
+const SprintPanel: React.FC<{ mockTickets: mockTicketFace[] }> = ({
+    mockTickets,
+}) => {
+    const [isToggle, setIsToggle] = useState(true);
+
+    const ticketsWrapClass = twMerge(
+        classNames("transition-all px-6 overflow-hidden relative h-0", {
+            "h-auto": isToggle,
+        })
+    );
+
+    const getProgressPercentage = (sprintTickets: mockTicketFace[]) => {
+        const havingStatus = sprintTickets.filter(
+            (ticket) => ticket.status !== -1
+        );
+
+        return havingStatus.length === 0 && sprintTickets.length === 0
+            ? 0
+            : Math.floor((havingStatus.length / sprintTickets.length) * 100);
+    };
+
+    return (
+        <Droppable droppableId={"SprintTickets"}>
+            {({ innerRef, droppableProps, placeholder }) => (
+                <div className="transition hover:brightness-95 bg-white">
+                    <div className="sticky top-0 bg-white w-full px-6 pt-4 pb-2 flex flex-col gap-3 ">
+                        <div className="flex justify-end gap-2">
+                            <MdOutlineEdit className="text-lg hover:text-lime-500 transition" />
+                            <MdOutlineDelete className="text-lg hover:text-rose-500 transition" />
+                        </div>
+                        <div className="text-neutral-600 flex flex-col gap-1">
+                            <div className="flex justify-between items-baseline">
+                                <div className="font-bold text-3xl flex gap-2 items-center">
+                                    <span>SprintRoll</span>
+                                </div>
+                                <span className="text-sm"># Sprint 0</span>
+                            </div>
+                            <div className="flex justify-between items-baseline text-sm text-neutral-500">
+                                <span className="">
+                                    {/* {sprintTickets.length} tickets inside */}
+                                </span>
+                                <span className=" flex gap-2">
+                                    <span>
+                                        {new Date().toLocaleDateString()}
+                                    </span>
+                                    -
+                                    <span>
+                                        {new Date().toLocaleDateString()}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div className="text-neutral-500">
+                            It's a mock sprint
+                        </div>
+
+                        <div className="flex gap-4 items-center">
+                            <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200  h-3">
+                                {getProgressPercentage(mockTickets) ? (
+                                    <div
+                                        className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full `}
+                                        style={{
+                                            width: `${getProgressPercentage(
+                                                mockTickets
+                                            )}%`,
+                                        }}
+                                    ></div>
+                                ) : (
+                                    <></>
+                                )}
+                            </div>
+                            {`${getProgressPercentage(mockTickets)}%`}
+                        </div>
+                    </div>
+                    <div
+                        className={ticketsWrapClass}
+                        ref={innerRef}
+                        {...droppableProps}
+                    >
+                        <div className="flex flex-col">
+                            <div>GGGG</div>
+                            {/* {mockTickets.length === 0 ? (
+                                <div className="text-neutral-300 text-sm">
+                                    It's empty, drop some tickets here
+                                </div>
+                            ) : (
+                                mockTickets.map((ticket, index) => (
+                                    <div>GG</div>
+                                    // <TicketStatusRow
+                                    //     index={index}
+                                    //     ticketInfo={ticket}
+                                    //     key={`${ticket.ticketID}-${ticket.order}`}
+                                    // />
+                                ))
+                            )} */}
+                        </div>
+                        {placeholder}
+                    </div>
+                    <div
+                        onClick={() =>
+                            setIsToggle((prev) => (prev ? false : true))
+                        }
+                        className="flex justify-center transition hover:bg-neutral-200 py-2 text-neutral-400"
+                    >
+                        {isToggle ? "less" : "more"}
+                    </div>
+                </div>
+            )}
+        </Droppable>
+    );
+};
 
 export const LandingPage: React.FC = () => {
+    const [mockTickets, setMockTickets] = useState<mockTicketFace[]>([
+        {
+            ticketTitle: "drag and drop to reorder!",
+            status: -1,
+        },
+        {
+            ticketTitle: "drop me into sprint cycle!",
+            status: 1,
+        },
+    ]);
+    const [mockSprintTickets, setMockSprintTickets] = useState<
+        mockTicketFace[] | []
+    >([]);
+
     useGSAP(() => {
         gsap.fromTo(
             ".intro-card",
@@ -28,8 +232,10 @@ export const LandingPage: React.FC = () => {
             },
             {
                 opacity: 1,
-                translateY: 0,
-                stagger: 0.25,
+                translateY: "0%",
+                stagger: 0.15,
+                duration: 1.5,
+                ease: "expoScale(0.5,7,none)",
                 scrollTrigger: {
                     trigger: ".container-intro",
                     scroller: ".landing-page",
@@ -43,7 +249,9 @@ export const LandingPage: React.FC = () => {
     }, {});
 
     const sectionTitle = twMerge(
-        classNames("text-4xl tracking-widest text-neutral-600")
+        classNames(
+            "text-4xl tracking-widest text-neutral-600  whitespace-nowrap"
+        )
     );
 
     const introCardWrap = twMerge(
@@ -53,8 +261,67 @@ export const LandingPage: React.FC = () => {
     );
 
     const introCardTitle = twMerge(
-        classNames("text-2xl leading-relaxed text-center")
+        classNames("text-2xl leading-relaxed text-center whitespace-nowrap")
     );
+
+    const toSprint = (
+        sourceIndex: number,
+        destIndex: number,
+        ticketID: string
+    ) => {
+        const [toSprintTicket] = mockTickets.filter(
+            (ticket) => ticket.ticketTitle === ticketID
+        );
+
+        setMockTickets((prev) => {
+            const ticketsCopy = [...prev];
+            ticketsCopy.splice(sourceIndex, 1);
+
+            return ticketsCopy;
+        });
+
+        setMockSprintTickets((prev) => {
+            const sprintTicketsCopy = [...prev];
+            sprintTicketsCopy.splice(destIndex, 0, toSprintTicket);
+
+            return sprintTicketsCopy;
+        });
+    };
+
+    const onDragEnd: OnDragEndResponder = (result) => {
+        const { source, destination } = result;
+
+        if (!destination) return;
+
+        switch (destination.droppableId) {
+            case "TicketList":
+                setMockTickets(
+                    () =>
+                        rearange(
+                            mockTickets as mockTicketFace[],
+                            source.index,
+                            destination.index
+                        ) as mockTicketFace[]
+                );
+
+                break;
+            case "SprintTickets":
+                toSprint(
+                    result.source.index,
+                    result.destination?.index as number,
+                    result.draggableId
+                );
+
+                break;
+
+            default:
+                break;
+        }
+    };
+
+    useEffect(() => {
+        console.log(mockSprintTickets);
+    }, [mockSprintTickets]);
 
     return (
         <div className="h-screen w-full overflow-x-hidden overflow-y-auto no-scrollbar bg-stone-100 landing-page">
@@ -156,48 +423,43 @@ export const LandingPage: React.FC = () => {
             </div>
 
             <div className="h-screen w-screen bg-stone-100 relative container-intro">
-                <div className="mx-auto w-3/4 py-24 flex flex-col gap-32">
-                    <div className={sectionTitle}>SprintRoll</div>
+                <div className="mx-auto w-3/4 py-24 flex flex-col gap-36">
+                    <div className=" flex flex-col gap-20">
+                        <div className={sectionTitle}># SprintRoll</div>
 
-                    <div className="flex gap-4">
-                        <div className={introCardWrap}>
-                            <div className={introCardTitle}>輕鬆規劃</div>
-                            <div>直觀的拖放介面，快速設定和調整任務</div>
-                        </div>
-                        <div className={introCardWrap}>
-                            <div className={introCardTitle}>協作無界限</div>
-                            <div>直觀的拖放介面，快速設定和調整任務</div>
-                        </div>
-                        <div className={introCardWrap}>
-                            <div className={introCardTitle}>客製化彈性</div>
-                            <div>按需調整，滿足獨特的工作流程和需求</div>
-                        </div>
-                        <div className={introCardWrap}>
-                            <div className={introCardTitle}>即時追蹤</div>
-                            <div>讓您隨時掌握專案狀態，做出明智決策</div>
+                        <div className="flex gap-4">
+                            <div className={introCardWrap}>
+                                <div className={introCardTitle}>輕鬆規劃</div>
+                                <div>直觀的拖放介面，快速設定和調整任務</div>
+                            </div>
+                            <div className={introCardWrap}>
+                                <div className={introCardTitle}>協作無界限</div>
+                                <div>實時共享進度，溝通無阻，保持團隊同步</div>
+                            </div>
+                            <div className={introCardWrap}>
+                                <div className={introCardTitle}>客製化彈性</div>
+                                <div>按需調整，滿足獨特的工作流程和需求</div>
+                            </div>
+                            <div className={introCardWrap}>
+                                <div className={introCardTitle}>即時追蹤</div>
+                                <div>讓您隨時掌握專案狀態，做出明智決策</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div className={sectionTitle}>Sprint DashBoard</div>
-
-                    {/* <div className="flex gap-24 justify-between relative">
-                        <div className="flex flex-1 flex-col shadow-xl rounded-xl overflow-hidden bg-white ticket">
-                            <div className="h-14 bg-lime-500"></div>
-                            <div className="h-fit bg-white overflow-hidden px-6 pt-4 pb-6 flex flex-col gap-6">
-                                <div className="text-4xl relative text-neutral-700">
-                                    <div>feature: complete SprintRoll</div>
+                    <div className="flex flex-col gap-20">
+                        <div className={sectionTitle}># Sprint DashBoard</div>
+                        <div className="flex gap-12 items-start">
+                            <DragDropContext onDragEnd={onDragEnd}>
+                                <TicketList mockTickets={mockTickets} />
+                                <div className="relative rounded-lg flex-1 overflow-hidden shadow-lg">
+                                    <SprintPanel
+                                        mockTickets={mockSprintTickets}
+                                    />
                                 </div>
-                                <div className="flex gap-2 justify-end mt-auto">
-                                    <span className="bg-blue-500/50 text-blue-700 rounded-full text-2xl py-1 px-4">
-                                        feature
-                                    </span>
-                                    <span className="bg-rose-500/50 text-rose-700 rounded-full text-2xl py-1 px-4">
-                                        ASAP
-                                    </span>
-                                </div>
-                            </div>
+                            </DragDropContext>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
             </div>
 

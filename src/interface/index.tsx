@@ -65,3 +65,8 @@ export interface ProjectFace {
     owner: string;
     ownerEmail: string;
 }
+
+export interface mockTicketFace {
+    ticketTitle: string;
+    status: number;
+}
