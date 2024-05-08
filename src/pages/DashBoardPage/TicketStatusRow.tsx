@@ -36,6 +36,39 @@ export const TicketStatusRow: React.FC<{
             }
         )
     );
+    const ticketStatusLabel = twMerge(
+        classNames(
+            "bg-neutral-400/50 grid place-items-center text-neutral-700 rounded-full px-2 text-sm",
+            {
+                "bg-lime-400/50 text-lime-700": ticketInfo.status === "0",
+                "bg-red-400/50 text-red-700": ticketInfo.status === "1",
+                "bg-yellow-300/50 text-yellow-700": ticketInfo.status === "2",
+            }
+        )
+    );
+
+    const getStatusLabel = (statusCode: number | string | undefined) => {
+        if (statusCode === undefined) return;
+
+        switch (statusCode) {
+            case -1:
+                return "unfinished";
+                break;
+
+            case "0":
+                return "completed";
+                break;
+            case "1":
+                return "rejected";
+                break;
+            case "2":
+                return "pending";
+                break;
+
+            default:
+                break;
+        }
+    };
 
     return (
         <>
@@ -62,20 +95,14 @@ export const TicketStatusRow: React.FC<{
                                     <span className={ticketStatusLight}></span>
                                 </span>
 
-                                {/* <span className={ticketStatusLight}></span> */}
                                 <span>{ticketInfo.title}</span>
                             </div>
                             <div className="flex justify-end gap-2">
-                                {/* {labels.map((label) => (
-                                    <div
-                                        key={label}
-                                        className="bg-neutral-400/50 grid place-items-center text-neutral-700 rounded-full px-2 text-sm"
-                                    >
-                                        {label}
-                                    </div>
-                                ))} */}
+                                <div className={ticketStatusLabel}>
+                                    {getStatusLabel(ticketInfo.status)}
+                                </div>
                                 {renderLabel(ticketInfo.label as object)}
-                                <div className="bg-neutral-400/50 grid place-items-center text-neutral-700 rounded-full px-2 text-sm">
+                                <div className="bg-neutral-300/50 grid place-items-center text-neutral-700 rounded-full px-2 text-sm">
                                     {ticketInfo.domain}
                                 </div>
                             </div>
