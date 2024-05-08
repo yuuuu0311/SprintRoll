@@ -77,19 +77,25 @@ const TicketList: React.FC<{ mockTickets: mockTicketFace[] }> = ({
                         <MdOutlineDelete className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500 dark:text-stone-200" />
                     </div>
 
-                    <div className="flex h-full overflow-auto  no-scrollbar flex-col gap-3">
-                        {mockTickets.map((ticketInfo, index) => {
-                            return (
-                                <Ticket
-                                    ticketInfo={ticketInfo}
-                                    index={index}
-                                    key={`${ticketInfo.ticketTitle}-${index}`}
-                                />
-                            );
-                        })}
+                    {mockTickets.length === 0 ? (
+                        <div className="text-neutral-400">
+                            drop tickets here
+                        </div>
+                    ) : (
+                        <div className="flex h-full overflow-auto  no-scrollbar flex-col gap-3">
+                            {mockTickets.map((ticketInfo, index) => {
+                                return (
+                                    <Ticket
+                                        ticketInfo={ticketInfo}
+                                        index={index}
+                                        key={`${ticketInfo.ticketTitle}-${index}`}
+                                    />
+                                );
+                            })}
 
-                        {placeholder}
-                    </div>
+                            {placeholder}
+                        </div>
+                    )}
                 </div>
             )}
         </Droppable>
@@ -135,7 +141,7 @@ const SprintPanel: React.FC<{ mockTickets: mockTicketFace[] }> = ({
                             </div>
                             <div className="flex justify-between items-baseline text-sm text-neutral-500">
                                 <span className="">
-                                    {/* {sprintTickets.length} tickets inside */}
+                                    {mockTickets.length} tickets inside
                                 </span>
                                 <span className=" flex gap-2">
                                     <span>
@@ -153,10 +159,10 @@ const SprintPanel: React.FC<{ mockTickets: mockTicketFace[] }> = ({
                         </div>
 
                         <div className="flex gap-4 items-center">
-                            <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200  h-3">
+                            <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200 h-3">
                                 {getProgressPercentage(mockTickets) ? (
                                     <div
-                                        className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full `}
+                                        className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full`}
                                         style={{
                                             width: `${getProgressPercentage(
                                                 mockTickets
@@ -176,21 +182,19 @@ const SprintPanel: React.FC<{ mockTickets: mockTicketFace[] }> = ({
                         {...droppableProps}
                     >
                         <div className="flex flex-col">
-                            <div>GGGG</div>
-                            {/* {mockTickets.length === 0 ? (
+                            {mockTickets.length === 0 ? (
                                 <div className="text-neutral-300 text-sm">
                                     It's empty, drop some tickets here
                                 </div>
                             ) : (
                                 mockTickets.map((ticket, index) => (
-                                    <div>GG</div>
-                                    // <TicketStatusRow
-                                    //     index={index}
-                                    //     ticketInfo={ticket}
-                                    //     key={`${ticket.ticketID}-${ticket.order}`}
-                                    // />
+                                    <TicketStatusRow
+                                        index={index}
+                                        ticketInfo={ticket}
+                                        key={`${ticket.ticketTitle}`}
+                                    />
                                 ))
-                            )} */}
+                            )}
                         </div>
                         {placeholder}
                     </div>
@@ -205,6 +209,60 @@ const SprintPanel: React.FC<{ mockTickets: mockTicketFace[] }> = ({
                 </div>
             )}
         </Droppable>
+    );
+};
+
+const TicketStatusRow: React.FC<{
+    ticketInfo: mockTicketFace;
+    index: number;
+}> = ({ ticketInfo, index }) => {
+    // style
+    const ticketStatusLightBg = twMerge(
+        classNames(
+            "absolute inline-flex h-full w-full rounded-full bg-neutral-400/50 opacity-75",
+            {
+                "animate-ping": ticketInfo.status === -1,
+                "bg-lime-400": ticketInfo.status === 1,
+            }
+        )
+    );
+    const ticketStatusLight = twMerge(
+        classNames(
+            "relative inline-flex rounded-full h-3 w-3 bg-neutral-400/50",
+            {
+                "bg-lime-400": ticketInfo.status === 1,
+            }
+        )
+    );
+
+    return (
+        <Draggable index={index} draggableId={ticketInfo.ticketTitle}>
+            {({ innerRef, draggableProps, dragHandleProps }) => (
+                <div ref={innerRef} {...draggableProps} {...dragHandleProps}>
+                    <div className="flex flex-wrap gap-2 md:gap-0 justify-between  hover:pl-5 p-2 hover:bg-stone-200/80 transition-all rounded-full">
+                        <div className="flex gap-4 items-center">
+                            <span className="relative flex h-3 w-3">
+                                <span className={ticketStatusLightBg}></span>
+                                <span className={ticketStatusLight}></span>
+                            </span>
+
+                            <span>{ticketInfo.ticketTitle}</span>
+                        </div>
+                        <div className="flex justify-end gap-2">
+                            {ticketInfo.status === -1 ? (
+                                <div className="bg-neutral-400/50 grid place-items-center text-neutral-700 rounded-full px-2 text-sm">
+                                    unfinished
+                                </div>
+                            ) : (
+                                <div className="bg-lime-400/50 grid place-items-center text-lime-700 rounded-full px-2 text-sm">
+                                    completed
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+        </Draggable>
     );
 };
 
@@ -288,13 +346,65 @@ export const LandingPage: React.FC = () => {
         });
     };
 
+    const toTicketList = (
+        sourceIndex: number,
+        destIndex: number,
+        ticketID: string
+    ) => {
+        const [toSprintTicket] = mockSprintTickets.filter(
+            (ticket) => ticket.ticketTitle === ticketID
+        );
+        setMockSprintTickets((prev) => {
+            const ticketsCopy = [...prev];
+            ticketsCopy.splice(sourceIndex, 1);
+
+            return ticketsCopy;
+        });
+
+        setMockTickets((prev) => {
+            const sprintTicketsCopy = [...prev];
+            sprintTicketsCopy.splice(destIndex, 0, toSprintTicket);
+
+            return sprintTicketsCopy;
+        });
+    };
+
+    const getDndResult = (sourceID: string, destID: string) => {
+        if (sourceID === "TicketList" && destID === "SprintTickets") return 0;
+        if (sourceID === "SprintTickets" && destID === "TicketList") return 1;
+        if (sourceID === "TicketList" && destID === "TicketList") return 2;
+        if (sourceID === "SprintTickets" && destID === "SprintTickets")
+            return 3;
+    };
+
     const onDragEnd: OnDragEndResponder = (result) => {
         const { source, destination } = result;
 
         if (!destination) return;
 
-        switch (destination.droppableId) {
-            case "TicketList":
+        switch (
+            getDndResult(
+                result.source.droppableId,
+                result.destination?.droppableId as string
+            )
+        ) {
+            case 0:
+                toSprint(
+                    result.source.index,
+                    result.destination?.index as number,
+                    result.draggableId
+                );
+
+                break;
+            case 1:
+                toTicketList(
+                    result.source.index,
+                    result.destination?.index as number,
+                    result.draggableId
+                );
+
+                break;
+            case 2:
                 setMockTickets(
                     () =>
                         rearange(
@@ -303,13 +413,15 @@ export const LandingPage: React.FC = () => {
                             destination.index
                         ) as mockTicketFace[]
                 );
-
                 break;
-            case "SprintTickets":
-                toSprint(
-                    result.source.index,
-                    result.destination?.index as number,
-                    result.draggableId
+            case 3:
+                setMockSprintTickets(
+                    () =>
+                        rearange(
+                            mockSprintTickets as mockTicketFace[],
+                            source.index,
+                            destination.index
+                        ) as mockTicketFace[]
                 );
 
                 break;
@@ -318,10 +430,6 @@ export const LandingPage: React.FC = () => {
                 break;
         }
     };
-
-    useEffect(() => {
-        console.log(mockSprintTickets);
-    }, [mockSprintTickets]);
 
     return (
         <div className="h-screen w-full overflow-x-hidden overflow-y-auto no-scrollbar bg-stone-100 landing-page">
