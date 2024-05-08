@@ -292,6 +292,29 @@ export const LandingPage: React.FC = () => {
 
     useGSAP(() => {
         gsap.fromTo(
+            ".hero",
+            {
+                opacity: 1,
+                borderRadius: 0,
+            },
+            {
+                opacity: 0.75,
+                borderRadius: 24,
+                scale: 0.9,
+                transformOrigin: "center center",
+                ease: "expoScale(0.5,7,none)",
+                scrollTrigger: {
+                    trigger: ".hero",
+                    scroller: ".landing-page",
+                    start: "top top",
+                    end: "bottom top",
+                    pin: true,
+                    scrub: 3,
+                    markers: true,
+                },
+            }
+        );
+        gsap.fromTo(
             ".intro-card",
             {
                 opacity: 0,
@@ -308,7 +331,6 @@ export const LandingPage: React.FC = () => {
                     scroller: ".landing-page",
                     start: "top center",
                     end: "center center",
-                    toggleActions: "play none none reverse",
                     // markers: true,
                 },
             }
@@ -442,7 +464,7 @@ export const LandingPage: React.FC = () => {
 
     return (
         <div className="h-screen w-full overflow-x-hidden overflow-y-auto no-scrollbar bg-stone-100 landing-page">
-            <div className="h-screen w-screen mx-auto relative grid place-items-center overflow-hidden">
+            <div className="h-screen w-screen mx-auto relative grid place-items-center overflow-hidden hero">
                 <motion.div
                     className="opacity-50 absolute w-full h-full bg-neutral-300"
                     initial={{
