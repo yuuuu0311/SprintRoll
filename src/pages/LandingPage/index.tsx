@@ -161,18 +161,14 @@ const SprintPanel: React.FC<{ mockTickets: mockTicketFace[] }> = ({
 
                         <div className="flex gap-4 items-center">
                             <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200 h-3">
-                                {getProgressPercentage(mockTickets) ? (
-                                    <div
-                                        className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full`}
-                                        style={{
-                                            width: `${getProgressPercentage(
-                                                mockTickets
-                                            )}%`,
-                                        }}
-                                    ></div>
-                                ) : (
-                                    <></>
-                                )}
+                                <div
+                                    className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full`}
+                                    style={{
+                                        width: `${getProgressPercentage(
+                                            mockTickets
+                                        )}%`,
+                                    }}
+                                ></div>
                             </div>
                             {`${getProgressPercentage(mockTickets)}%`}
                         </div>
@@ -310,7 +306,7 @@ export const LandingPage: React.FC = () => {
                     end: "bottom top",
                     pin: true,
                     scrub: 3,
-                    markers: true,
+                    // markers: true,
                 },
             }
         );
@@ -569,19 +565,21 @@ export const LandingPage: React.FC = () => {
                         <div className="gap-6 grid md:grid-cols-4 grid-cols-1">
                             <div className={introCardWrap}>
                                 <div className={introCardTitle}>輕鬆規劃</div>
-                                <div>直觀的拖放介面，快速設定和調整任務</div>
+                                <div>直覺的拖曳介面，快速設定和調整任務</div>
                             </div>
                             <div className={introCardWrap}>
                                 <div className={introCardTitle}>協作無界限</div>
-                                <div>實時共享進度，溝通無阻，保持團隊同步</div>
+                                <div>隨時共享進度，溝通無阻，保持團隊同步</div>
                             </div>
                             <div className={introCardWrap}>
-                                <div className={introCardTitle}>客製化彈性</div>
-                                <div>按需調整，滿足獨特的工作流程和需求</div>
+                                <div className={introCardTitle}>客製化調整</div>
+                                <div>
+                                    按需產品需求調整，滿足的工作流程和需求
+                                </div>
                             </div>
                             <div className={introCardWrap}>
                                 <div className={introCardTitle}>即時追蹤</div>
-                                <div>讓您隨時掌握專案狀態，做出明智決策</div>
+                                <div>讓您隨時掌握產品狀態，做出明智決策</div>
                             </div>
                         </div>
                     </div>
@@ -589,7 +587,7 @@ export const LandingPage: React.FC = () => {
                     <div className="min-h-[750px] flex flex-col md:gap-20 gap-12">
                         <div className={sectionTitle}># Sprint DashBoard</div>
                         <div className="text-xl text-neutral-600 tracking-wide leading-relaxed">
-                            發掘全新視角的儀表板，專為提升專案透明度而設計。實時查看關鍵指標，透過精準的數據視覺化，一目了然地掌握專案進度和團隊表現。無論何時何地，都能迅速做出數據驅動的決策，確保您的專案按計劃推進，效率和成果均可預見
+                            發掘全新視角的儀表板，專為提升專案透明度而設計。隨時查看關鍵指標，透過精準的統計數據，一目了然地掌握專案進度和團隊表現。無論何時何地，都能迅速做出數據驅動的決策，確保您的專案按計劃進行，效率和成果均可預見
                         </div>
                         <div className="flex flex-col gap-6">
                             <div className="text-neutral-400">

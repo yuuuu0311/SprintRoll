@@ -63,7 +63,7 @@ export const SigninPanel: React.FC<{
         <div>
             <div className="flex flex-col gap-4">
                 <div className="text-3xl font-bold text-neutral-500 mb-4">
-                    Signin
+                    Sign Up
                 </div>
                 <div>
                     <input
@@ -100,7 +100,7 @@ export const SigninPanel: React.FC<{
                             className="text-blue-500 cursor-pointer"
                             onClick={() => setIsLoginPanel((prev) => !prev)}
                         >
-                            Login
+                            Sign In
                         </span>
                     </span>
                 </div>
@@ -111,7 +111,7 @@ export const SigninPanel: React.FC<{
                     onClickFun={handleSignIn}
                     addonStyle="w-full flex justify-center"
                 >
-                    {isLoading ? <Loader addonStyle="h-6 w-6" /> : "signIn"}
+                    {isLoading ? <Loader addonStyle="h-6 w-6" /> : "Sign Up"}
                 </Button>
                 {isError && (
                     <div className="text-red-500">
@@ -121,7 +121,7 @@ export const SigninPanel: React.FC<{
                     </div>
                 )}
                 {isSignIn && (
-                    <div className="text-green-500">signIn success</div>
+                    <div className="text-green-500">Sign Up Successfully</div>
                 )}
             </div>
         </div>

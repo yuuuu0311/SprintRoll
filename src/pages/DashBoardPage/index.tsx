@@ -148,7 +148,7 @@ export const DashBoardPage: React.FC = () => {
             });
 
             toAnotherSprint(
-                movedTicket.ticketID as string,
+                movedTicket as TicketFace,
                 getSprintNum(destination.droppableId)
             );
         } else {

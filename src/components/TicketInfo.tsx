@@ -247,7 +247,6 @@ export const TicketInfo: React.FC<{
             }}
             title={ticketInfo.title as string}
         >
-            <div>{isInCollection}</div>
             <div className="flex gap-2 flex-1 mb-3">
                 <div className="flex flex-col gap-6 flex-1">
                     <DialogSection sectionTitle="created date">
@@ -350,7 +349,7 @@ export const TicketInfo: React.FC<{
                                 </option>
                                 <option value="0">complete</option>
                                 <option value="1">reject</option>
-                                <option value="2">padding</option>
+                                <option value="2">pending</option>
                             </select>
                         </div>
                     </DialogSection>

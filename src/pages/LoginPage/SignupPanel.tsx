@@ -14,7 +14,7 @@ import { useUser } from "@/utilities/store";
 import { Button } from "@/components/Button";
 import { Loader } from "@/components/Loader";
 
-export const LoginPanel: React.FC<{
+export const SignupPanel: React.FC<{
     setIsLoginPanel: Dispatch<SetStateAction<boolean>>;
 }> = ({ setIsLoginPanel }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -71,7 +71,7 @@ export const LoginPanel: React.FC<{
         <div>
             <div className="flex flex-col gap-4">
                 <div className="text-3xl font-bold text-neutral-500 mb-4">
-                    Login
+                    Sign In
                 </div>
                 <div>
                     <input
@@ -118,7 +118,11 @@ export const LoginPanel: React.FC<{
                         onClickFun={handleLogin}
                         addonStyle="w-full flex justify-center"
                     >
-                        {isLoading ? <Loader addonStyle="h-6 w-6" /> : "Login"}
+                        {isLoading ? (
+                            <Loader addonStyle="h-6 w-6" />
+                        ) : (
+                            "Sign In"
+                        )}
                     </Button>
                 </div>
                 {isError && (

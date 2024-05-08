@@ -313,10 +313,13 @@ export const addSprint = async (sprintInfo: SprintFace) => {
 };
 
 export const toAnotherSprint = async (
-    ticketId: string,
+    movedTicket: TicketFace,
     sprintIndex: number
 ) => {
-    const ticketRef = doc(db, ticketId);
+    const ticketRef = doc(
+        db,
+        `collections/${movedTicket.collectionID}/tickets/${movedTicket.ticketID}`
+    );
 
     updateDoc(ticketRef, {
         inSprint: sprintIndex,

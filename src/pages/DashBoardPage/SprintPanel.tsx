@@ -79,8 +79,8 @@ export const SprintPanel: React.FC<{
     };
 
     const ticketsWrapClass = twMerge(
-        classNames("transition-all px-6 overflow-hidden relative h-0", {
-            "h-auto": isToggle,
+        classNames("transition-all px-6 overflow-hidden relative max-h-0", {
+            "max-h-[1000px] overflow-auto no-scrollbar": isToggle,
         })
     );
     const inputWrapClass = twMerge(classNames("flex flex-col gap-2"));
@@ -162,18 +162,14 @@ export const SprintPanel: React.FC<{
 
                             <div className="flex gap-4 items-center">
                                 <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200  h-3">
-                                    {getProgressPercentage(sprintTickets) ? (
-                                        <div
-                                            className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full `}
-                                            style={{
-                                                width: `${getProgressPercentage(
-                                                    sprintTickets
-                                                )}%`,
-                                            }}
-                                        ></div>
-                                    ) : (
-                                        <></>
-                                    )}
+                                    <div
+                                        className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full `}
+                                        style={{
+                                            width: `${getProgressPercentage(
+                                                sprintTickets
+                                            )}%`,
+                                        }}
+                                    ></div>
                                 </div>
                                 {`${getProgressPercentage(sprintTickets)}%`}
                             </div>

@@ -3,7 +3,7 @@ import { FloatingTicket } from "@/components/FloatingTicket";
 
 // component
 import { SigninPanel } from "./SigninPanel";
-import { LoginPanel } from "./LoginPanel";
+import { SignupPanel } from "./SignupPanel";
 import { useState } from "react";
 
 export const LoginPage: React.FC = () => {
@@ -59,7 +59,7 @@ export const LoginPage: React.FC = () => {
                 </div>
                 <div className="flex-1 flex flex-col p-14 gap-6 justify-center">
                     {isLoginPanel ? (
-                        <LoginPanel setIsLoginPanel={setIsLoginPanel} />
+                        <SignupPanel setIsLoginPanel={setIsLoginPanel} />
                     ) : (
                         <SigninPanel setIsLoginPanel={setIsLoginPanel} />
                     )}
