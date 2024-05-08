@@ -24,6 +24,7 @@ import { NavLink } from "react-router-dom";
 
 // components
 import { FloatingTicket } from "@/components/FloatingTicket";
+import { Footer } from "./Footer";
 
 // icon
 import { IoMdArrowRoundForward } from "react-icons/io";
@@ -66,7 +67,7 @@ const TicketList: React.FC<{ mockTickets: mockTicketFace[] }> = ({
         <Droppable droppableId={"TicketList"}>
             {({ innerRef, droppableProps, placeholder }) => (
                 <div
-                    className="flex max-h-full flex-col gap-3 bg-neutral-200 p-4 rounded-lg w-56 shadow-lg dark:bg-neutral-600"
+                    className="flex max-h-full flex-col gap-3 bg-neutral-200 p-4 pb-6 rounded-lg md:w-56 w-full shadow-lg dark:bg-neutral-600"
                     ref={innerRef}
                     {...droppableProps}
                 >
@@ -316,13 +317,13 @@ export const LandingPage: React.FC = () => {
 
     const sectionTitle = twMerge(
         classNames(
-            "text-4xl tracking-widest text-neutral-600  whitespace-nowrap text-neutral-600 font-semibold"
+            "md:text-4xl text-2xl tracking-widest text-neutral-600  whitespace-nowrap text-neutral-600 font-semibold"
         )
     );
 
     const introCardWrap = twMerge(
         classNames(
-            "flex flex-col gap-6 bg-white px-12 pt-6 py-8 rounded-xl tracking-widest overflow-hidden shadow-md hover:bg-lime-400/30 transition flex-1 intro-card"
+            "flex flex-col gap-6 bg-white px-12 pt-6 py-8 rounded-xl tracking-widest overflow-hidden shadow-lg hover:bg-lime-400/30 transition flex-1 intro-card"
         )
     );
 
@@ -539,11 +540,11 @@ export const LandingPage: React.FC = () => {
             </div>
 
             <div className="w-screen bg-stone-100 relative container-intro">
-                <div className="mx-auto w-3/4 py-24 flex flex-col gap-36">
-                    <div className=" flex flex-col gap-20">
+                <div className="mx-auto md:w-3/4 w-full md:py-24 py-12 px-10 flex flex-col gap-36">
+                    <div className="flex flex-col md:gap-20 gap-12">
                         <div className={sectionTitle}># SprintRoll</div>
 
-                        <div className="flex gap-4">
+                        <div className="gap-6 grid md:grid-cols-4 grid-cols-1">
                             <div className={introCardWrap}>
                                 <div className={introCardTitle}>輕鬆規劃</div>
                                 <div>直觀的拖放介面，快速設定和調整任務</div>
@@ -563,25 +564,39 @@ export const LandingPage: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="h-[750px] flex flex-col gap-20">
+                    <div className="min-h-[750px] flex flex-col md:gap-20 gap-12">
                         <div className={sectionTitle}># Sprint DashBoard</div>
                         <div className="text-xl text-neutral-600 tracking-wide leading-relaxed">
                             發掘全新視角的儀表板，專為提升專案透明度而設計。實時查看關鍵指標，透過精準的數據視覺化，一目了然地掌握專案進度和團隊表現。無論何時何地，都能迅速做出數據驅動的決策，確保您的專案按計劃推進，效率和成果均可預見
                         </div>
                         <div className="flex flex-col gap-6">
                             <div className="text-neutral-400">
-                                請試著拖曳左方的
+                                請試著拖曳
+                                <span className="inline-block md:hidden">
+                                    上方
+                                </span>
+                                <span className="hidden md:inline-block">
+                                    左方
+                                </span>
+                                的
                                 <span className="text-lime-500 px-2 font-bold">
                                     Ticket
                                 </span>
-                                到右方的
+                                到
+                                <span className="inline-block md:hidden">
+                                    下方
+                                </span>
+                                <span className="hidden md:inline-block">
+                                    右方
+                                </span>
+                                的
                                 <span className="text-lime-500 px-2 font-bold">
                                     Sprint DashBoard
                                 </span>
                                 中
                             </div>
 
-                            <div className="flex gap-12 items-start">
+                            <div className="flex gap-12 md:items-start md:flex-row flex-col items-stretch">
                                 <DragDropContext onDragEnd={onDragEnd}>
                                     <TicketList mockTickets={mockTickets} />
                                     <div className="relative rounded-lg flex-1 overflow-hidden shadow-lg">
@@ -596,10 +611,7 @@ export const LandingPage: React.FC = () => {
                 </div>
             </div>
 
-            <div className="text-xs p-20 bottom-10 w-screen text-center opacity-50">
-                Copyright © {new Date().getFullYear()} SprintRoll . All rights
-                reserved.
-            </div>
+            <Footer />
         </div>
     );
 };
