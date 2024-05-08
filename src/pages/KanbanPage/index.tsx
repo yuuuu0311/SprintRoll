@@ -69,7 +69,11 @@ export const KanbanPage: React.FC = () => {
 
                 ticketsSetters[source.droppableId].setter(
                     (prev: TicketFace[]) =>
-                        rearange(prev, source.index, destination.index)
+                        rearange(
+                            prev,
+                            source.index,
+                            destination.index
+                        ) as TicketFace[]
                 );
 
                 orderTicket(

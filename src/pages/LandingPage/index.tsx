@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // GSAP
 import { gsap } from "gsap";
@@ -273,7 +273,15 @@ export const LandingPage: React.FC = () => {
             status: -1,
         },
         {
+            ticketTitle: "checkout the dashboard",
+            status: -1,
+        },
+        {
             ticketTitle: "drop me into sprint cycle!",
+            status: 1,
+        },
+        {
+            ticketTitle: "let's get started",
             status: 1,
         },
     ]);
@@ -308,7 +316,7 @@ export const LandingPage: React.FC = () => {
 
     const sectionTitle = twMerge(
         classNames(
-            "text-4xl tracking-widest text-neutral-600  whitespace-nowrap"
+            "text-4xl tracking-widest text-neutral-600  whitespace-nowrap text-neutral-600 font-semibold"
         )
     );
 
@@ -530,7 +538,7 @@ export const LandingPage: React.FC = () => {
                 </div>
             </div>
 
-            <div className="h-screen w-screen bg-stone-100 relative container-intro">
+            <div className="w-screen bg-stone-100 relative container-intro">
                 <div className="mx-auto w-3/4 py-24 flex flex-col gap-36">
                     <div className=" flex flex-col gap-20">
                         <div className={sectionTitle}># SprintRoll</div>
@@ -555,17 +563,34 @@ export const LandingPage: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-20">
+                    <div className="h-[750px] flex flex-col gap-20">
                         <div className={sectionTitle}># Sprint DashBoard</div>
-                        <div className="flex gap-12 items-start">
-                            <DragDropContext onDragEnd={onDragEnd}>
-                                <TicketList mockTickets={mockTickets} />
-                                <div className="relative rounded-lg flex-1 overflow-hidden shadow-lg">
-                                    <SprintPanel
-                                        mockTickets={mockSprintTickets}
-                                    />
-                                </div>
-                            </DragDropContext>
+                        <div className="text-xl text-neutral-600 tracking-wide leading-relaxed">
+                            發掘全新視角的儀表板，專為提升專案透明度而設計。實時查看關鍵指標，透過精準的數據視覺化，一目了然地掌握專案進度和團隊表現。無論何時何地，都能迅速做出數據驅動的決策，確保您的專案按計劃推進，效率和成果均可預見
+                        </div>
+                        <div className="flex flex-col gap-6">
+                            <div className="text-neutral-400">
+                                請試著拖曳左方的
+                                <span className="text-lime-500 px-2 font-bold">
+                                    Ticket
+                                </span>
+                                到右方的
+                                <span className="text-lime-500 px-2 font-bold">
+                                    Sprint DashBoard
+                                </span>
+                                中
+                            </div>
+
+                            <div className="flex gap-12 items-start">
+                                <DragDropContext onDragEnd={onDragEnd}>
+                                    <TicketList mockTickets={mockTickets} />
+                                    <div className="relative rounded-lg flex-1 overflow-hidden shadow-lg">
+                                        <SprintPanel
+                                            mockTickets={mockSprintTickets}
+                                        />
+                                    </div>
+                                </DragDropContext>
+                            </div>
                         </div>
                     </div>
                 </div>
