@@ -1,25 +1,42 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
+    "compilerOptions": {
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "module": "ESNext",
+        "skipLibCheck": true,
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
+        "paths": {
+            "@": ["./src"],
+            "@/*": ["./src/*"],
+            "utilities/": ["./src/utilities"],
+            "utilities/*": ["./src/utilities/*"],
+            "components/": ["./src/components"],
+            "components/*": ["./src/components/*"],
+            "markData/": ["./src/markData"],
+            "markData/*": ["./src/markData/*"],
+            "interface/": ["./src/interface"],
+            "interface/*": ["./src/interface/*"],
+            "pages/": ["./src/pages"],
+            "pages/*": ["./src/pages/*"],
+            "assets/": ["./src/assets"],
+            "assets/*": ["./src/assets/*"]
+        },
 
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true
+    },
+    "include": ["src"],
+    "references": [{ "path": "./tsconfig.node.json" }]
 }
