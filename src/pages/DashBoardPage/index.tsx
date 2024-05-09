@@ -215,7 +215,7 @@ export const DashBoardPage: React.FC = () => {
         })
     );
     const inputCycleClass = twMerge(
-        classNames("rounded", {
+        classNames("rounded z-50", {
             "outline outline-2 outline-rose-500": sprintInfoError.name,
         })
     );

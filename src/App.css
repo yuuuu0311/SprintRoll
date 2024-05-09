@@ -13,6 +13,10 @@
     .text-stroke-4 {
         -webkit-text-stroke: 4px currentColor;
     }
+
+    .rs-picker-popup {
+        z-index: 999 !important;
+    }
 }
 
 @layer utilities {
@@ -24,4 +28,8 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
+}
+
+.rs-picker-popup {
+    z-index: 999 !important;
 }
