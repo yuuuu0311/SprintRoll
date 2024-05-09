@@ -584,6 +584,10 @@ export const LandingPage: React.FC = () => {
                     <div className="flex flex-col md:gap-20 gap-12">
                         <div className={sectionTitle}># SprintRoll</div>
 
+                        <div className="text-xl text-neutral-600 tracking-wide leading-relaxed">
+                            在快速變化的開發環境中，一個高效的專案管理工具是重要的。我們深知您面對的挑戰，因此特別設計了一套能夠滿足現代管理需求的解決方案。此工具具備以下四大核心功能，旨在提升您的工作效率並優化團隊合作：
+                        </div>
+
                         <div className="gap-6 grid md:grid-cols-4 grid-cols-1">
                             <div className={introCardWrap}>
                                 <div className={introCardTitle}>輕鬆規劃</div>
