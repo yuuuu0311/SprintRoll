@@ -91,58 +91,67 @@ export const TicketList: React.FC<{
                         {...draggableProps}
                         {...dragHandleProps}
                     >
-                        <Droppable droppableId={collectionInfo.collectionID}>
-                            {({ innerRef, droppableProps, placeholder }) => (
-                                <div
-                                    className="flex max-h-full flex-col gap-3 bg-neutral-200 p-4 rounded-lg w-56 shadow-lg dark:bg-neutral-600"
-                                    ref={innerRef}
-                                    {...droppableProps}
-                                    {...dragHandleProps}
-                                >
-                                    <div className="flex justify-between items-center">
-                                        <h3 className="text-lg text-neutral-700 font-bold capitalize dark:text-stone-200">
-                                            {collectionInfo.name}
-                                        </h3>
-                                        <MdOutlineDelete
-                                            className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500 dark:text-stone-200"
-                                            onClick={handleDialogToggle}
+                        <div className="p-4 bg-neutral-200  rounded-lg w-56 shadow-lg">
+                            <div className="flex justify-between items-center mb-3">
+                                <h3 className="text-lg text-neutral-700 font-bold capitalize">
+                                    {collectionInfo.name}
+                                </h3>
+                                <MdOutlineDelete
+                                    className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500"
+                                    onClick={handleDialogToggle}
+                                />
+                            </div>
+                            <Droppable
+                                droppableId={collectionInfo.collectionID}
+                            >
+                                {({
+                                    innerRef,
+                                    droppableProps,
+                                    placeholder,
+                                }) => (
+                                    <div
+                                        className="flex max-h-full flex-col gap-3 "
+                                        ref={innerRef}
+                                        {...droppableProps}
+                                        {...dragHandleProps}
+                                    >
+                                        <div className="flex h-full overflow-auto  no-scrollbar flex-col gap-3">
+                                            {ticketsData === undefined && (
+                                                <Loader />
+                                            )}
+                                            {(
+                                                ticketsData as CollectionFace[]
+                                            )?.map(
+                                                (
+                                                    ticket: TicketFace,
+                                                    index: number
+                                                ) => (
+                                                    <Ticket
+                                                        ticketInfo={ticket}
+                                                        index={index}
+                                                        key={ticket.ticketID}
+                                                        isInCollection={
+                                                            collectionInfo.collectionID
+                                                        }
+                                                    />
+                                                )
+                                            )}
+
+                                            {placeholder}
+                                        </div>
+
+                                        <AddTicketInput
+                                            collectionID={
+                                                collectionInfo.collectionID
+                                            }
+                                            ticketsLength={
+                                                ticketsData?.length as number
+                                            }
                                         />
                                     </div>
-
-                                    <div className="flex h-full overflow-auto  no-scrollbar flex-col gap-3">
-                                        {ticketsData === undefined && (
-                                            <Loader />
-                                        )}
-                                        {(ticketsData as CollectionFace[])?.map(
-                                            (
-                                                ticket: TicketFace,
-                                                index: number
-                                            ) => (
-                                                <Ticket
-                                                    ticketInfo={ticket}
-                                                    index={index}
-                                                    key={ticket.ticketID}
-                                                    isInCollection={
-                                                        collectionInfo.collectionID
-                                                    }
-                                                />
-                                            )
-                                        )}
-
-                                        {placeholder}
-                                    </div>
-
-                                    <AddTicketInput
-                                        collectionID={
-                                            collectionInfo.collectionID
-                                        }
-                                        ticketsLength={
-                                            ticketsData?.length as number
-                                        }
-                                    />
-                                </div>
-                            )}
-                        </Droppable>
+                                )}
+                            </Droppable>
+                        </div>
                     </div>
                 )}
             </Draggable>
