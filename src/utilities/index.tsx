@@ -296,8 +296,11 @@ export const updateTicketInfo = async (
     });
 };
 
-export const resetTicketStatus = async (ticketID: string) => {
-    const docRef = doc(db, ticketID);
+export const resetTicketStatus = async (ticketInfo: TicketFace) => {
+    const docRef = doc(
+        db,
+        `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
+    );
 
     await updateDoc(docRef, {
         inSprint: null,

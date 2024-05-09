@@ -79,7 +79,7 @@ export const SprintPanel: React.FC<{
     };
 
     const ticketsWrapClass = twMerge(
-        classNames("transition-all px-6 overflow-hidden relative max-h-0", {
+        classNames("transition-all px-6 overflow-hidden relative max-h-0 z-0", {
             "max-h-[1000px] overflow-auto no-scrollbar": isToggle,
         })
     );
@@ -113,7 +113,7 @@ export const SprintPanel: React.FC<{
             >
                 {({ innerRef, placeholder }) => (
                     <div className="transition hover:brightness-95 bg-neutral-100">
-                        <div className="sticky top-0 bg-stone-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3 ">
+                        <div className="sticky top-0 bg-stone-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3 z-[1]">
                             <div className="flex justify-end gap-2">
                                 <MdOutlineEdit
                                     className="text-lg hover:text-lime-500 transition"
@@ -161,7 +161,7 @@ export const SprintPanel: React.FC<{
                             )}
 
                             <div className="flex gap-4 items-center">
-                                <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200  h-3">
+                                <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200 h-3">
                                     <div
                                         className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full `}
                                         style={{

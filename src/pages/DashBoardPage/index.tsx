@@ -161,7 +161,7 @@ export const DashBoardPage: React.FC = () => {
                 return prev;
             });
 
-            resetTicketStatus(movedTicket.ticketID as string);
+            resetTicketStatus(movedTicket as TicketFace);
         }
     };
 
