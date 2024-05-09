@@ -292,11 +292,12 @@ export const LandingPage: React.FC = () => {
             {
                 opacity: 1,
                 borderRadius: 0,
+                padding: "0%",
             },
             {
                 opacity: 0.75,
                 borderRadius: 24,
-                scale: 0.9,
+                padding: "10%",
                 transformOrigin: "center center",
                 ease: "expoScale(0.5,7,none)",
                 scrollTrigger: {
@@ -305,6 +306,25 @@ export const LandingPage: React.FC = () => {
                     start: "top top",
                     end: "bottom top",
                     pin: true,
+                    scrub: 3,
+                    // markers: true,
+                },
+            }
+        );
+        gsap.fromTo(
+            ".hero-inner",
+            {
+                borderRadius: 0,
+            },
+            {
+                borderRadius: 24,
+                transformOrigin: "center center",
+                ease: "expoScale(0.5,7,none)",
+                scrollTrigger: {
+                    trigger: ".hero",
+                    scroller: ".landing-page",
+                    start: "top top",
+                    end: "bottom top",
                     scrub: 3,
                     // markers: true,
                 },
@@ -460,100 +480,102 @@ export const LandingPage: React.FC = () => {
 
     return (
         <div className="h-screen w-full overflow-x-hidden overflow-y-auto no-scrollbar bg-stone-100 landing-page">
-            <div className="h-screen w-screen mx-auto relative grid place-items-center overflow-hidden hero">
-                <motion.div
-                    className="opacity-50 absolute w-full h-full bg-neutral-300"
-                    initial={{
-                        scale: 1,
-                    }}
-                    animate={{
-                        scale: 1.5,
-                    }}
-                    transition={{
-                        duration: 4,
-                        ease: "easeInOut",
-                    }}
-                >
-                    {Array.from(Array(5)).map((ele, index) => (
-                        <FloatingTicket
-                            key={`${ele}+${index}`}
-                            index={index}
-                            domain={0}
-                        />
-                    ))}
-                    {Array.from(Array(2)).map((ele, index) => (
-                        <FloatingTicket
-                            key={`${ele}+${index}`}
-                            index={index}
-                            domain={1}
-                        />
-                    ))}
-                    {Array.from(Array(3)).map((ele, index) => (
-                        <FloatingTicket
-                            key={`${ele}+${index}`}
-                            index={index}
-                            domain={2}
-                        />
-                    ))}
-                    {Array.from(Array(5)).map((ele, index) => (
-                        <FloatingTicket
-                            key={`${ele}+${index}`}
-                            index={index}
-                            domain={3}
-                        />
-                    ))}
-                </motion.div>
-                <div className="z-50 w-fit mx-auto flex flex-col gap-2 justify-center items-center md:scale-150 tracking-widest">
-                    <div className="relative h-20 w-full flex overflow-hidden justify-center items-center text-stroke-4 select-none pointer-events-none">
-                        {Array.from("SprintRoll").map((word, index) => (
-                            <motion.div
-                                key={`${word}-${index}`}
-                                className="text-6xl tex-bold text-stroke-2 "
+            <div className="hero h-screen w-screen overflow-hidden hero">
+                <div className="h-full w-full mx-auto relative grid place-items-center overflow-hidden hero-inner">
+                    <motion.div
+                        className="opacity-50 absolute w-full h-full bg-neutral-300"
+                        initial={{
+                            scale: 1,
+                        }}
+                        animate={{
+                            scale: 1.5,
+                        }}
+                        transition={{
+                            duration: 4,
+                            ease: "easeInOut",
+                        }}
+                    >
+                        {Array.from(Array(5)).map((ele, index) => (
+                            <FloatingTicket
+                                key={`${ele}+${index}`}
+                                index={index}
+                                domain={0}
+                            />
+                        ))}
+                        {Array.from(Array(2)).map((ele, index) => (
+                            <FloatingTicket
+                                key={`${ele}+${index}`}
+                                index={index}
+                                domain={1}
+                            />
+                        ))}
+                        {Array.from(Array(3)).map((ele, index) => (
+                            <FloatingTicket
+                                key={`${ele}+${index}`}
+                                index={index}
+                                domain={2}
+                            />
+                        ))}
+                        {Array.from(Array(5)).map((ele, index) => (
+                            <FloatingTicket
+                                key={`${ele}+${index}`}
+                                index={index}
+                                domain={3}
+                            />
+                        ))}
+                    </motion.div>
+                    <div className="z-50 w-fit mx-auto flex flex-col gap-2 justify-center items-center md:scale-150 tracking-widest">
+                        <div className="relative h-20 w-full flex overflow-hidden justify-center items-center text-stroke-4 select-none pointer-events-none">
+                            {Array.from("SprintRoll").map((word, index) => (
+                                <motion.div
+                                    key={`${word}-${index}`}
+                                    className="text-6xl tex-bold text-stroke-2 "
+                                    initial={{
+                                        translateY: "100%",
+                                        opacity: 0,
+                                        color: "#FFFFFF",
+                                    }}
+                                    animate={{
+                                        translateY: "0%",
+                                        opacity: 1,
+                                        color: "#454545",
+                                    }}
+                                    transition={{
+                                        duration: 1,
+                                        ease: [0, 0.71, 0.2, 1.01],
+                                        delay: index / 12,
+                                        repeat: 2,
+                                        repeatType: "reverse",
+                                    }}
+                                >
+                                    {word}
+                                </motion.div>
+                            ))}
+                        </div>
+                        <div className="text-xl text-bold scale-110 select-none pointer-events-none">
+                            your best rollup option
+                        </div>
+                        <NavLink to="/login">
+                            <motion.button
+                                className="flex gap-2 items-center py-1 px-3 text-stone-100 bg-neutral-600 rounded-full mt-3 active:bg-neutral-600 active:scale-90 hover:bg-neutral-700 transition select-none"
                                 initial={{
-                                    translateY: "100%",
                                     opacity: 0,
-                                    color: "#FFFFFF",
                                 }}
                                 animate={{
-                                    translateY: "0%",
                                     opacity: 1,
-                                    color: "#454545",
                                 }}
                                 transition={{
                                     duration: 1,
-                                    ease: [0, 0.71, 0.2, 1.01],
-                                    delay: index / 12,
-                                    repeat: 2,
-                                    repeatType: "reverse",
+                                    ease: "easeInOut",
                                 }}
                             >
-                                {word}
-                            </motion.div>
-                        ))}
+                                <div>Start</div>
+                                <div>
+                                    <IoMdArrowRoundForward />
+                                </div>
+                            </motion.button>
+                        </NavLink>
                     </div>
-                    <div className="text-xl text-bold scale-110 select-none pointer-events-none">
-                        your best rollup option
-                    </div>
-                    <NavLink to="/login">
-                        <motion.button
-                            className="flex gap-2 items-center py-1 px-3 text-stone-100 bg-neutral-600 rounded-full mt-3 active:bg-neutral-600 active:scale-90 hover:bg-neutral-700 transition select-none"
-                            initial={{
-                                opacity: 0,
-                            }}
-                            animate={{
-                                opacity: 1,
-                            }}
-                            transition={{
-                                duration: 1,
-                                ease: "easeInOut",
-                            }}
-                        >
-                            <div>Start</div>
-                            <div>
-                                <IoMdArrowRoundForward />
-                            </div>
-                        </motion.button>
-                    </NavLink>
                 </div>
             </div>
 
