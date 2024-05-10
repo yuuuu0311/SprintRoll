@@ -220,7 +220,7 @@ export const DashBoardPage: React.FC = () => {
     return (
         <div className="flex flex-col items-start w-full h-full">
             <div className="px-12 py-4 gap-2 text-neutral-500 hidden md:flex">
-                <span>{project}</span>
+                <span className="line-clamp-1">{project}</span>
                 <span>/</span>
                 <span>all</span>
             </div>

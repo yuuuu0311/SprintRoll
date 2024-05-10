@@ -91,9 +91,9 @@ export const SprintPanel: React.FC<{
     const getTicketWrapClass = (isDraggingOver: boolean) => {
         const ticketsWrapClass = twMerge(
             classNames(
-                "transition-all relative mx-6 p-3 overflow-hidden max-h-0 ",
+                "transition-all relative mx-6 overflow-hidden max-h-0 ",
                 {
-                    "max-h-[1000px] overflow-auto no-scrollbar": isToggle,
+                    "max-h-[1000px] overflow-auto no-scrollbar p-3": isToggle,
                     "bg-neutral-300/50 w-[calc(100% - 3rem)] rounded-md":
                         isDraggingOver,
                 }
@@ -125,7 +125,7 @@ export const SprintPanel: React.FC<{
 
     return (
         <div className="relative">
-            <div className="transition hover:brightness-95 hover:z-[-0] bg-neutral-100 relative z-1">
+            <div className="transition hover:brightness-95 hover:z-[-0] bg-neutral-100 relative z-10">
                 <div className="sticky top-0 bg-stone-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3 z-[1]">
                     <div className="flex justify-end gap-2">
                         <MdOutlineEdit
@@ -266,6 +266,13 @@ export const SprintPanel: React.FC<{
 
                     <div className="flex justify-end gap-2">
                         <Button
+                            rounded
+                            secondary
+                            onClickFun={() => handleDialogToggle("delete")}
+                        >
+                            Close
+                        </Button>
+                        <Button
                             danger
                             rounded
                             onClickFun={() => {
@@ -274,13 +281,6 @@ export const SprintPanel: React.FC<{
                             }}
                         >
                             delete
-                        </Button>
-                        <Button
-                            rounded
-                            secondary
-                            onClickFun={() => handleDialogToggle("delete")}
-                        >
-                            Close
                         </Button>
                     </div>
                 </Dialog>

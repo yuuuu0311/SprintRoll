@@ -64,9 +64,11 @@ export const ProfileCard: React.FC<{
             <div className="cursor-pointer flex-1 hover:bg-neutral-200 transition bg-stone-100 w-full h-auto aspect-square rounded-md overflow-hidden p-5 flex flex-col gap-2 shadow-lg">
                 <NavLink
                     to={`/${projectInfo.name}/all`}
-                    className="flex-1 text-xl"
+                    className="text-xl flex-1 line-clamp-1"
                 >
-                    {projectInfo.name}
+                    <span className="text-xl line-clamp-1">
+                        {projectInfo.name}
+                    </span>
                 </NavLink>
 
                 {isCollaborative ? (
@@ -100,18 +102,18 @@ export const ProfileCard: React.FC<{
 
                     <div className="flex justify-end gap-2">
                         <Button
-                            danger
-                            rounded
-                            onClickFun={() => handleDeleteProject(projectInfo)}
-                        >
-                            delete
-                        </Button>
-                        <Button
                             rounded
                             secondary
                             onClickFun={() => handleDialogToggle("delete")}
                         >
                             Close
+                        </Button>
+                        <Button
+                            danger
+                            rounded
+                            onClickFun={() => handleDeleteProject(projectInfo)}
+                        >
+                            delete
                         </Button>
                     </div>
                 </Dialog>

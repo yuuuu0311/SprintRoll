@@ -135,7 +135,7 @@ export const KanbanPage: React.FC = () => {
             {collectionsData !== undefined && (
                 <div className="h-full flex flex-col">
                     <div className="px-12 py-4 gap-2 text-neutral-500 hidden md:flex">
-                        <span>{project}</span>
+                        <span className="line-clamp-1">{project}</span>
                         <span>/</span>
                         <span>{domain}</span>
                     </div>

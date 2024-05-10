@@ -28,7 +28,7 @@ export const Button: React.FC<ButtonProps> = ({ ...props }) => {
                 props.danger,
             "text-white bg-lime-500 hover:bg-lime-600 active:bg-lime-500":
                 props.success,
-            "text-neutral-700 hover:bg-neutral-600":
+            "text-neutral-400 hover:bg-neutral-300 hover:text-neutral-600":
                 props.primary && props.link,
         })
     );

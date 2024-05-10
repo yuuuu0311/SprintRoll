@@ -31,7 +31,7 @@ export const TabAccordion: React.FC<{
             classNames(
                 "transition-all text-neutral-400 rounded-md py-2 px-3 bg-neutral-200 hover:pl-5",
                 {
-                    "text-neutral-500 dark:text-stone-300": isActive,
+                    "text-neutral-700": isActive,
                 }
             )
         );
@@ -71,7 +71,7 @@ export const TabAccordion: React.FC<{
                 onClick={() => setIsActive((prev) => !prev)}
                 className={navigationTitleClass}
             >
-                <span>{projectInfo.name}</span>
+                <span className="line-clamp-1 flex-1">{projectInfo.name}</span>
                 <MdExpandMore className={navigationTitleIconClass} />
             </div>
             <ul className={navigationWrapClass}>
@@ -127,8 +127,10 @@ export const TabAccordion: React.FC<{
                 ) : (
                     <Button
                         rounded
-                        secondary
+                        primary
+                        link
                         onClickFun={() => setIsAddDomain(true)}
+                        addonStyle={"text-left"}
                     >
                         + add
                     </Button>

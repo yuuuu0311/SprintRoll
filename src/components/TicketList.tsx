@@ -105,18 +105,22 @@ export const TicketList: React.FC<{
                             <Droppable
                                 droppableId={collectionInfo.collectionID}
                             >
-                                {({
-                                    innerRef,
-                                    droppableProps,
-                                    placeholder,
-                                }) => (
+                                {(
+                                    { innerRef, droppableProps, placeholder },
+                                    { isDraggingOver }
+                                ) => (
                                     <div
                                         className="flex max-h-full flex-col gap-3 "
                                         ref={innerRef}
                                         {...droppableProps}
                                         {...dragHandleProps}
                                     >
-                                        <div className="flex h-full overflow-auto  no-scrollbar flex-col gap-3">
+                                        <div
+                                            className={`flex h-full overflow-auto  no-scrollbar flex-col gap-3 transition-all ${
+                                                isDraggingOver &&
+                                                "bg-neutral-300/50 p-2 rounded-md"
+                                            }`}
+                                        >
                                             {ticketsData === undefined && (
                                                 <Loader />
                                             )}
@@ -172,6 +176,13 @@ export const TicketList: React.FC<{
 
                     <div className="flex justify-end gap-2">
                         <Button
+                            rounded
+                            secondary
+                            onClickFun={handleDialogToggle}
+                        >
+                            Close
+                        </Button>
+                        <Button
                             danger
                             rounded
                             onClickFun={() =>
@@ -179,13 +190,6 @@ export const TicketList: React.FC<{
                             }
                         >
                             delete
-                        </Button>
-                        <Button
-                            rounded
-                            secondary
-                            onClickFun={handleDialogToggle}
-                        >
-                            Close
                         </Button>
                     </div>
                 </Dialog>

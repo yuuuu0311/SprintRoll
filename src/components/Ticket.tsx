@@ -105,7 +105,10 @@ export const Ticket: React.FC<{
         return labelArr.length;
     };
 
-    console.log();
+    const getDraggingStyle = (isDragging: boolean) => {
+        const classes = twMerge(classNames({ "shadow-lg": isDragging }));
+        return classes;
+    };
 
     return (
         <>
@@ -117,11 +120,15 @@ export const Ticket: React.FC<{
                     }
                     isDragDisabled={dialogActive}
                 >
-                    {({ innerRef, draggableProps, dragHandleProps }) => (
+                    {(
+                        { innerRef, draggableProps, dragHandleProps },
+                        { isDragging }
+                    ) => (
                         <div
                             ref={innerRef}
                             {...draggableProps}
                             {...dragHandleProps}
+                            className={getDraggingStyle(isDragging)}
                         >
                             <div
                                 className={ticketsClass}
@@ -129,7 +136,9 @@ export const Ticket: React.FC<{
                             >
                                 <div className={ticketsDomainClass}></div>
                                 <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
-                                    <div className="">{ticketInfo.title}</div>
+                                    <div className="line-clamp-1">
+                                        {ticketInfo.title}
+                                    </div>
                                     {needRenderLabel(
                                         ticketInfo.label as LabelFace
                                     ) > 0 ? (
