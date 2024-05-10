@@ -78,11 +78,29 @@ export const SprintPanel: React.FC<{
         }));
     };
 
-    const ticketsWrapClass = twMerge(
-        classNames("transition-all px-6 overflow-hidden relative max-h-0 z-0", {
-            "max-h-[1000px] overflow-auto no-scrollbar": isToggle,
-        })
-    );
+    const getTicketInnerWrapClass = (isDraggingOver: boolean) => {
+        const ticketsWrapClass = twMerge(
+            classNames("flex flex-col items-start", {
+                "gap-2": isDraggingOver,
+            })
+        );
+
+        return ticketsWrapClass;
+    };
+
+    const getTicketWrapClass = (isDraggingOver: boolean) => {
+        const ticketsWrapClass = twMerge(
+            classNames(
+                "transition-all relative mx-6 p-3 overflow-hidden max-h-0",
+                {
+                    "max-h-[1000px] overflow-auto no-scrollbar": isToggle,
+                    "bg-neutral-300/50 w-[calc(100% - 3rem)] rounded-md":
+                        isDraggingOver,
+                }
+            )
+        );
+        return ticketsWrapClass;
+    };
     const inputWrapClass = twMerge(classNames("flex flex-col gap-2"));
     const inputTitleClass = twMerge(classNames("rounded w-full py-1 px-2"));
     const inputCycleClass = twMerge(classNames("rounded"));
@@ -106,76 +124,81 @@ export const SprintPanel: React.FC<{
     }, [sprintTickets]);
 
     return (
-        <div>
-            <Droppable
-                droppableId={`sprintTickets-${index}`}
-                type="droppableItem"
-            >
-                {({ innerRef, placeholder }) => (
-                    <div className="transition hover:brightness-95 bg-neutral-100">
-                        <div className="sticky top-0 bg-stone-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3 z-[1]">
-                            <div className="flex justify-end gap-2">
-                                <MdOutlineEdit
-                                    className="text-lg hover:text-lime-500 transition"
-                                    onClick={() => handleDialogToggle("edit")}
-                                />
-                                <MdOutlineDelete
-                                    className="text-lg hover:text-rose-500 transition"
-                                    onClick={() => handleDialogToggle("delete")}
-                                />
+        <div className="relative">
+            <div className="transition hover:brightness-95 bg-neutral-100 relative">
+                <div className="sticky top-0 bg-stone-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3">
+                    <div className="flex justify-end gap-2">
+                        <MdOutlineEdit
+                            className="text-lg hover:text-lime-500 transition"
+                            onClick={() => handleDialogToggle("edit")}
+                        />
+                        <MdOutlineDelete
+                            className="text-lg hover:text-rose-500 transition"
+                            onClick={() => handleDialogToggle("delete")}
+                        />
+                    </div>
+                    <div className="text-neutral-600 flex flex-col gap-1">
+                        <div className="flex justify-between items-baseline">
+                            <div className="font-bold text-3xl flex gap-2 items-center">
+                                <span>{sprintInfo.name}</span>
                             </div>
-                            <div className="text-neutral-600 flex flex-col gap-1">
-                                <div className="flex justify-between items-baseline">
-                                    <div className="font-bold text-3xl flex gap-2 items-center">
-                                        <span>{sprintInfo.name}</span>
-                                    </div>
-                                    <span className="text-sm">
-                                        # Sprint {index}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between items-baseline text-sm text-neutral-500">
-                                    <span className="">
-                                        {sprintTickets.length} tickets inside
-                                    </span>
-                                    <span className=" flex gap-2">
-                                        <span>
-                                            {getDateString(
-                                                sprintInfo.cycle[0] as Timestamp
-                                            )}
-                                        </span>
-                                        -
-                                        <span>
-                                            {getDateString(
-                                                sprintInfo.cycle[1] as Timestamp
-                                            )}
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                            {sprintInfo.description.length === 0 ? (
-                                <></>
-                            ) : (
-                                <div className="text-neutral-500">
-                                    {sprintInfo.description}
-                                </div>
-                            )}
-
-                            <div className="flex gap-4 items-center">
-                                <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200 h-3">
-                                    <div
-                                        className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full `}
-                                        style={{
-                                            width: `${getProgressPercentage(
-                                                sprintTickets
-                                            )}%`,
-                                        }}
-                                    ></div>
-                                </div>
-                                {`${getProgressPercentage(sprintTickets)}%`}
-                            </div>
+                            <span className="text-sm"># Sprint {index}</span>
                         </div>
-                        <div className={ticketsWrapClass} ref={innerRef}>
-                            <div className="flex flex-col">
+                        <div className="flex justify-between items-baseline text-sm text-neutral-500">
+                            <span className="">
+                                {sprintTickets.length} tickets inside
+                            </span>
+                            <span className=" flex gap-2">
+                                <span>
+                                    {getDateString(
+                                        sprintInfo.cycle[0] as Timestamp
+                                    )}
+                                </span>
+                                -
+                                <span>
+                                    {getDateString(
+                                        sprintInfo.cycle[1] as Timestamp
+                                    )}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    {sprintInfo.description.length === 0 ? (
+                        <></>
+                    ) : (
+                        <div className="text-neutral-500">
+                            {sprintInfo.description}
+                        </div>
+                    )}
+
+                    <div className="flex gap-4 items-center">
+                        <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200 h-3">
+                            <div
+                                className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full `}
+                                style={{
+                                    width: `${getProgressPercentage(
+                                        sprintTickets
+                                    )}%`,
+                                }}
+                            ></div>
+                        </div>
+                        {`${getProgressPercentage(sprintTickets)}%`}
+                    </div>
+                </div>
+                <Droppable
+                    droppableId={`sprintTickets-${index}`}
+                    type="droppableItem"
+                >
+                    {({ innerRef, placeholder }, { isDraggingOver }) => (
+                        <div
+                            className={getTicketWrapClass(isDraggingOver)}
+                            ref={innerRef}
+                        >
+                            <div
+                                className={getTicketInnerWrapClass(
+                                    isDraggingOver
+                                )}
+                            >
                                 {isTicketLoading && <div>Loading</div>}
                                 {sprintTickets.length === 0 ? (
                                     <div className="text-neutral-300 text-sm">
@@ -214,20 +237,19 @@ export const SprintPanel: React.FC<{
                                         </Draggable>
                                     ))
                                 )}
+
+                                {placeholder}
                             </div>
-                            {placeholder}
                         </div>
-                        <div
-                            onClick={() =>
-                                setIsToggle((prev) => (prev ? false : true))
-                            }
-                            className="flex justify-center transition hover:bg-neutral-200 py-2 text-neutral-400"
-                        >
-                            {isToggle ? "less" : "more"}
-                        </div>
-                    </div>
-                )}
-            </Droppable>
+                    )}
+                </Droppable>
+                <div
+                    onClick={() => setIsToggle((prev) => (prev ? false : true))}
+                    className="flex justify-center transition hover:bg-neutral-200 py-2 text-neutral-400"
+                >
+                    {isToggle ? "less" : "more"}
+                </div>
+            </div>
 
             {dialogActive.delete && (
                 <Dialog
