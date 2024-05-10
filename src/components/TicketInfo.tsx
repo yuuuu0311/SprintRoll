@@ -23,7 +23,7 @@ import { Dialog } from "@/components/Dialog";
 
 // utilities
 import {
-    deleteTicket,
+    // deleteTicket,
     // getDomainDeveloper,
     // assignDeveloper,
     // removeFromAssigned,
@@ -170,7 +170,7 @@ export const TicketInfo: React.FC<{
     index: number;
     isInCollection?: string;
     setDialogActive: Dispatch<SetStateAction<boolean>>;
-}> = ({ isInCollection, index, ticketInfo, setDialogActive }) => {
+}> = ({ ticketInfo, setDialogActive }) => {
     // const [assignedDeveloper, setAssignedDeveloper] = useState<
     //     UserFace[] | void
     // >();

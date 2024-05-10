@@ -352,6 +352,7 @@ export const addCollaborator = async (
     projectID: string | undefined,
     uid: string,
     data: {
+        email: string;
         name: string;
         role: number;
     }

@@ -2,6 +2,8 @@ import ReactDOM from "react-dom";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
+import { MdClose } from "react-icons/md";
+
 export const Dialog: React.FC<{
     children: React.ReactNode;
     title: string;
@@ -18,9 +20,12 @@ export const Dialog: React.FC<{
         )
     );
     const titleClass = twMerge(
-        classNames(`px-8 py-6 font-bold text-xl capitalize text-neutral-600`, {
-            "text-rose-500": danger,
-        })
+        classNames(
+            `px-8 py-6 font-bold text-xl capitalize text-neutral-600 flex justify-between`,
+            {
+                "text-rose-500": danger,
+            }
+        )
     );
 
     return ReactDOM.createPortal(
@@ -31,7 +36,13 @@ export const Dialog: React.FC<{
             ></div>
             <div className={dialogClass}>
                 {title.length !== 0 && (
-                    <div className={titleClass}>{title}</div>
+                    <div className={titleClass}>
+                        {title}
+                        <MdClose
+                            className="hover:text-neutral-400 transition"
+                            onClick={handleDialogToggle}
+                        />
+                    </div>
                 )}
                 <div className="flex flex-col flex-1 px-6 pb-6">{children}</div>
             </div>
