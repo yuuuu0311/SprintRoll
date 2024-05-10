@@ -27,15 +27,12 @@ export const TicketStatusRow: React.FC<{
     // style
     const ticketRowClass = twMerge(
         classNames(
-            "flex flex-wrap gap-2 justify-between bg-stone-100 hover:pl-5 p-2 hover:bg-stone-200/80 transition-all rounded-full",
+            "flex flex-wrap gap-2 justify-between bg-stone-100 hover:pl-5 p-2 hover:bg-stone-200/80 transition-all rounded-full relative",
             {
                 "z-50 shadow-lg fixed w-full": isDragging,
             }
         )
     );
-    useEffect(() => {
-        console.log(isDragging);
-    }, [isDragging]);
 
     const ticketStatusLightBg = twMerge(
         classNames(
@@ -101,7 +98,7 @@ export const TicketStatusRow: React.FC<{
                 onClick={() => {
                     setDialogActive((prev) => !prev);
                 }}
-                className="w-full"
+                className="w-full relative"
             >
                 <div className={ticketRowClass}>
                     <div className="flex gap-4 items-center flex-1">

@@ -80,7 +80,7 @@ export const SprintPanel: React.FC<{
 
     const getTicketInnerWrapClass = (isDraggingOver: boolean) => {
         const ticketsWrapClass = twMerge(
-            classNames("flex flex-col items-start", {
+            classNames("flex flex-col items-start relative", {
                 "gap-2": isDraggingOver,
             })
         );
@@ -91,7 +91,7 @@ export const SprintPanel: React.FC<{
     const getTicketWrapClass = (isDraggingOver: boolean) => {
         const ticketsWrapClass = twMerge(
             classNames(
-                "transition-all relative mx-6 p-3 overflow-hidden max-h-0",
+                "transition-all relative mx-6 p-3 overflow-hidden max-h-0 ",
                 {
                     "max-h-[1000px] overflow-auto no-scrollbar": isToggle,
                     "bg-neutral-300/50 w-[calc(100% - 3rem)] rounded-md":
@@ -125,8 +125,8 @@ export const SprintPanel: React.FC<{
 
     return (
         <div className="relative">
-            <div className="transition hover:brightness-95 bg-neutral-100 relative">
-                <div className="sticky top-0 bg-stone-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3">
+            <div className="transition hover:brightness-95 hover:z-[-0] bg-neutral-100 relative z-1">
+                <div className="sticky top-0 bg-stone-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3 z-[1]">
                     <div className="flex justify-end gap-2">
                         <MdOutlineEdit
                             className="text-lg hover:text-lime-500 transition"
