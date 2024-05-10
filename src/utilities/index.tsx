@@ -379,6 +379,23 @@ export const deleteAllTickets = async (collectionPath: string) => {
     }
 };
 
+export const deleteAllSprints = async (projectInfo: ProjectFace) => {
+    const sprintsRef = query(
+        collection(db, "sprints"),
+        where("project", "==", projectInfo.name)
+    );
+
+    try {
+        const snapshot = await getDocs(sprintsRef);
+
+        snapshot.forEach((doc) => {
+            deleteDoc(doc.ref);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const deleteAllCollection = async (projectInfo: ProjectFace) => {
     const collectionRef = query(
         collection(db, "collections"),

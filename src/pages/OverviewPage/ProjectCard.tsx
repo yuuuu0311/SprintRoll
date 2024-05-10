@@ -12,7 +12,7 @@ import {
     addCollaborator,
     debounce,
 } from "@/utilities";
-import { deleteAllCollection } from "@/utilities";
+import { deleteAllCollection, deleteAllSprints } from "@/utilities";
 import { useCollaborators } from "@/utilities/hook";
 
 //components
@@ -52,6 +52,7 @@ export const ProfileCard: React.FC<{
 
     const handleDeleteProject = (projectInfo: ProjectFace) => {
         deleteProject(projectInfo);
+        deleteAllSprints(projectInfo);
         deleteAllCollection(projectInfo);
     };
 
