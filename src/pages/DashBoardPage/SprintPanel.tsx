@@ -1,7 +1,7 @@
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 import { Timestamp } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 
@@ -183,11 +183,35 @@ export const SprintPanel: React.FC<{
                                     </div>
                                 ) : (
                                     sprintTickets.map((ticket, index) => (
-                                        <TicketStatusRow
+                                        <Draggable
                                             index={index}
-                                            ticketInfo={ticket}
                                             key={`${ticket.ticketID}-${ticket.order}`}
-                                        />
+                                            draggableId={
+                                                ticket.ticketID as string
+                                            }
+                                        >
+                                            {(
+                                                {
+                                                    innerRef,
+                                                    draggableProps,
+                                                    dragHandleProps,
+                                                },
+                                                { isDragging }
+                                            ) => (
+                                                <TicketStatusRow
+                                                    index={index}
+                                                    innerRef={innerRef}
+                                                    draggableProps={
+                                                        draggableProps
+                                                    }
+                                                    dragHandleProps={
+                                                        dragHandleProps
+                                                    }
+                                                    isDragging={isDragging}
+                                                    ticketInfo={ticket}
+                                                />
+                                            )}
+                                        </Draggable>
                                     ))
                                 )}
                             </div>
@@ -281,7 +305,7 @@ export const SprintPanel: React.FC<{
                         <div className={inputWrapClass}>
                             <div className="text-neutral-500">description</div>
                             <textarea
-                                className="p-2 text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-neutral-300 outline-none transition "
+                                className="p-2 bg-white text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-neutral-300 outline-none transition "
                                 placeholder="add some description here"
                                 onChange={(e) => {
                                     setNewSprintInfo((prev) => ({

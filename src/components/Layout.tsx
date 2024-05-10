@@ -23,7 +23,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
     const navigationWrapClass = twMerge(classNames("flex flex-col"));
 
     return (
-        <div className="flex flex-col md:flex-row h-screen w-screen bg-neutral-300 dark:bg-neutral-800">
+        <div className="flex flex-col md:flex-row h-screen w-screen bg-neutral-300">
             <TabNavigation>
                 <div className={navigationWrapClass}>
                     {projectInfo?.map((project) => (
@@ -33,7 +33,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
                         <TabAccordion projectInfo={project} key={project.id} />
                     ))}
                 </div>
-                <div className="mt-auto px-4 py-3 border-t-2 border-t-solid border-t-neutral-300/50 text-neutral-500 hover:bg-neutral-400/50 transition dark:bg-neutral-600 dark:text-stone-200 dark:border-t-neutral-500/50">
+                <div className="mt-auto sticky bottom-0 px-4 py-3 border-t-2 border-t-solid bg-neutral-300 border-t-neutral-300/50 text-neutral-500 hover:bg-neutral-400 transition">
                     <NavLink
                         to={`/profile/overview`}
                         className="w-full h-full flex justify-between items-center"

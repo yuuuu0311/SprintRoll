@@ -18,7 +18,7 @@ export const Dialog: React.FC<{
         )
     );
     const titleClass = twMerge(
-        classNames(`px-6 py-4 font-bold text-lg capitalize text-neutral-600`, {
+        classNames(`px-8 py-6 font-bold text-xl capitalize text-neutral-600`, {
             "text-rose-500": danger,
         })
     );

@@ -4,15 +4,12 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import "rsuite/DateRangePicker/styles/index.css";
 
 // dependency
-import {
-    DragDropContext,
-    Droppable,
-    OnDragEndResponder,
-} from "react-beautiful-dnd";
+import { DragDropContext, OnDragEndResponder } from "react-beautiful-dnd";
 
 // components
-import { Ticket } from "@/components/Ticket";
+
 import { Loader } from "@/components/Loader";
+import { ProjectTickets } from "./ProjectTickets";
 import { SprintPanel } from "./SprintPanel";
 
 import { Button } from "@/components/Button";
@@ -232,43 +229,9 @@ export const DashBoardPage: React.FC = () => {
                 <div className="relative flex flex-col h-full w-full">
                     <DragDropContext onDragEnd={onDragEnd}>
                         <div className="relative flex md:flex-row flex-col gap-6 h-full w-full">
-                            <Droppable
-                                droppableId="collections"
-                                type="droppableItem"
-                            >
-                                {({ innerRef, placeholder }) => (
-                                    <div
-                                        className="flex flex-col gap-3 p-4 rounded-md md:w-56 bg-neutral-200 shadow-lg md:h-full h-1/3"
-                                        ref={innerRef}
-                                    >
-                                        <div className="font-bold text-neutral-800">
-                                            Product Backlog
-                                        </div>
-
-                                        {allTickets === undefined && (
-                                            <div className="py-2 h-24">
-                                                <Loader addonStyle="py-2" />
-                                            </div>
-                                        )}
-                                        <div className="flex flex-col gap-3 overflow-auto flex-1 no-scrollbar">
-                                            {allTickets?.map(
-                                                (ticket, index) => (
-                                                    <Ticket
-                                                        key={ticket.ticketID}
-                                                        ticketInfo={ticket}
-                                                        index={index}
-                                                        isInCollection={
-                                                            ticket.collectionID
-                                                        }
-                                                    />
-                                                )
-                                            )}
-                                        </div>
-
-                                        {placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
+                            <ProjectTickets
+                                allTickets={allTickets as TicketFace[]}
+                            />
 
                             <div className="flex-1 flex flex-col gap-7 md:h-full h-1/3">
                                 {isSprintLoading && (

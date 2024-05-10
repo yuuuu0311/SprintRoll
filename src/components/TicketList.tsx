@@ -88,6 +88,7 @@ export const TicketList: React.FC<{
                 {({ innerRef, draggableProps, dragHandleProps }) => (
                     <div
                         ref={innerRef}
+                        className="h-fit"
                         {...draggableProps}
                         {...dragHandleProps}
                     >

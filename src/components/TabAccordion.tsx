@@ -29,7 +29,7 @@ export const TabAccordion: React.FC<{
     const navLinkClass = (isActive: boolean) =>
         twMerge(
             classNames(
-                "transition-all text-neutral-400 rounded-md py-2 px-3 bg-neutral-200 hover:pl-5 dark:bg-neutral-500 dark:text-stone-400",
+                "transition-all text-neutral-400 rounded-md py-2 px-3 bg-neutral-200 hover:pl-5",
                 {
                     "text-neutral-500 dark:text-stone-300": isActive,
                 }
@@ -38,10 +38,9 @@ export const TabAccordion: React.FC<{
 
     const navigationTitleClass = twMerge(
         classNames(
-            "bg-neutral-400/50 text-neutral-500 px-7 py-2 flex justify-between items-center capitalize hover:bg-neutral-400 hover:text-neutral-600 transition dark:bg-neutral-600 dark:text-stone-200",
+            "bg-neutral-400/50 text-neutral-500 px-7 py-2 flex justify-between items-center capitalize hover:bg-neutral-400 hover:text-neutral-600 transition",
             {
-                "bg-neutral-400 text-neutral-600 dark:bg-neutral-700 dark:text-stone-200":
-                    isActive,
+                "bg-neutral-400 text-neutral-600": isActive,
             }
         )
     );

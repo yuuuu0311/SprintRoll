@@ -288,18 +288,18 @@ export const LandingPage: React.FC = () => {
 
     useGSAP(() => {
         gsap.fromTo(
-            ".hero",
+            ".hero-inner",
             {
                 opacity: 1,
                 borderRadius: 0,
-                padding: "0%",
+                scale: 1,
             },
             {
                 opacity: 0.75,
                 borderRadius: 24,
-                padding: "10%",
+                scale: 0.8,
                 transformOrigin: "center center",
-                ease: "expoScale(0.5,7,none)",
+                ease: "easeInOut",
                 scrollTrigger: {
                     trigger: ".hero",
                     scroller: ".landing-page",
@@ -311,25 +311,7 @@ export const LandingPage: React.FC = () => {
                 },
             }
         );
-        gsap.fromTo(
-            ".hero-inner",
-            {
-                borderRadius: 0,
-            },
-            {
-                borderRadius: 24,
-                transformOrigin: "center center",
-                ease: "expoScale(0.5,7,none)",
-                scrollTrigger: {
-                    trigger: ".hero",
-                    scroller: ".landing-page",
-                    start: "top top",
-                    end: "bottom top",
-                    scrub: 3,
-                    // markers: true,
-                },
-            }
-        );
+
         gsap.fromTo(
             ".intro-card",
             {

@@ -6,10 +6,9 @@ import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
 // interface
-import { TicketFace, LabelInputFace } from "@/interface";
+import { TicketFace, LabelInputFace, LabelFace } from "@/interface";
 
 // components
-
 import { TicketInfo } from "@/components/TicketInfo";
 import { renderLabel } from "@/components/Label";
 
@@ -95,6 +94,19 @@ export const Ticket: React.FC<{
         setDialogActive((prev) => (prev ? false : true));
     };
 
+    const needRenderLabel = (labels: LabelFace) => {
+        const labelArr = [];
+
+        for (const key in labels) {
+            const labelCheck = labels[key as keyof LabelFace];
+            if (labelCheck) labelArr.push(key);
+        }
+
+        return labelArr.length;
+    };
+
+    console.log();
+
     return (
         <>
             {ticketInfo.ticketID !== undefined && (
@@ -118,11 +130,17 @@ export const Ticket: React.FC<{
                                 <div className={ticketsDomainClass}></div>
                                 <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
                                     <div className="">{ticketInfo.title}</div>
-                                    <div className="flex flex-wrap justify-end gap-2 ">
-                                        {renderLabel(
-                                            ticketInfo.label as object
-                                        )}
-                                    </div>
+                                    {needRenderLabel(
+                                        ticketInfo.label as LabelFace
+                                    ) > 0 ? (
+                                        <div className="flex flex-wrap justify-end gap-2 ">
+                                            {renderLabel(
+                                                ticketInfo.label as object
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )}
                                 </div>
                             </div>
                         </div>
