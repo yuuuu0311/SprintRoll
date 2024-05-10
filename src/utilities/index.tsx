@@ -365,26 +365,33 @@ export const deleteCollection = async (collectionInfo: CollectionFace) => {
     }
 };
 
+export const deleteAllTickets = async (collectionPath: string) => {
+    const ticketsRef = collection(db, `${collectionPath}/tickets`);
+
+    try {
+        const snapshot = await getDocs(ticketsRef);
+
+        snapshot.forEach((doc) => {
+            deleteDoc(doc.ref);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const deleteAllCollection = async (projectInfo: ProjectFace) => {
     const collectionRef = query(
         collection(db, "collections"),
         where("project", "==", projectInfo.name)
     );
 
-    // const ticketsRef = collection(
-    //     db,
-    //     `collections/${collectionInfo.collectionID}/tickets`
-    // );
-
     try {
         const snapshot = await getDocs(collectionRef);
 
         snapshot.forEach((doc) => {
-            console.log(doc.data());
             deleteDoc(doc.ref);
+            deleteAllTickets(doc.ref.path);
         });
-
-        // await deleteDoc(docRef);
     } catch (error) {
         console.log(error);
     }
