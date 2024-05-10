@@ -54,7 +54,6 @@ export interface LabelFace {
 export interface LabelInputFace extends LabelFace {
     ticketInfo: TicketFace;
     labelName: string;
-    // isCheck: object | undefined;
     changeHandler?: Dispatch<SetStateAction<LabelFace>>;
 }
 

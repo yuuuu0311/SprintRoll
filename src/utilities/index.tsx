@@ -282,8 +282,6 @@ export const updateTicketInfo = async (
     ticketInfo: TicketFace,
     obj: { target: string; value: string | object }
 ) => {
-    console.log(ticketInfo);
-
     const docRef = doc(
         db,
         `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
@@ -346,6 +344,50 @@ export const removeCollaborator = async (
     uid: string
 ) => {
     await deleteDoc(doc(db, `projects/${projectID}/collaborators/${uid}`));
+};
+
+export const deleteCollection = async (collectionInfo: CollectionFace) => {
+    const docRef = doc(db, `collections/${collectionInfo.collectionID}`);
+    const ticketsRef = collection(
+        db,
+        `collections/${collectionInfo.collectionID}/tickets`
+    );
+
+    try {
+        const snapshot = await getDocs(ticketsRef);
+        snapshot.forEach((doc) => {
+            deleteDoc(doc.ref);
+        });
+
+        await deleteDoc(docRef);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const deleteAllCollection = async (projectInfo: ProjectFace) => {
+    const collectionRef = query(
+        collection(db, "collections"),
+        where("project", "==", projectInfo.name)
+    );
+
+    // const ticketsRef = collection(
+    //     db,
+    //     `collections/${collectionInfo.collectionID}/tickets`
+    // );
+
+    try {
+        const snapshot = await getDocs(collectionRef);
+
+        snapshot.forEach((doc) => {
+            console.log(doc.data());
+            deleteDoc(doc.ref);
+        });
+
+        // await deleteDoc(docRef);
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 export const addCollaborator = async (

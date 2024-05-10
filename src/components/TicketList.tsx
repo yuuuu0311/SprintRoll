@@ -2,7 +2,6 @@ import React, { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 // dependency
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 
 // interface
 import { CollectionFace, TicketFace } from "@/interface";
@@ -15,8 +14,8 @@ import { AddTicketInput } from "@/components/AddTicketInput";
 import { Loader } from "@/components/Loader";
 
 // hook and utilities
+import { deleteCollection } from "@/utilities";
 import { useTickets } from "@/utilities/hook";
-import { db } from "@/utilities/firebase";
 
 // icons
 import { MdOutlineDelete } from "react-icons/md";
@@ -41,23 +40,8 @@ export const TicketList: React.FC<{
 
     const [dialogActive, setDialogActive] = useState(false);
 
-    const handleDeleteCollection = async (collectionInfo: CollectionFace) => {
-        const docRef = doc(db, `collections/${collectionInfo.collectionID}`);
-        const ticketsRef = collection(
-            db,
-            `collections/${collectionInfo.collectionID}/tickets`
-        );
-
-        try {
-            const snapshot = await getDocs(ticketsRef);
-            snapshot.forEach((doc) => {
-                deleteDoc(doc.ref);
-            });
-
-            await deleteDoc(docRef);
-        } catch (error) {
-            console.log(error);
-        }
+    const handleDeleteCollection = () => {
+        deleteCollection(collectionInfo);
     };
 
     const handleDialogToggle = () => {
