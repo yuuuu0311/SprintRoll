@@ -280,7 +280,7 @@ export const DashBoardPage: React.FC = () => {
                             cycle: [new Date(), undefined],
                         });
                     }}
-                    title="add category"
+                    title="add sprint"
                 >
                     <div className="flex flex-col gap-2 mb-6">
                         <div className={inputWrapClass}>

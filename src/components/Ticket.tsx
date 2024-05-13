@@ -117,6 +117,17 @@ export const Ticket: React.FC<{
         return classes;
     };
 
+    const handleNewTicketTitle = () => {
+        setNewTicketTitle((prev) => ({
+            ...prev,
+            isEdit: false,
+        }));
+        updateTicketInfo(ticketInfo, {
+            target: "title",
+            value: newTicketTitle.value as string,
+        });
+    };
+
     return (
         <>
             {ticketInfo.ticketID !== undefined && (
@@ -181,21 +192,9 @@ export const Ticket: React.FC<{
                                                             onClick={(e) =>
                                                                 e.stopPropagation()
                                                             }
-                                                            onBlur={() => {
-                                                                setNewTicketTitle(
-                                                                    (prev) => ({
-                                                                        ...prev,
-                                                                        isEdit: false,
-                                                                    })
-                                                                );
-                                                                updateTicketInfo(
-                                                                    ticketInfo,
-                                                                    {
-                                                                        target: "title",
-                                                                        value: newTicketTitle.value as string,
-                                                                    }
-                                                                );
-                                                            }}
+                                                            onBlur={() =>
+                                                                handleNewTicketTitle
+                                                            }
                                                             onChange={(e) => {
                                                                 setNewTicketTitle(
                                                                     (prev) => ({
@@ -206,6 +205,13 @@ export const Ticket: React.FC<{
                                                                     })
                                                                 );
                                                             }}
+                                                            onKeyDown={(e) => {
+                                                                if (
+                                                                    e.key ===
+                                                                    "Enter"
+                                                                )
+                                                                    handleNewTicketTitle();
+                                                            }}
                                                         />
                                                     </span>
                                                 </span>
@@ -214,19 +220,7 @@ export const Ticket: React.FC<{
                                                         className="cursor-pointer hover:text-lime-600"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            setNewTicketTitle(
-                                                                (prev) => ({
-                                                                    ...prev,
-                                                                    isEdit: false,
-                                                                })
-                                                            );
-                                                            updateTicketInfo(
-                                                                ticketInfo,
-                                                                {
-                                                                    target: "title",
-                                                                    value: newTicketTitle.value as string,
-                                                                }
-                                                            );
+                                                            handleNewTicketTitle();
                                                         }}
                                                     />
                                                 </span>

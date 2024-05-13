@@ -291,7 +291,7 @@ export const SprintPanel: React.FC<{
                     handleDialogToggle={() => {
                         handleDialogToggle("edit");
                     }}
-                    title="add category"
+                    title="edit sprint"
                 >
                     <div className="flex flex-col gap-2 mb-6">
                         <div className={inputWrapClass}>

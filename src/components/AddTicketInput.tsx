@@ -65,6 +65,9 @@ export const AddTicketInput: React.FC<{
                             placeholder="Ticket Title"
                             autoFocus
                             onChange={(e) => handleChange(e)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") handleAddTicket();
+                            }}
                             className="text-md px-3 py-2 w-full rounded-md overflow-hidden leading-none outline-none transition focus:bg-neutral-300 "
                         />
                     </div>
