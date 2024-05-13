@@ -13,6 +13,7 @@ import { TicketList } from "@/components/TicketList";
 import { AddCategoryDialog } from "./addCategory";
 import { Button } from "@/components/Button";
 import { Loader } from "@/components/Loader";
+import { GarbageCan } from "@/components/GarbageCan";
 
 // utilities
 import {
@@ -185,6 +186,7 @@ export const KanbanPage: React.FC = () => {
                     </div>
                 </div>
             )}
+            <GarbageCan />
         </>
     );
 };

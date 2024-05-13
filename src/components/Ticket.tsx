@@ -15,6 +15,9 @@ import { renderLabel } from "@/components/Label";
 // utilities
 import { updateTicketInfo } from "@/utilities";
 
+// icon
+import { MdModeEdit, MdCheck } from "react-icons/md";
+
 export const Label: React.FC<LabelInputFace> = ({
     ticketInfo,
     labelName,
@@ -75,9 +78,13 @@ export const Ticket: React.FC<{
     isDragging?: boolean;
 }> = ({ isInCollection, index, ticketInfo, isDragging }) => {
     const [dialogActive, setDialogActive] = useState(false);
+    const [newTicketTitle, setNewTicketTitle] = useState({
+        isEdit: false,
+        value: ticketInfo.title,
+    });
 
     const ticketsClass = twMerge(
-        classNames("rounded-md overflow-hidden transition", {
+        classNames("rounded-md overflow-hidden transition group", {
             "drop-shadow-xl": isDragging,
         })
     );
@@ -136,8 +143,95 @@ export const Ticket: React.FC<{
                             >
                                 <div className={ticketsDomainClass}></div>
                                 <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
-                                    <div className="line-clamp-1">
-                                        {ticketInfo.title}
+                                    <div className="flex gap-1 justify-between items-center">
+                                        {!newTicketTitle.isEdit ? (
+                                            <>
+                                                <span className="flex-1 line-clamp-1">
+                                                    <span>
+                                                        {ticketInfo.title}
+                                                    </span>
+                                                </span>
+                                                <span className="cursor-pointer transition group-hover:opacity-100 opacity-0 ">
+                                                    <MdModeEdit
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setNewTicketTitle(
+                                                                (prev) => ({
+                                                                    ...prev,
+                                                                    isEdit: true,
+                                                                })
+                                                            );
+                                                        }}
+                                                    />
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="flex-1 line-clamp-1">
+                                                    <span>
+                                                        <input
+                                                            type="text"
+                                                            name="newTicketTitle"
+                                                            id="newTicketTitle"
+                                                            className="bg-transparent outline-none"
+                                                            autoFocus={true}
+                                                            value={
+                                                                newTicketTitle.value
+                                                            }
+                                                            onClick={(e) =>
+                                                                e.stopPropagation()
+                                                            }
+                                                            onBlur={() => {
+                                                                setNewTicketTitle(
+                                                                    (prev) => ({
+                                                                        ...prev,
+                                                                        isEdit: false,
+                                                                    })
+                                                                );
+                                                                updateTicketInfo(
+                                                                    ticketInfo,
+                                                                    {
+                                                                        target: "title",
+                                                                        value: newTicketTitle.value as string,
+                                                                    }
+                                                                );
+                                                            }}
+                                                            onChange={(e) => {
+                                                                setNewTicketTitle(
+                                                                    (prev) => ({
+                                                                        ...prev,
+                                                                        value: e
+                                                                            .target
+                                                                            .value,
+                                                                    })
+                                                                );
+                                                            }}
+                                                        />
+                                                    </span>
+                                                </span>
+                                                <span>
+                                                    <MdCheck
+                                                        className="cursor-pointer hover:text-lime-600"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setNewTicketTitle(
+                                                                (prev) => ({
+                                                                    ...prev,
+                                                                    isEdit: false,
+                                                                })
+                                                            );
+                                                            updateTicketInfo(
+                                                                ticketInfo,
+                                                                {
+                                                                    target: "title",
+                                                                    value: newTicketTitle.value as string,
+                                                                }
+                                                            );
+                                                        }}
+                                                    />
+                                                </span>
+                                            </>
+                                        )}
                                     </div>
                                     {needRenderLabel(
                                         ticketInfo.label as LabelFace
