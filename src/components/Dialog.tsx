@@ -39,7 +39,7 @@ export const Dialog: React.FC<{
                     <div className={titleClass}>
                         {title}
                         <MdClose
-                            className="hover:text-neutral-400 transition"
+                            className="hover:text-neutral-400 transition cursor-pointer"
                             onClick={handleDialogToggle}
                         />
                     </div>

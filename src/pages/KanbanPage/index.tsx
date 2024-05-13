@@ -13,7 +13,8 @@ import { TicketList } from "@/components/TicketList";
 import { AddCategoryDialog } from "./addCategory";
 import { Button } from "@/components/Button";
 import { Loader } from "@/components/Loader";
-import { GarbageCan } from "@/components/GarbageCan";
+
+import { BreadCrumbs } from "@/components/BreadCrumbs";
 
 // utilities
 import {
@@ -30,7 +31,7 @@ import { useDialog } from "@/utilities/store";
 import { CollectionFace, TicketFace, DialogState } from "@/interface";
 
 export const KanbanPage: React.FC = () => {
-    const { project, domain } = useParams();
+    const { domain } = useParams();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
     const { collectionsData, setCollectionsData } = useCollections();
 
@@ -135,11 +136,7 @@ export const KanbanPage: React.FC = () => {
 
             {collectionsData !== undefined && (
                 <div className="h-full flex flex-col">
-                    <div className="px-12 py-4 gap-2 text-neutral-500 hidden md:flex">
-                        <span className="line-clamp-1">{project}</span>
-                        <span>/</span>
-                        <span>{domain}</span>
-                    </div>
+                    <BreadCrumbs />
                     <div className="flex flex-1 gap-2 items-start md:px-12 px-6 md:pb-12 md:pt-0 py-6 overflow-x-auto overflow-y-hidden w-full h-full">
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable
@@ -186,7 +183,6 @@ export const KanbanPage: React.FC = () => {
                     </div>
                 </div>
             )}
-            <GarbageCan />
         </>
     );
 };

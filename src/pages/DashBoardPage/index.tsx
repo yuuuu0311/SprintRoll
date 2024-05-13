@@ -7,11 +7,10 @@ import "rsuite/DateRangePicker/styles/index.css";
 import { DragDropContext, OnDragEndResponder } from "react-beautiful-dnd";
 
 // components
-
 import { Loader } from "@/components/Loader";
 import { ProjectTickets } from "./ProjectTickets";
 import { SprintPanel } from "./SprintPanel";
-
+import { BreadCrumbs } from "@/components/BreadCrumbs";
 import { Button } from "@/components/Button";
 import { DateRangePicker } from "rsuite";
 
@@ -219,11 +218,7 @@ export const DashBoardPage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-start w-full h-full">
-            <div className="px-12 py-4 gap-2 text-neutral-500 hidden md:flex">
-                <span className="line-clamp-1">{project}</span>
-                <span>/</span>
-                <span>all</span>
-            </div>
+            <BreadCrumbs />
 
             <div className="md:px-12 px-6 md:pb-12 md:pt-0 py-6 overflow-hidden h-full w-full">
                 <div className="relative flex flex-col h-full w-full">

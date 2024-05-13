@@ -59,7 +59,7 @@ export const OverviewPage = () => {
         )
     );
     const cardWrapClass = twMerge(
-        classNames("grid gap-3 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4")
+        classNames("grid gap-3 grid-cols-2 lg:grid-cols-5 xl:grid-cols-6")
     );
 
     return (

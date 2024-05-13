@@ -151,7 +151,10 @@ export const useSprint = () => {
                             ...(doc.data() as SprintFace),
                             id: doc.id,
                         }))
-                        .sort((a, b) => a.index - b.index) as SprintFace[]
+                        .sort((a, b) => Number(a.cycle[0]) - Number(b.cycle[0]))
+                        .sort(
+                            (a, b) => Number(a.cycle[1]) - Number(b.cycle[1])
+                        ) as SprintFace[]
             );
         });
 
