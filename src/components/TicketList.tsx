@@ -169,9 +169,7 @@ export const TicketList: React.FC<{
                         <Button
                             danger
                             rounded
-                            onClickFun={() =>
-                                handleDeleteCollection(collectionInfo)
-                            }
+                            onClickFun={() => handleDeleteCollection()}
                         >
                             delete
                         </Button>
