@@ -72,11 +72,11 @@ export const TicketList: React.FC<{
                 {({ innerRef, draggableProps, dragHandleProps }) => (
                     <div
                         ref={innerRef}
-                        className="h-fit"
+                        // className="h-fit"
                         {...draggableProps}
                         {...dragHandleProps}
                     >
-                        <div className="p-4 bg-neutral-200  rounded-lg w-56 shadow-lg">
+                        <div className="p-4 bg-neutral-200 max-h-full rounded-lg w-56 shadow-lg flex flex-col">
                             <div className="flex justify-between items-center mb-3">
                                 <h3 className="text-lg text-neutral-700 font-bold capitalize">
                                     {collectionInfo.name}
@@ -94,13 +94,13 @@ export const TicketList: React.FC<{
                                     { isDraggingOver }
                                 ) => (
                                     <div
-                                        className="flex max-h-full flex-col gap-3 "
+                                        className="flex max-h-full flex-col gap-3 flex-1 overflow-auto  no-scrollbar "
                                         ref={innerRef}
                                         {...droppableProps}
                                         {...dragHandleProps}
                                     >
                                         <div
-                                            className={`flex h-full overflow-auto  no-scrollbar flex-col gap-3 transition-all ${
+                                            className={`flex h-full flex-col gap-3 transition-all ${
                                                 isDraggingOver &&
                                                 "bg-neutral-300/50 p-2 rounded-md"
                                             }`}
@@ -128,18 +128,13 @@ export const TicketList: React.FC<{
 
                                             {placeholder}
                                         </div>
-
-                                        <AddTicketInput
-                                            collectionID={
-                                                collectionInfo.collectionID
-                                            }
-                                            ticketsLength={
-                                                ticketsData?.length as number
-                                            }
-                                        />
                                     </div>
                                 )}
                             </Droppable>
+                            <AddTicketInput
+                                collectionID={collectionInfo.collectionID}
+                                ticketsLength={ticketsData?.length as number}
+                            />
                         </div>
                     </div>
                 )}

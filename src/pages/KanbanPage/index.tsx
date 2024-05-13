@@ -85,7 +85,6 @@ export const KanbanPage: React.FC = () => {
                 );
 
                 break;
-
             default:
                 if (ticketsSetters === undefined) return;
 
@@ -151,15 +150,22 @@ export const KanbanPage: React.FC = () => {
                                     >
                                         {(
                                             collectionsData as CollectionFace[]
-                                        )?.map((collection: CollectionFace) => (
-                                            <TicketList
-                                                collectionInfo={collection}
-                                                key={collection.collectionID}
-                                                setTicketsSetters={
-                                                    setTicketsSetters
-                                                }
-                                            />
-                                        ))}
+                                        )?.map(
+                                            (collection: CollectionFace) =>
+                                                collection !== undefined && (
+                                                    <TicketList
+                                                        collectionInfo={
+                                                            collection
+                                                        }
+                                                        key={
+                                                            collection.collectionID
+                                                        }
+                                                        setTicketsSetters={
+                                                            setTicketsSetters
+                                                        }
+                                                    />
+                                                )
+                                        )}
 
                                         {placeholder}
                                     </div>

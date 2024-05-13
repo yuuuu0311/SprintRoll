@@ -13,10 +13,11 @@ import { TicketInfo } from "@/components/TicketInfo";
 import { renderLabel } from "@/components/Label";
 
 // utilities
-import { updateTicketInfo } from "@/utilities";
+import { updateTicketInfo, deleteTicket } from "@/utilities";
 
 // icon
 import { MdModeEdit, MdCheck } from "react-icons/md";
+import { TiDelete } from "react-icons/ti";
 
 export const Label: React.FC<LabelInputFace> = ({
     ticketInfo,
@@ -84,16 +85,16 @@ export const Ticket: React.FC<{
     });
 
     const ticketsClass = twMerge(
-        classNames("rounded-md overflow-hidden transition group", {
+        classNames("rounded-md transition group relative overflow-hidden", {
             "drop-shadow-xl": isDragging,
         })
     );
     const ticketsDomainClass = twMerge(
-        classNames({
-            "p-2 bg-lime-500": ticketInfo.domain === "frontend",
-            "p-2 bg-red-500": ticketInfo.domain === "backend",
-            "p-2 bg-yellow-500": ticketInfo.domain === "data",
-            "p-2 bg-blue-500": ticketInfo.domain === "ios",
+        classNames("px-2 py-1 flex justify-end group bg-purple-300", {
+            "bg-lime-500": ticketInfo.domain === "frontend",
+            "bg-red-500": ticketInfo.domain === "backend",
+            "bg-yellow-500": ticketInfo.domain === "data",
+            "bg-blue-500": ticketInfo.domain === "ios",
         })
     );
 
@@ -152,7 +153,19 @@ export const Ticket: React.FC<{
                                 className={ticketsClass}
                                 onClick={handleDialogToggle}
                             >
-                                <div className={ticketsDomainClass}></div>
+                                <div className={ticketsDomainClass}>
+                                    <TiDelete
+                                        className="opacity-0 group-hover:opacity-100 transition hover:text-rose-600 cursor-pointer"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            deleteTicket(
+                                                isInCollection as string,
+                                                ticketInfo.ticketID as string,
+                                                index as number
+                                            );
+                                        }}
+                                    />
+                                </div>
                                 <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
                                     <div className="flex gap-1 justify-between items-center">
                                         {!newTicketTitle.isEdit ? (
