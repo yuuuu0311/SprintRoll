@@ -77,7 +77,7 @@ export const TicketList: React.FC<{
                         {...dragHandleProps}
                     >
                         <div className="p-4 bg-neutral-200 max-h-full rounded-lg w-56 shadow-lg flex flex-col">
-                            <div className="flex justify-between items-center mb-3">
+                            <div className="flex justify-between items-center">
                                 <h3 className="text-lg text-neutral-700 font-bold capitalize">
                                     {collectionInfo.name}
                                 </h3>
@@ -94,7 +94,7 @@ export const TicketList: React.FC<{
                                     { isDraggingOver }
                                 ) => (
                                     <div
-                                        className="flex max-h-full flex-col gap-3 flex-1 overflow-auto  no-scrollbar "
+                                        className="flex max-h-full flex-col gap-3 flex-1 overflow-auto  no-scrollbar py-3"
                                         ref={innerRef}
                                         {...droppableProps}
                                         {...dragHandleProps}
