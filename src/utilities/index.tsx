@@ -447,7 +447,7 @@ export const handleDeleteSprint = async (
 ) => {
     const sprintTicketsRef = query(
         collectionGroup(db, "tickets"),
-        where("inSprint", "==", sprintInfo.index),
+        where("inSprint", "==", sprintInfo.id),
         where("project", "==", project)
     );
 

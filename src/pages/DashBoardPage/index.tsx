@@ -35,13 +35,6 @@ const toSprintPanel = (droppableId: string) => {
     return sprintIndexRegex.test(droppableId);
 };
 
-// const getSprintNum = (droppableId: string) => {
-//     const splitString = droppableId.split("-");
-//     const index = splitString[1];
-
-//     return parseInt(index);
-// };
-
 const getSprintID = (droppableId: string) => {
     const splitString = droppableId.split("-");
     const id = splitString[2];

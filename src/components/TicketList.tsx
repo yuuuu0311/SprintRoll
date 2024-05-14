@@ -72,7 +72,7 @@ export const TicketList: React.FC<{
                 {({ innerRef, draggableProps, dragHandleProps }) => (
                     <div
                         ref={innerRef}
-                        // className="h-fit"
+                        className="min-h-auto max-h-full relative"
                         {...draggableProps}
                         {...dragHandleProps}
                     >

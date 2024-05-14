@@ -462,7 +462,7 @@ export const LandingPage: React.FC = () => {
 
     return (
         <div className="h-screen w-full overflow-x-hidden overflow-y-auto no-scrollbar bg-stone-100 landing-page">
-            <div className="hero h-screen w-screen overflow-hidden hero">
+            <div className="hero h-screen w-screen overflow-hidden">
                 <div className="h-full w-full mx-auto relative grid place-items-center overflow-hidden hero-inner">
                     <motion.div
                         className="opacity-50 absolute w-full h-full bg-neutral-300"
@@ -558,10 +558,22 @@ export const LandingPage: React.FC = () => {
                             </motion.button>
                         </NavLink>
                     </div>
+                    <a
+                        href="#intro"
+                        className="cursor-pointer absolute bottom-8 flex flex-col gap-2 items-center transition hover:translate-y-1"
+                    >
+                        <div>about SprintRoll</div>
+                        <div className=" rotate-90">
+                            <IoMdArrowRoundForward />
+                        </div>
+                    </a>
                 </div>
             </div>
 
-            <div className="w-screen bg-stone-100 relative container-intro">
+            <div
+                className="w-screen bg-stone-100 relative container-intro"
+                id="intro"
+            >
                 <div className="mx-auto md:w-3/4 w-full md:py-24 py-12 px-10 flex flex-col gap-36">
                     <div className="flex flex-col md:gap-20 gap-12">
                         <div className={sectionTitle}># SprintRoll</div>
@@ -570,7 +582,7 @@ export const LandingPage: React.FC = () => {
                             在快速變化的開發環境中，一個高效的專案管理工具是重要的。我們深知您面對的挑戰，因此特別設計了一套能夠滿足現代管理需求的解決方案。此工具具備以下四大核心功能，旨在提升您的工作效率並優化團隊合作：
                         </div>
 
-                        <div className="gap-6 grid md:grid-cols-4 grid-cols-1">
+                        <div className="gap-6 grid md:grid-cols-2 lg:grid-cols-4 grid-cols-1">
                             <div className={introCardWrap}>
                                 <div className={introCardTitle}>輕鬆規劃</div>
                                 <div>直覺的拖曳介面，快速設定和調整任務</div>
@@ -580,14 +592,16 @@ export const LandingPage: React.FC = () => {
                                 <div>隨時共享進度，溝通無阻，保持團隊同步</div>
                             </div>
                             <div className={introCardWrap}>
-                                <div className={introCardTitle}>客製化調整</div>
+                                <div className={introCardTitle}>即時追蹤</div>
                                 <div>
-                                    按需產品需求調整，滿足的工作流程和需求
+                                    讓您隨時掌握產品或專案狀態，做出明智決策
                                 </div>
                             </div>
                             <div className={introCardWrap}>
-                                <div className={introCardTitle}>即時追蹤</div>
-                                <div>讓您隨時掌握產品狀態，做出明智決策</div>
+                                <div className={introCardTitle}>客製化調整</div>
+                                <div>
+                                    按需產品或專案需求調整，滿足不同的工作流程和需求
+                                </div>
                             </div>
                         </div>
                     </div>
