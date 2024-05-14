@@ -31,15 +31,22 @@ import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
 const toSprintPanel = (droppableId: string) => {
-    const sprintIndexRegex = /sprintTickets-[0-9]/;
+    const sprintIndexRegex = /sprintTickets-[0-9].*/;
     return sprintIndexRegex.test(droppableId);
 };
 
-const getSprintNum = (droppableId: string) => {
-    const splitString = droppableId.split("-");
-    const index = splitString[1];
+// const getSprintNum = (droppableId: string) => {
+//     const splitString = droppableId.split("-");
+//     const index = splitString[1];
 
-    return parseInt(index);
+//     return parseInt(index);
+// };
+
+const getSprintID = (droppableId: string) => {
+    const splitString = droppableId.split("-");
+    const id = splitString[2];
+
+    return id;
 };
 
 const getMovedTicket = (sourceState: TicketFace[], sourceIndex: number) => {
@@ -112,7 +119,8 @@ export const DashBoardPage: React.FC = () => {
                 }
             );
 
-            toSprint(result.draggableId, getSprintNum(destination.droppableId));
+            // toSprint(result.draggableId, getSprintNum(destination.droppableId));
+            toSprint(result.draggableId, getSprintID(destination.droppableId));
         } else if (source.droppableId === destination.droppableId) {
             console.log("drop on same sprint");
 
@@ -145,7 +153,8 @@ export const DashBoardPage: React.FC = () => {
 
             toAnotherSprint(
                 movedTicket as TicketFace,
-                getSprintNum(destination.droppableId)
+                // getSprintNum(destination.droppableId)
+                getSprintID(destination.droppableId)
             );
         } else {
             const { state: sourceState } =
@@ -241,7 +250,10 @@ export const DashBoardPage: React.FC = () => {
                                         </div>
                                     ) : (
                                         sprintInfo.map(
-                                            (sprint: object, index: number) => (
+                                            (
+                                                sprint: SprintFace,
+                                                index: number
+                                            ) => (
                                                 <SprintPanel
                                                     setSprintTicketsSetters={
                                                         setSprintTicketsSetters
@@ -249,7 +261,7 @@ export const DashBoardPage: React.FC = () => {
                                                     sprintInfo={
                                                         sprint as SprintFace
                                                     }
-                                                    key={index}
+                                                    key={`sprintTickets-${index}-${sprint.id}`}
                                                     index={index}
                                                 />
                                             )

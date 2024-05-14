@@ -262,7 +262,7 @@ export const removeFromAssigned: (
     });
 };
 
-export const toSprint = async (draggableId: string, index: number) => {
+export const toSprint = async (draggableId: string, id: string) => {
     const ticket = query(
         collectionGroup(db, "tickets"),
         where(documentId(), "==", draggableId)
@@ -273,7 +273,7 @@ export const toSprint = async (draggableId: string, index: number) => {
     tickets.forEach((ticket) => {
         setDoc(ticket.ref, {
             ...ticket.data(),
-            inSprint: index,
+            inSprint: id,
         });
     });
 };
@@ -315,7 +315,8 @@ export const addSprint = async (sprintInfo: SprintFace) => {
 
 export const toAnotherSprint = async (
     movedTicket: TicketFace,
-    sprintIndex: number
+    // sprintIndex: number
+    sprintID: string
 ) => {
     const ticketRef = doc(
         db,
@@ -323,7 +324,7 @@ export const toAnotherSprint = async (
     );
 
     updateDoc(ticketRef, {
-        inSprint: sprintIndex,
+        inSprint: sprintID,
     });
 };
 

@@ -72,7 +72,7 @@ export const useTickets = (id?: string) => {
     return { isLoading, ticketsData, setTicketsData, setIsLoading };
 };
 
-export const useAllTickets = (index?: number) => {
+export const useAllTickets = (index?: number, sprintInfoID?: string) => {
     const { project } = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [allTickets, setAllTickets] = useState<TicketFace[]>();
@@ -101,7 +101,7 @@ export const useAllTickets = (index?: number) => {
             const sprintTicketsCopy = tickets.docs
                 .filter(
                     (ticket) =>
-                        ticket.data().inSprint == index &&
+                        ticket.data().inSprint == sprintInfoID &&
                         ticket.data().project === project
                 )
                 .map((ticket) => ({

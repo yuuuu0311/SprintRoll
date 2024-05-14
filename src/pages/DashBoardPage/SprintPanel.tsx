@@ -56,8 +56,10 @@ export const SprintPanel: React.FC<{
         delete: false,
         edit: false,
     });
-    const { isTicketLoading, sprintTickets, setSprintTickets } =
-        useAllTickets(index);
+    const { isTicketLoading, sprintTickets, setSprintTickets } = useAllTickets(
+        index,
+        sprintInfo.id
+    );
 
     const [newSprintInfo, setNewSprintInfo] = useState<SprintFace>({
         index: sprintInfo.index,
@@ -110,7 +112,7 @@ export const SprintPanel: React.FC<{
             (prev) =>
                 ({
                     ...prev,
-                    [`sprintTickets-${index}`]: {
+                    [`sprintTickets-${index}-${sprintInfo.id}`]: {
                         state: sprintTickets,
                         setter: setSprintTickets,
                     },
@@ -186,7 +188,7 @@ export const SprintPanel: React.FC<{
                     </div>
                 </div>
                 <Droppable
-                    droppableId={`sprintTickets-${index}`}
+                    droppableId={`sprintTickets-${index}-${sprintInfo.id}`}
                     type="droppableItem"
                 >
                     {({ innerRef, placeholder }, { isDraggingOver }) => (
