@@ -32,7 +32,10 @@ export const SignupPanel: React.FC<{
 
     const inputClass = twMerge(
         classNames(
-            `text-md px-3 py-2 rounded-md overflow-hidden leading-none transition w-full`
+            `text-md px-3 py-2 rounded-md overflow-hidden leading-none transition w-full`,
+            {
+                "bg-rose-100": isError,
+            }
         )
     );
 
@@ -41,21 +44,27 @@ export const SignupPanel: React.FC<{
             setIsLoading(true);
             const auth = getAuth();
 
-            const { user } = await signInWithEmailAndPassword(
+            await signInWithEmailAndPassword(
                 auth,
                 userInfo.email,
                 userInfo.password
-            );
+            )
+                .then(({ user }) => {
+                    if (user.uid === null || user.email === null) return;
 
-            if (user.uid === null || user.email === null) return;
+                    localStorage.setItem("userID", user.uid);
+                    localStorage.setItem("userEmail", user.email);
 
-            localStorage.setItem("userID", user.uid);
-            localStorage.setItem("userEmail", user.email);
-
-            setUser({ uid: user.uid, email: user.email } as UserFace);
-
-            setIsLoading(false);
-            setIsLogin(true);
+                    setUser({ uid: user.uid, email: user.email } as UserFace);
+                    setIsLoading(false);
+                    setIsLogin(true);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    setIsLoading(false);
+                    setIsError(error as Error);
+                    return;
+                });
         } catch (error) {
             setIsError(error as Error);
         }
@@ -102,6 +111,16 @@ export const SignupPanel: React.FC<{
                     />
                 </div>
 
+                {isError && (
+                    <div className="text-red-500">
+                        {isError.message ===
+                            "Firebase: Error (auth/email-already-in-use)." &&
+                            "email has been used"}
+                        {isError.message ===
+                            "Firebase: Error (auth/invalid-credential)." &&
+                            "email or password is wrong"}
+                    </div>
+                )}
                 <div className="flex gap-3">
                     <span>Don't have an account ?</span>
                     <span
@@ -111,6 +130,7 @@ export const SignupPanel: React.FC<{
                         Sign up
                     </span>
                 </div>
+
                 <div>
                     <Button
                         rounded
@@ -125,13 +145,6 @@ export const SignupPanel: React.FC<{
                         )}
                     </Button>
                 </div>
-                {isError && (
-                    <div className="text-red-500">
-                        {isError.message ===
-                            "Firebase: Error (auth/email-already-in-use)." &&
-                            "email has been used"}
-                    </div>
-                )}
             </div>
         </div>
     );

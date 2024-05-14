@@ -37,7 +37,6 @@ export const LoginPage: React.FC = () => {
             localStorage.setItem("userEmail", user.email);
 
             setUser({ uid: user.uid, email: user.email } as UserFace);
-
             setIsLoading(false);
             setIsLogin(true);
         } catch (error) {
