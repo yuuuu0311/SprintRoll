@@ -39,22 +39,28 @@ export const SigninPanel: React.FC<{
         try {
             setIsLoading(true);
             const auth = getAuth();
-            const { user } = await createUserWithEmailAndPassword(
+
+            await createUserWithEmailAndPassword(
                 auth,
                 userInfo.email,
                 userInfo.password
-            );
+            )
+                .then(async ({ user }) => {
+                    await setDoc(doc(db, "users", user.uid), {
+                        uid: user.uid,
+                        email: user.email,
+                    });
 
-            await setDoc(doc(db, "users", user.uid), {
-                uid: user.uid,
-                email: user.email,
-            });
-
-            setIsLoading(false);
-            setIsSignIn(true);
-            setIsLoginPanel((prev) => !prev);
+                    setIsLoading(false);
+                    setIsSignIn(true);
+                    setIsLoginPanel((prev) => !prev);
+                })
+                .catch((error) => {
+                    setIsLoading(false);
+                    setIsError(error as Error);
+                    return;
+                });
         } catch (error) {
-            setIsLoading(false);
             setIsError(error as Error);
         }
     };
@@ -93,6 +99,16 @@ export const SigninPanel: React.FC<{
                         }
                     />
                 </div>
+                {isError && (
+                    <div className="text-red-500">
+                        {isError.message ===
+                            "Firebase: Error (auth/email-already-in-use)." &&
+                            "email has been used"}
+                        {isError.message ===
+                            "Firebase: Password should be at least 6 characters (auth/weak-password)." &&
+                            "password should be at least 6 characters"}
+                    </div>
+                )}
                 <div className="flex gap-3">
                     <span>
                         Back to{" "}
@@ -113,13 +129,7 @@ export const SigninPanel: React.FC<{
                 >
                     {isLoading ? <Loader addonStyle="h-6 w-6" /> : "Sign Up"}
                 </Button>
-                {isError && (
-                    <div className="text-red-500">
-                        {isError.message ===
-                            "Firebase: Error (auth/email-already-in-use)." &&
-                            "email has been used"}
-                    </div>
-                )}
+
                 {isSignIn && (
                     <div className="text-green-500">Sign Up Successfully</div>
                 )}

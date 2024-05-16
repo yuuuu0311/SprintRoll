@@ -1,7 +1,7 @@
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 import { Timestamp } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 
@@ -56,8 +56,10 @@ export const SprintPanel: React.FC<{
         delete: false,
         edit: false,
     });
-    const { isTicketLoading, sprintTickets, setSprintTickets } =
-        useAllTickets(index);
+    const { isTicketLoading, sprintTickets, setSprintTickets } = useAllTickets(
+        index,
+        sprintInfo.id
+    );
 
     const [newSprintInfo, setNewSprintInfo] = useState<SprintFace>({
         index: sprintInfo.index,
@@ -78,11 +80,29 @@ export const SprintPanel: React.FC<{
         }));
     };
 
-    const ticketsWrapClass = twMerge(
-        classNames("transition-all px-6 overflow-hidden relative max-h-0", {
-            "max-h-[1000px] overflow-auto no-scrollbar": isToggle,
-        })
-    );
+    const getTicketInnerWrapClass = (isDraggingOver: boolean) => {
+        const ticketsWrapClass = twMerge(
+            classNames("flex flex-col items-start relative", {
+                "gap-2": isDraggingOver,
+            })
+        );
+
+        return ticketsWrapClass;
+    };
+
+    const getTicketWrapClass = (isDraggingOver: boolean) => {
+        const ticketsWrapClass = twMerge(
+            classNames(
+                "transition-all relative mx-6 overflow-hidden max-h-0 ",
+                {
+                    "max-h-[1000px] overflow-auto no-scrollbar p-3": isToggle,
+                    "bg-neutral-300/50 w-[calc(100% - 3rem)] rounded-md":
+                        isDraggingOver,
+                }
+            )
+        );
+        return ticketsWrapClass;
+    };
     const inputWrapClass = twMerge(classNames("flex flex-col gap-2"));
     const inputTitleClass = twMerge(classNames("rounded w-full py-1 px-2"));
     const inputCycleClass = twMerge(classNames("rounded"));
@@ -92,7 +112,7 @@ export const SprintPanel: React.FC<{
             (prev) =>
                 ({
                     ...prev,
-                    [`sprintTickets-${index}`]: {
+                    [`sprintTickets-${index}-${sprintInfo.id}`]: {
                         state: sprintTickets,
                         setter: setSprintTickets,
                     },
@@ -106,76 +126,81 @@ export const SprintPanel: React.FC<{
     }, [sprintTickets]);
 
     return (
-        <div>
-            <Droppable
-                droppableId={`sprintTickets-${index}`}
-                type="droppableItem"
-            >
-                {({ innerRef, placeholder }) => (
-                    <div className="transition hover:brightness-95 bg-neutral-100">
-                        <div className="sticky top-0 bg-stone-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3 ">
-                            <div className="flex justify-end gap-2">
-                                <MdOutlineEdit
-                                    className="text-lg hover:text-lime-500 transition"
-                                    onClick={() => handleDialogToggle("edit")}
-                                />
-                                <MdOutlineDelete
-                                    className="text-lg hover:text-rose-500 transition"
-                                    onClick={() => handleDialogToggle("delete")}
-                                />
+        <div className="relative">
+            <div className="transition hover:brightness-95 hover:z-[-0] bg-neutral-100 relative z-10">
+                <div className="sticky top-0 bg-stone-100 w-full px-6 pt-4 pb-2 flex flex-col gap-3 z-[1]">
+                    <div className="flex justify-end gap-2">
+                        <MdOutlineEdit
+                            className="text-lg hover:text-lime-500 transition"
+                            onClick={() => handleDialogToggle("edit")}
+                        />
+                        <MdOutlineDelete
+                            className="text-lg hover:text-rose-500 transition"
+                            onClick={() => handleDialogToggle("delete")}
+                        />
+                    </div>
+                    <div className="text-neutral-600 flex flex-col gap-1">
+                        <div className="flex justify-between items-baseline">
+                            <div className="font-bold text-3xl flex gap-2 items-center">
+                                <span>{sprintInfo.name}</span>
                             </div>
-                            <div className="text-neutral-600 flex flex-col gap-1">
-                                <div className="flex justify-between items-baseline">
-                                    <div className="font-bold text-3xl flex gap-2 items-center">
-                                        <span>{sprintInfo.name}</span>
-                                    </div>
-                                    <span className="text-sm">
-                                        # Sprint {index}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between items-baseline text-sm text-neutral-500">
-                                    <span className="">
-                                        {sprintTickets.length} tickets inside
-                                    </span>
-                                    <span className=" flex gap-2">
-                                        <span>
-                                            {getDateString(
-                                                sprintInfo.cycle[0] as Timestamp
-                                            )}
-                                        </span>
-                                        -
-                                        <span>
-                                            {getDateString(
-                                                sprintInfo.cycle[1] as Timestamp
-                                            )}
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                            {sprintInfo.description.length === 0 ? (
-                                <></>
-                            ) : (
-                                <div className="text-neutral-500">
-                                    {sprintInfo.description}
-                                </div>
-                            )}
-
-                            <div className="flex gap-4 items-center">
-                                <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200  h-3">
-                                    <div
-                                        className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full `}
-                                        style={{
-                                            width: `${getProgressPercentage(
-                                                sprintTickets
-                                            )}%`,
-                                        }}
-                                    ></div>
-                                </div>
-                                {`${getProgressPercentage(sprintTickets)}%`}
-                            </div>
+                            <span className="text-sm"># Sprint {index}</span>
                         </div>
-                        <div className={ticketsWrapClass} ref={innerRef}>
-                            <div className="flex flex-col">
+                        <div className="flex justify-between items-baseline text-sm text-neutral-500">
+                            <span className="">
+                                {sprintTickets.length} tickets inside
+                            </span>
+                            <span className=" flex gap-2">
+                                <span>
+                                    {getDateString(
+                                        sprintInfo.cycle[0] as Timestamp
+                                    )}
+                                </span>
+                                -
+                                <span>
+                                    {getDateString(
+                                        sprintInfo.cycle[1] as Timestamp
+                                    )}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    {sprintInfo.description.length === 0 ? (
+                        <></>
+                    ) : (
+                        <div className="text-neutral-500">
+                            {sprintInfo.description}
+                        </div>
+                    )}
+
+                    <div className="flex gap-4 items-center">
+                        <div className="flex-1 relative rounded-full overflow-hidden bg-neutral-200 h-3">
+                            <div
+                                className={`animate-pulse transition-all ease-in-out duration-1000 origin-left bg-lime-500 rounded-full h-full `}
+                                style={{
+                                    width: `${getProgressPercentage(
+                                        sprintTickets
+                                    )}%`,
+                                }}
+                            ></div>
+                        </div>
+                        {`${getProgressPercentage(sprintTickets)}%`}
+                    </div>
+                </div>
+                <Droppable
+                    droppableId={`sprintTickets-${index}-${sprintInfo.id}`}
+                    type="droppableItem"
+                >
+                    {({ innerRef, placeholder }, { isDraggingOver }) => (
+                        <div
+                            className={getTicketWrapClass(isDraggingOver)}
+                            ref={innerRef}
+                        >
+                            <div
+                                className={getTicketInnerWrapClass(
+                                    isDraggingOver
+                                )}
+                            >
                                 {isTicketLoading && <div>Loading</div>}
                                 {sprintTickets.length === 0 ? (
                                     <div className="text-neutral-300 text-sm">
@@ -183,27 +208,50 @@ export const SprintPanel: React.FC<{
                                     </div>
                                 ) : (
                                     sprintTickets.map((ticket, index) => (
-                                        <TicketStatusRow
+                                        <Draggable
                                             index={index}
-                                            ticketInfo={ticket}
                                             key={`${ticket.ticketID}-${ticket.order}`}
-                                        />
+                                            draggableId={
+                                                ticket.ticketID as string
+                                            }
+                                        >
+                                            {(
+                                                {
+                                                    innerRef,
+                                                    draggableProps,
+                                                    dragHandleProps,
+                                                },
+                                                { isDragging }
+                                            ) => (
+                                                <TicketStatusRow
+                                                    index={index}
+                                                    innerRef={innerRef}
+                                                    draggableProps={
+                                                        draggableProps
+                                                    }
+                                                    dragHandleProps={
+                                                        dragHandleProps
+                                                    }
+                                                    isDragging={isDragging}
+                                                    ticketInfo={ticket}
+                                                />
+                                            )}
+                                        </Draggable>
                                     ))
                                 )}
+
+                                {placeholder}
                             </div>
-                            {placeholder}
                         </div>
-                        <div
-                            onClick={() =>
-                                setIsToggle((prev) => (prev ? false : true))
-                            }
-                            className="flex justify-center transition hover:bg-neutral-200 py-2 text-neutral-400"
-                        >
-                            {isToggle ? "less" : "more"}
-                        </div>
-                    </div>
-                )}
-            </Droppable>
+                    )}
+                </Droppable>
+                <div
+                    onClick={() => setIsToggle((prev) => (prev ? false : true))}
+                    className="flex justify-center transition hover:bg-neutral-200 py-2 text-neutral-400"
+                >
+                    {isToggle ? "less" : "more"}
+                </div>
+            </div>
 
             {dialogActive.delete && (
                 <Dialog
@@ -220,6 +268,13 @@ export const SprintPanel: React.FC<{
 
                     <div className="flex justify-end gap-2">
                         <Button
+                            rounded
+                            secondary
+                            onClickFun={() => handleDialogToggle("delete")}
+                        >
+                            Close
+                        </Button>
+                        <Button
                             danger
                             rounded
                             onClickFun={() => {
@@ -228,13 +283,6 @@ export const SprintPanel: React.FC<{
                             }}
                         >
                             delete
-                        </Button>
-                        <Button
-                            rounded
-                            secondary
-                            onClickFun={() => handleDialogToggle("delete")}
-                        >
-                            Close
                         </Button>
                     </div>
                 </Dialog>
@@ -245,7 +293,7 @@ export const SprintPanel: React.FC<{
                     handleDialogToggle={() => {
                         handleDialogToggle("edit");
                     }}
-                    title="add category"
+                    title="edit sprint"
                 >
                     <div className="flex flex-col gap-2 mb-6">
                         <div className={inputWrapClass}>
@@ -281,7 +329,7 @@ export const SprintPanel: React.FC<{
                         <div className={inputWrapClass}>
                             <div className="text-neutral-500">description</div>
                             <textarea
-                                className="p-2 text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-neutral-300 outline-none transition "
+                                className="p-2 bg-white text-neutral-500 rounded appearance-none w-full resize-none bg-transparent focus:bg-neutral-300 outline-none transition "
                                 placeholder="add some description here"
                                 onChange={(e) => {
                                     setNewSprintInfo((prev) => ({

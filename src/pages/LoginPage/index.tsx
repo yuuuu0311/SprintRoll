@@ -1,13 +1,54 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FloatingTicket } from "@/components/FloatingTicket";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 // component
+import { FloatingTicket } from "@/components/FloatingTicket";
 import { SigninPanel } from "./SigninPanel";
 import { SignupPanel } from "./SignupPanel";
-import { useState } from "react";
+import { Button } from "@/components/Button";
+import { Loader } from "@/components/Loader";
+
+// utilities
+import { UserFace } from "@/interface";
+import { useUser } from "@/utilities/store";
 
 export const LoginPage: React.FC = () => {
+    const { setUser } = useUser<UserFace>((state) => state);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
     const [isLoginPanel, setIsLoginPanel] = useState(true);
+
+    const handleLogin = async () => {
+        try {
+            setIsLoading(true);
+            const auth = getAuth();
+
+            const { user } = await signInWithEmailAndPassword(
+                auth,
+                "test123456@gmail.com",
+                "test123456"
+            );
+
+            if (user.uid === null || user.email === null) return;
+
+            localStorage.setItem("userID", user.uid);
+            localStorage.setItem("userEmail", user.email);
+
+            setUser({ uid: user.uid, email: user.email } as UserFace);
+            setIsLoading(false);
+            setIsLogin(true);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (isLogin) navigate("/profile/overview");
+    }, [isLogin, navigate]);
+
     return (
         <div className="grid place-items-center bg-neutral-300 h-full">
             <div className="rounded-2xl overflow-hidden bg-stone-100 md:w-2/3 md:h-2/3 w-full h-full flex flex-col md:flex-row shadow-xl">
@@ -63,6 +104,19 @@ export const LoginPage: React.FC = () => {
                     ) : (
                         <SigninPanel setIsLoginPanel={setIsLoginPanel} />
                     )}
+                    <hr className="border-neutral-300" />
+                    <Button
+                        rounded
+                        success
+                        onClickFun={handleLogin}
+                        addonStyle="w-full flex justify-center"
+                    >
+                        {isLoading ? (
+                            <Loader addonStyle="h-6 w-6 text-white" />
+                        ) : (
+                            "Sign In with test account"
+                        )}
+                    </Button>
                 </div>
             </div>
         </div>

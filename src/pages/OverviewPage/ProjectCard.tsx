@@ -12,6 +12,8 @@ import {
     addCollaborator,
     debounce,
 } from "@/utilities";
+import { deleteAllCollection, deleteAllSprints } from "@/utilities";
+import { useCollaborators } from "@/utilities/hook";
 
 //components
 import { Collaborators } from "./Collaborators";
@@ -30,6 +32,7 @@ export const ProfileCard: React.FC<{
         invite: false,
     });
 
+    const { collaborators } = useCollaborators(projectInfo.id);
     const [searchCollaborators, setSearchCollaborators] = useState<
         UserFace[] | undefined
     >([]);
@@ -49,6 +52,8 @@ export const ProfileCard: React.FC<{
 
     const handleDeleteProject = (projectInfo: ProjectFace) => {
         deleteProject(projectInfo);
+        deleteAllSprints(projectInfo);
+        deleteAllCollection(projectInfo);
     };
 
     const handleSearchCollaborators = debounce(
@@ -64,23 +69,33 @@ export const ProfileCard: React.FC<{
             <div className="cursor-pointer flex-1 hover:bg-neutral-200 transition bg-stone-100 w-full h-auto aspect-square rounded-md overflow-hidden p-5 flex flex-col gap-2 shadow-lg">
                 <NavLink
                     to={`/${projectInfo.name}/all`}
-                    className="flex-1 text-xl"
+                    className="text-xl flex-1 line-clamp-1"
                 >
-                    {projectInfo.name}
+                    <span className="text-xl line-clamp-1">
+                        {projectInfo.name}
+                    </span>
                 </NavLink>
 
                 {isCollaborative ? (
                     <span>project owner : {projectInfo.ownerEmail}</span>
                 ) : (
-                    <div className="mt-auto justify-end flex gap-2 items-center">
-                        <MdOutlinePeopleOutline
-                            className="hover:text-blue-500 transition text-xl cursor-pointer text-neutral-500"
+                    <div className="mt-auto justify-end flex gap-2 h-[20px]">
+                        <div
+                            className="flex items-end leading-none gap-1 hover:text-blue-500 text-neutral-500"
                             onClick={() => handleDialogToggle("invite")}
-                        />
-                        <MdOutlineDelete
-                            className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500"
-                            onClick={() => handleDialogToggle("delete")}
-                        />
+                        >
+                            <span className=" text-xs">
+                                {collaborators?.length}
+                            </span>
+                            <MdOutlinePeopleOutline className=" transition text-xl cursor-pointer" />
+                        </div>
+
+                        <div>
+                            <MdOutlineDelete
+                                className="hover:text-rose-500 transition text-xl cursor-pointer text-neutral-500"
+                                onClick={() => handleDialogToggle("delete")}
+                            />
+                        </div>
                     </div>
                 )}
             </div>
@@ -100,18 +115,18 @@ export const ProfileCard: React.FC<{
 
                     <div className="flex justify-end gap-2">
                         <Button
-                            danger
-                            rounded
-                            onClickFun={() => handleDeleteProject(projectInfo)}
-                        >
-                            delete
-                        </Button>
-                        <Button
                             rounded
                             secondary
                             onClickFun={() => handleDialogToggle("delete")}
                         >
                             Close
+                        </Button>
+                        <Button
+                            danger
+                            rounded
+                            onClickFun={() => handleDeleteProject(projectInfo)}
+                        >
+                            delete
                         </Button>
                     </div>
                 </Dialog>
@@ -144,7 +159,6 @@ export const ProfileCard: React.FC<{
                                     >
                                         <div className="flex gap-2 items-center">
                                             <div>{collaborator.email}</div>
-                                            {/* <div>{collaborator.uid}</div> */}
                                         </div>
 
                                         <div
@@ -156,6 +170,7 @@ export const ProfileCard: React.FC<{
                                                     {
                                                         name: collaborator.uid as string,
                                                         role: 1,
+                                                        email: collaborator.email as string,
                                                     }
                                                 );
                                             }}

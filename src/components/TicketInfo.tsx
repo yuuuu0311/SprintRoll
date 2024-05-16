@@ -9,24 +9,24 @@ import {
 // dependency
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
-import { useDebounce } from "use-debounce";
+// import { useDebounce } from "use-debounce";
 
 // interface
-import { TicketFace, UserFace, LabelInputFace, LabelFace } from "@/interface";
+import { TicketFace, LabelInputFace, LabelFace } from "@/interface";
 
 // components
 import { Button } from "@/components/Button";
 import { Dialog } from "@/components/Dialog";
 
 // icons
-import { MdManageSearch } from "react-icons/md";
+// import { MdManageSearch } from "react-icons/md";
 
 // utilities
 import {
-    deleteTicket,
-    getDomainDeveloper,
-    assignDeveloper,
-    removeFromAssigned,
+    // deleteTicket,
+    // getDomainDeveloper,
+    // assignDeveloper,
+    // removeFromAssigned,
     debounce,
     updateTicketInfo,
 } from "@/utilities";
@@ -105,7 +105,7 @@ const DialogSection: React.FC<{
     return (
         <div>
             {sectionTitle && (
-                <div className="capitalize text-md px-2 text-neutral-500 mb-2">
+                <div className="capitalize text-md px-2 text-bold text-neutral-600 mb-2">
                     {sectionTitle}
                 </div>
             )}
@@ -115,72 +115,72 @@ const DialogSection: React.FC<{
     );
 };
 
-const Developer: React.FC<{
-    developerInfo: UserFace;
-    isInCollection: string;
-    ticketInfo: TicketFace;
-}> = ({ developerInfo, isInCollection, ticketInfo }) => {
-    const assignedDeveloperArr = [
-        ...(ticketInfo.assignedDeveloper as string | undefined[]),
-    ];
-    const isInAssigned =
-        assignedDeveloperArr.indexOf(developerInfo.name) !== -1;
+// const Developer: React.FC<{
+//     developerInfo: UserFace;
+//     isInCollection: string;
+//     ticketInfo: TicketFace;
+// }> = ({ developerInfo, isInCollection, ticketInfo }) => {
+//     const assignedDeveloperArr = [
+//         ...(ticketInfo.assignedDeveloper as string | undefined[]),
+//     ];
+//     const isInAssigned =
+//         assignedDeveloperArr.indexOf(developerInfo.name) !== -1;
 
-    return (
-        <div className="rounded-md bg-neutral-100 flex justify-between items-center gap-4 p-4">
-            <div className="flex flex-1 flex-col gap-1">
-                <div className="capitalize flex justify-between items-baseline">
-                    <span>{developerInfo.name} </span>
-                    <span className="text-xs text-neutral-500">
-                        {developerInfo.domain}
-                    </span>
-                </div>
-                <div className="text-gray-500 text-sm ">
-                    {developerInfo.email}
-                </div>
-            </div>
+//     return (
+//         <div className="rounded-md bg-neutral-100 flex justify-between items-center gap-4 p-4">
+//             <div className="flex flex-1 flex-col gap-1">
+//                 <div className="capitalize flex justify-between items-baseline">
+//                     <span>{developerInfo.name} </span>
+//                     <span className="text-xs text-neutral-500">
+//                         {developerInfo.domain}
+//                     </span>
+//                 </div>
+//                 <div className="text-gray-500 text-sm ">
+//                     {developerInfo.email}
+//                 </div>
+//             </div>
 
-            <Button
-                link
-                success={!isInAssigned}
-                danger={isInAssigned}
-                addonStyle="text-md aspect-square p-0 w-6 grid place-items-center rounded-full"
-                onClickFun={() =>
-                    isInAssigned
-                        ? removeFromAssigned(
-                              developerInfo,
-                              isInCollection,
-                              ticketInfo.ticketID as string
-                          )
-                        : assignDeveloper(
-                              developerInfo,
-                              isInCollection,
-                              ticketInfo.ticketID as string
-                          )
-                }
-            >
-                {isInAssigned ? "-" : "+"}
-            </Button>
-        </div>
-    );
-};
+//             <Button
+//                 link
+//                 success={!isInAssigned}
+//                 danger={isInAssigned}
+//                 addonStyle="text-md aspect-square p-0 w-6 grid place-items-center rounded-full"
+//                 onClickFun={() =>
+//                     isInAssigned
+//                         ? removeFromAssigned(
+//                               developerInfo,
+//                               isInCollection,
+//                               ticketInfo.ticketID as string
+//                           )
+//                         : assignDeveloper(
+//                               developerInfo,
+//                               isInCollection,
+//                               ticketInfo.ticketID as string
+//                           )
+//                 }
+//             >
+//                 {isInAssigned ? "-" : "+"}
+//             </Button>
+//         </div>
+//     );
+// };
 
 export const TicketInfo: React.FC<{
     ticketInfo: TicketFace;
     index: number;
     isInCollection?: string;
     setDialogActive: Dispatch<SetStateAction<boolean>>;
-}> = ({ isInCollection, index, ticketInfo, setDialogActive }) => {
-    const [assignedDeveloper, setAssignedDeveloper] = useState<
-        UserFace[] | void
-    >();
+}> = ({ ticketInfo, setDialogActive }) => {
+    // const [assignedDeveloper, setAssignedDeveloper] = useState<
+    //     UserFace[] | void
+    // >();
 
-    const [isSearching, setIsSearching] = useState<boolean>();
-    const [searchDeveloper, setSearchDeveloper] = useState<string>();
-    const [searchValue] = useDebounce(searchDeveloper, 1000, {
-        leading: true,
-        maxWait: 300,
-    });
+    // const [isSearching, setIsSearching] = useState<boolean>();
+    // const [searchDeveloper, setSearchDeveloper] = useState<string>();
+    // const [searchValue] = useDebounce(searchDeveloper, 1000, {
+    //     leading: true,
+    //     maxWait: 300,
+    // });
 
     const [ticketLabel, setTicketLabel] = useState<LabelFace>(
         ticketInfo.label as LabelFace
@@ -196,30 +196,30 @@ export const TicketInfo: React.FC<{
         })
     );
 
-    const handleSearchToggle = () => {
-        setSearchDeveloper("");
-        setAssignedDeveloper([]);
-        setIsSearching((prev) => !prev);
-    };
+    // const handleSearchToggle = () => {
+    //     setSearchDeveloper("");
+    //     setAssignedDeveloper([]);
+    //     setIsSearching((prev) => !prev);
+    // };
 
     const handleDialogToggle = () => {
         setDialogActive((prev) => (prev ? false : true));
     };
 
-    const handelSearchDeveloper = async (e: ChangeEvent<HTMLInputElement>) => {
-        setSearchDeveloper(e.target.value);
+    // const handelSearchDeveloper = async (e: ChangeEvent<HTMLInputElement>) => {
+    //     setSearchDeveloper(e.target.value);
 
-        if (e.target.value.length === 0) {
-            setAssignedDeveloper([]);
-        } else {
-            const developerInfo = await getDomainDeveloper(
-                ticketInfo.domain as string,
-                searchValue as string
-            );
+    //     if (e.target.value.length === 0) {
+    //         setAssignedDeveloper([]);
+    //     } else {
+    //         const developerInfo = await getDomainDeveloper(
+    //             ticketInfo.domain as string,
+    //             searchValue as string
+    //         );
 
-            setAssignedDeveloper(developerInfo);
-        }
-    };
+    //         setAssignedDeveloper(developerInfo);
+    //     }
+    // };
 
     const handleTicketChange = (e: ChangeEvent<HTMLSelectElement>) => {
         updateTicketInfo(ticketInfo, {
@@ -243,7 +243,7 @@ export const TicketInfo: React.FC<{
             size="md"
             handleDialogToggle={() => {
                 handleDialogToggle();
-                setAssignedDeveloper(undefined);
+                // setAssignedDeveloper(undefined);
             }}
             title={ticketInfo.title as string}
         >
@@ -274,7 +274,7 @@ export const TicketInfo: React.FC<{
                             ))}
                         </div>
                     </DialogSection>
-                    <DialogSection sectionTitle="assigned developers">
+                    {/* <DialogSection sectionTitle="assigned developers">
                         <div className="flex gap-1 flex-wrap px-2 mb-2">
                             {!ticketInfo.assignedDeveloper?.length ? (
                                 <div className="text-neutral-400">
@@ -331,7 +331,7 @@ export const TicketInfo: React.FC<{
                                 </div>
                             </div>
                         )}
-                    </DialogSection>
+                    </DialogSection> */}
                     <DialogSection sectionTitle="Status">
                         <div className="relative">
                             <select
@@ -366,7 +366,7 @@ export const TicketInfo: React.FC<{
                 </div>
             </div>
             <div className="flex gap-2 mt-auto justify-end">
-                <Button
+                {/* <Button
                     rounded
                     danger
                     onClickFun={() => {
@@ -378,7 +378,7 @@ export const TicketInfo: React.FC<{
                     }}
                 >
                     delete
-                </Button>
+                </Button> */}
                 <Button
                     rounded
                     secondary
@@ -386,7 +386,7 @@ export const TicketInfo: React.FC<{
                         handleDialogToggle();
                     }}
                 >
-                    close
+                    Back
                 </Button>
             </div>
         </Dialog>

@@ -6,6 +6,7 @@ interface collaborator {
     uid: string;
     name: string;
     role: number;
+    email: string;
 }
 
 export const Collaborators: React.FC<{ projectID: string | undefined }> = ({
@@ -21,8 +22,7 @@ export const Collaborators: React.FC<{ projectID: string | undefined }> = ({
                     className="flex gap-8 items-center py-2"
                 >
                     <div className="flex gap-2 items-center">
-                        <div>avatar</div>
-                        <div>{collaborator.uid}</div>
+                        <div>{collaborator.email}</div>
                     </div>
 
                     <div

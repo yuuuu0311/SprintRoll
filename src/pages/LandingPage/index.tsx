@@ -288,17 +288,18 @@ export const LandingPage: React.FC = () => {
 
     useGSAP(() => {
         gsap.fromTo(
-            ".hero",
+            ".hero-inner",
             {
                 opacity: 1,
                 borderRadius: 0,
+                scale: 1,
             },
             {
                 opacity: 0.75,
                 borderRadius: 24,
-                scale: 0.9,
+                scale: 0.8,
                 transformOrigin: "center center",
-                ease: "expoScale(0.5,7,none)",
+                ease: "easeInOut",
                 scrollTrigger: {
                     trigger: ".hero",
                     scroller: ".landing-page",
@@ -310,6 +311,7 @@ export const LandingPage: React.FC = () => {
                 },
             }
         );
+
         gsap.fromTo(
             ".intro-card",
             {
@@ -460,109 +462,127 @@ export const LandingPage: React.FC = () => {
 
     return (
         <div className="h-screen w-full overflow-x-hidden overflow-y-auto no-scrollbar bg-stone-100 landing-page">
-            <div className="h-screen w-screen mx-auto relative grid place-items-center overflow-hidden hero">
-                <motion.div
-                    className="opacity-50 absolute w-full h-full bg-neutral-300"
-                    initial={{
-                        scale: 1,
-                    }}
-                    animate={{
-                        scale: 1.5,
-                    }}
-                    transition={{
-                        duration: 4,
-                        ease: "easeInOut",
-                    }}
-                >
-                    {Array.from(Array(5)).map((ele, index) => (
-                        <FloatingTicket
-                            key={`${ele}+${index}`}
-                            index={index}
-                            domain={0}
-                        />
-                    ))}
-                    {Array.from(Array(2)).map((ele, index) => (
-                        <FloatingTicket
-                            key={`${ele}+${index}`}
-                            index={index}
-                            domain={1}
-                        />
-                    ))}
-                    {Array.from(Array(3)).map((ele, index) => (
-                        <FloatingTicket
-                            key={`${ele}+${index}`}
-                            index={index}
-                            domain={2}
-                        />
-                    ))}
-                    {Array.from(Array(5)).map((ele, index) => (
-                        <FloatingTicket
-                            key={`${ele}+${index}`}
-                            index={index}
-                            domain={3}
-                        />
-                    ))}
-                </motion.div>
-                <div className="z-50 w-fit mx-auto flex flex-col gap-2 justify-center items-center md:scale-150 tracking-widest">
-                    <div className="relative h-20 w-full flex overflow-hidden justify-center items-center text-stroke-4 select-none pointer-events-none">
-                        {Array.from("SprintRoll").map((word, index) => (
-                            <motion.div
-                                key={`${word}-${index}`}
-                                className="text-6xl tex-bold text-stroke-2 "
+            <div className="hero h-screen w-screen overflow-hidden">
+                <div className="h-full w-full mx-auto relative grid place-items-center overflow-hidden hero-inner">
+                    <motion.div
+                        className="opacity-50 absolute w-full h-full bg-neutral-300"
+                        initial={{
+                            scale: 1,
+                        }}
+                        animate={{
+                            scale: 1.5,
+                        }}
+                        transition={{
+                            duration: 4,
+                            ease: "easeInOut",
+                        }}
+                    >
+                        {Array.from(Array(5)).map((ele, index) => (
+                            <FloatingTicket
+                                key={`${ele}+${index}`}
+                                index={index}
+                                domain={0}
+                            />
+                        ))}
+                        {Array.from(Array(2)).map((ele, index) => (
+                            <FloatingTicket
+                                key={`${ele}+${index}`}
+                                index={index}
+                                domain={1}
+                            />
+                        ))}
+                        {Array.from(Array(3)).map((ele, index) => (
+                            <FloatingTicket
+                                key={`${ele}+${index}`}
+                                index={index}
+                                domain={2}
+                            />
+                        ))}
+                        {Array.from(Array(5)).map((ele, index) => (
+                            <FloatingTicket
+                                key={`${ele}+${index}`}
+                                index={index}
+                                domain={3}
+                            />
+                        ))}
+                    </motion.div>
+                    <div className="z-50 w-fit mx-auto flex flex-col gap-2 justify-center items-center md:scale-150 tracking-widest">
+                        <div className="relative h-20 w-full flex overflow-hidden justify-center items-center text-stroke-4 select-none pointer-events-none">
+                            {Array.from("SprintRoll").map((word, index) => (
+                                <motion.div
+                                    key={`${word}-${index}`}
+                                    className="text-6xl tex-bold text-stroke-2 "
+                                    initial={{
+                                        translateY: "100%",
+                                        opacity: 0,
+                                        color: "#FFFFFF",
+                                    }}
+                                    animate={{
+                                        translateY: "0%",
+                                        opacity: 1,
+                                        color: "#454545",
+                                    }}
+                                    transition={{
+                                        duration: 1,
+                                        ease: [0, 0.71, 0.2, 1.01],
+                                        delay: index / 12,
+                                        repeat: 2,
+                                        repeatType: "reverse",
+                                    }}
+                                >
+                                    {word}
+                                </motion.div>
+                            ))}
+                        </div>
+                        <div className="text-xl text-bold scale-110 select-none pointer-events-none">
+                            your best rollup option
+                        </div>
+                        <NavLink to="/login">
+                            <motion.button
+                                className="flex gap-2 items-center py-1 px-3 text-stone-100 bg-neutral-600 rounded-full mt-3 active:bg-neutral-600 active:scale-90 hover:bg-neutral-700 transition select-none"
                                 initial={{
-                                    translateY: "100%",
                                     opacity: 0,
-                                    color: "#FFFFFF",
                                 }}
                                 animate={{
-                                    translateY: "0%",
                                     opacity: 1,
-                                    color: "#454545",
                                 }}
                                 transition={{
                                     duration: 1,
-                                    ease: [0, 0.71, 0.2, 1.01],
-                                    delay: index / 12,
-                                    repeat: 2,
-                                    repeatType: "reverse",
+                                    ease: "easeInOut",
                                 }}
                             >
-                                {word}
-                            </motion.div>
-                        ))}
+                                <div>Start</div>
+                                <div>
+                                    <IoMdArrowRoundForward />
+                                </div>
+                            </motion.button>
+                        </NavLink>
                     </div>
-                    <div className="text-xl text-bold scale-110 select-none pointer-events-none">
-                        your best rollup option
-                    </div>
-                    <NavLink to="/login">
-                        <motion.button
-                            className="flex gap-2 items-center py-1 px-3 text-stone-100 bg-neutral-600 rounded-full mt-3 active:bg-neutral-600 active:scale-90 hover:bg-neutral-700 transition select-none"
-                            initial={{
-                                opacity: 0,
-                            }}
-                            animate={{
-                                opacity: 1,
-                            }}
-                            transition={{
-                                duration: 1,
-                                ease: "easeInOut",
-                            }}
-                        >
-                            <div>Start</div>
-                            <div>
-                                <IoMdArrowRoundForward />
-                            </div>
-                        </motion.button>
-                    </NavLink>
+                    <a
+                        href="#intro"
+                        className="cursor-pointer absolute bottom-8 flex flex-col gap-2 items-center transition hover:translate-y-1"
+                    >
+                        <div>about SprintRoll</div>
+                        <div className=" rotate-90">
+                            <IoMdArrowRoundForward />
+                        </div>
+                    </a>
                 </div>
             </div>
 
-            <div className="w-screen bg-stone-100 relative container-intro">
+            <div
+                className="w-screen bg-stone-100 relative container-intro"
+                id="intro"
+            >
                 <div className="mx-auto md:w-3/4 w-full md:py-24 py-12 px-10 flex flex-col gap-36">
                     <div className="flex flex-col md:gap-20 gap-12">
                         <div className={sectionTitle}># SprintRoll</div>
 
-                        <div className="gap-6 grid md:grid-cols-4 grid-cols-1">
+                        <div className="text-xl text-neutral-600 tracking-wide leading-relaxed">
+                            在快速變化的開發環境中，一個高效的專案管理工具是重要的。我們深知您面對的挑戰，因此特別設計了一套能夠滿足現代管理需求的解決方案。此工具具備以下四大核心功能，旨在提升您的工作效率並優化團隊合作：
+                        </div>
+
+                        <div className="gap-6 grid md:grid-cols-2 lg:grid-cols-4 grid-cols-1">
                             <div className={introCardWrap}>
                                 <div className={introCardTitle}>輕鬆規劃</div>
                                 <div>直覺的拖曳介面，快速設定和調整任務</div>
@@ -572,14 +592,16 @@ export const LandingPage: React.FC = () => {
                                 <div>隨時共享進度，溝通無阻，保持團隊同步</div>
                             </div>
                             <div className={introCardWrap}>
-                                <div className={introCardTitle}>客製化調整</div>
+                                <div className={introCardTitle}>即時追蹤</div>
                                 <div>
-                                    按需產品需求調整，滿足的工作流程和需求
+                                    讓您隨時掌握產品或專案狀態，做出明智決策
                                 </div>
                             </div>
                             <div className={introCardWrap}>
-                                <div className={introCardTitle}>即時追蹤</div>
-                                <div>讓您隨時掌握產品狀態，做出明智決策</div>
+                                <div className={introCardTitle}>客製化調整</div>
+                                <div>
+                                    按需產品或專案需求調整，滿足不同的工作流程和需求
+                                </div>
                             </div>
                         </div>
                     </div>

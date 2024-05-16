@@ -6,15 +6,18 @@ import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
 // interface
-import { TicketFace, LabelInputFace } from "@/interface";
+import { TicketFace, LabelInputFace, LabelFace } from "@/interface";
 
 // components
-
 import { TicketInfo } from "@/components/TicketInfo";
 import { renderLabel } from "@/components/Label";
 
 // utilities
-import { updateTicketInfo } from "@/utilities";
+import { updateTicketInfo, deleteTicket } from "@/utilities";
+
+// icon
+import { MdModeEdit, MdCheck } from "react-icons/md";
+import { TiDelete } from "react-icons/ti";
 
 export const Label: React.FC<LabelInputFace> = ({
     ticketInfo,
@@ -76,23 +79,54 @@ export const Ticket: React.FC<{
     isDragging?: boolean;
 }> = ({ isInCollection, index, ticketInfo, isDragging }) => {
     const [dialogActive, setDialogActive] = useState(false);
+    const [newTicketTitle, setNewTicketTitle] = useState({
+        isEdit: false,
+        value: ticketInfo.title,
+    });
 
     const ticketsClass = twMerge(
-        classNames("rounded-md overflow-hidden transition", {
+        classNames("rounded-md transition group relative overflow-hidden", {
             "drop-shadow-xl": isDragging,
         })
     );
     const ticketsDomainClass = twMerge(
-        classNames({
-            "p-2 bg-lime-500": ticketInfo.domain === "frontend",
-            "p-2 bg-red-500": ticketInfo.domain === "backend",
-            "p-2 bg-yellow-500": ticketInfo.domain === "data",
-            "p-2 bg-blue-500": ticketInfo.domain === "ios",
+        classNames("px-2 py-1 flex justify-end group bg-purple-300", {
+            "bg-lime-500": ticketInfo.domain === "frontend",
+            "bg-red-500": ticketInfo.domain === "backend",
+            "bg-yellow-500": ticketInfo.domain === "data",
+            "bg-blue-500": ticketInfo.domain === "ios",
         })
     );
 
     const handleDialogToggle = () => {
         setDialogActive((prev) => (prev ? false : true));
+    };
+
+    const needRenderLabel = (labels: LabelFace) => {
+        const labelArr = [];
+
+        for (const key in labels) {
+            const labelCheck = labels[key as keyof LabelFace];
+            if (labelCheck) labelArr.push(key);
+        }
+
+        return labelArr.length;
+    };
+
+    const getDraggingStyle = (isDragging: boolean) => {
+        const classes = twMerge(classNames({ "shadow-lg": isDragging }));
+        return classes;
+    };
+
+    const handleNewTicketTitle = () => {
+        setNewTicketTitle((prev) => ({
+            ...prev,
+            isEdit: false,
+        }));
+        updateTicketInfo(ticketInfo, {
+            target: "title",
+            value: newTicketTitle.value as string,
+        });
     };
 
     return (
@@ -105,24 +139,118 @@ export const Ticket: React.FC<{
                     }
                     isDragDisabled={dialogActive}
                 >
-                    {({ innerRef, draggableProps, dragHandleProps }) => (
+                    {(
+                        { innerRef, draggableProps, dragHandleProps },
+                        { isDragging }
+                    ) => (
                         <div
                             ref={innerRef}
                             {...draggableProps}
                             {...dragHandleProps}
+                            className={getDraggingStyle(isDragging)}
                         >
                             <div
                                 className={ticketsClass}
                                 onClick={handleDialogToggle}
                             >
-                                <div className={ticketsDomainClass}></div>
+                                <div className={ticketsDomainClass}>
+                                    <TiDelete
+                                        className="opacity-0 group-hover:opacity-100 transition hover:text-rose-600 cursor-pointer"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            deleteTicket(
+                                                isInCollection as string,
+                                                ticketInfo.ticketID as string,
+                                                index as number
+                                            );
+                                        }}
+                                    />
+                                </div>
                                 <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
-                                    <div className="">{ticketInfo.title}</div>
-                                    <div className="flex flex-wrap justify-end gap-2 ">
-                                        {renderLabel(
-                                            ticketInfo.label as object
+                                    <div className="flex gap-1 justify-between items-center">
+                                        {!newTicketTitle.isEdit ? (
+                                            <>
+                                                <span className="flex-1 line-clamp-1">
+                                                    <span>
+                                                        {ticketInfo.title}
+                                                    </span>
+                                                </span>
+                                                <span className="cursor-pointer transition group-hover:opacity-100 opacity-0 ">
+                                                    <MdModeEdit
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setNewTicketTitle(
+                                                                (prev) => ({
+                                                                    ...prev,
+                                                                    isEdit: true,
+                                                                })
+                                                            );
+                                                        }}
+                                                    />
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="flex-1 line-clamp-1">
+                                                    <span>
+                                                        <input
+                                                            type="text"
+                                                            name="newTicketTitle"
+                                                            id="newTicketTitle"
+                                                            className="bg-transparent outline-none"
+                                                            autoFocus={true}
+                                                            value={
+                                                                newTicketTitle.value
+                                                            }
+                                                            onClick={(e) =>
+                                                                e.stopPropagation()
+                                                            }
+                                                            onBlur={() =>
+                                                                handleNewTicketTitle
+                                                            }
+                                                            onChange={(e) => {
+                                                                setNewTicketTitle(
+                                                                    (prev) => ({
+                                                                        ...prev,
+                                                                        value: e
+                                                                            .target
+                                                                            .value,
+                                                                    })
+                                                                );
+                                                            }}
+                                                            onKeyDown={(e) => {
+                                                                if (
+                                                                    e.key ===
+                                                                    "Enter"
+                                                                )
+                                                                    handleNewTicketTitle();
+                                                            }}
+                                                        />
+                                                    </span>
+                                                </span>
+                                                <span>
+                                                    <MdCheck
+                                                        className="cursor-pointer hover:text-lime-600"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleNewTicketTitle();
+                                                        }}
+                                                    />
+                                                </span>
+                                            </>
                                         )}
                                     </div>
+                                    {needRenderLabel(
+                                        ticketInfo.label as LabelFace
+                                    ) > 0 ? (
+                                        <div className="flex flex-wrap justify-end gap-2 ">
+                                            {renderLabel(
+                                                ticketInfo.label as object
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )}
                                 </div>
                             </div>
                         </div>

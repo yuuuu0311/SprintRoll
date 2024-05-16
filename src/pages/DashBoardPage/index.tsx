@@ -4,17 +4,13 @@ import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import "rsuite/DateRangePicker/styles/index.css";
 
 // dependency
-import {
-    DragDropContext,
-    Droppable,
-    OnDragEndResponder,
-} from "react-beautiful-dnd";
+import { DragDropContext, OnDragEndResponder } from "react-beautiful-dnd";
 
 // components
-import { Ticket } from "@/components/Ticket";
 import { Loader } from "@/components/Loader";
+import { ProjectTickets } from "./ProjectTickets";
 import { SprintPanel } from "./SprintPanel";
-
+import { BreadCrumbs } from "@/components/BreadCrumbs";
 import { Button } from "@/components/Button";
 import { DateRangePicker } from "rsuite";
 
@@ -35,15 +31,15 @@ import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 
 const toSprintPanel = (droppableId: string) => {
-    const sprintIndexRegex = /sprintTickets-[0-9]/;
+    const sprintIndexRegex = /sprintTickets-[0-9].*/;
     return sprintIndexRegex.test(droppableId);
 };
 
-const getSprintNum = (droppableId: string) => {
+const getSprintID = (droppableId: string) => {
     const splitString = droppableId.split("-");
-    const index = splitString[1];
+    const id = splitString[2];
 
-    return parseInt(index);
+    return id;
 };
 
 const getMovedTicket = (sourceState: TicketFace[], sourceIndex: number) => {
@@ -116,7 +112,8 @@ export const DashBoardPage: React.FC = () => {
                 }
             );
 
-            toSprint(result.draggableId, getSprintNum(destination.droppableId));
+            // toSprint(result.draggableId, getSprintNum(destination.droppableId));
+            toSprint(result.draggableId, getSprintID(destination.droppableId));
         } else if (source.droppableId === destination.droppableId) {
             console.log("drop on same sprint");
 
@@ -149,7 +146,8 @@ export const DashBoardPage: React.FC = () => {
 
             toAnotherSprint(
                 movedTicket as TicketFace,
-                getSprintNum(destination.droppableId)
+                // getSprintNum(destination.droppableId)
+                getSprintID(destination.droppableId)
             );
         } else {
             const { state: sourceState } =
@@ -161,7 +159,7 @@ export const DashBoardPage: React.FC = () => {
                 return prev;
             });
 
-            resetTicketStatus(movedTicket.ticketID as string);
+            resetTicketStatus(movedTicket as TicketFace);
         }
     };
 
@@ -215,60 +213,22 @@ export const DashBoardPage: React.FC = () => {
         })
     );
     const inputCycleClass = twMerge(
-        classNames("rounded", {
+        classNames("rounded z-50", {
             "outline outline-2 outline-rose-500": sprintInfoError.name,
         })
     );
 
     return (
         <div className="flex flex-col items-start w-full h-full">
-            <div className="px-12 py-4 gap-2 text-neutral-500 hidden md:flex">
-                <span>{project}</span>
-                <span>/</span>
-                <span>all</span>
-            </div>
+            <BreadCrumbs />
 
             <div className="md:px-12 px-6 md:pb-12 md:pt-0 py-6 overflow-hidden h-full w-full">
                 <div className="relative flex flex-col h-full w-full">
                     <DragDropContext onDragEnd={onDragEnd}>
                         <div className="relative flex md:flex-row flex-col gap-6 h-full w-full">
-                            <Droppable
-                                droppableId="collections"
-                                type="droppableItem"
-                            >
-                                {({ innerRef, placeholder }) => (
-                                    <div
-                                        className="flex flex-col gap-3 p-4 rounded-md md:w-56 bg-neutral-200 shadow-lg md:h-full h-1/3"
-                                        ref={innerRef}
-                                    >
-                                        <div className="font-bold text-neutral-800">
-                                            Product Backlog
-                                        </div>
-
-                                        {allTickets === undefined && (
-                                            <div className="py-2 h-24">
-                                                <Loader addonStyle="py-2" />
-                                            </div>
-                                        )}
-                                        <div className="flex flex-col gap-3 overflow-auto flex-1 no-scrollbar">
-                                            {allTickets?.map(
-                                                (ticket, index) => (
-                                                    <Ticket
-                                                        key={ticket.ticketID}
-                                                        ticketInfo={ticket}
-                                                        index={index}
-                                                        isInCollection={
-                                                            ticket.collectionID
-                                                        }
-                                                    />
-                                                )
-                                            )}
-                                        </div>
-
-                                        {placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
+                            <ProjectTickets
+                                allTickets={allTickets as TicketFace[]}
+                            />
 
                             <div className="flex-1 flex flex-col gap-7 md:h-full h-1/3">
                                 {isSprintLoading && (
@@ -283,7 +243,10 @@ export const DashBoardPage: React.FC = () => {
                                         </div>
                                     ) : (
                                         sprintInfo.map(
-                                            (sprint: object, index: number) => (
+                                            (
+                                                sprint: SprintFace,
+                                                index: number
+                                            ) => (
                                                 <SprintPanel
                                                     setSprintTicketsSetters={
                                                         setSprintTicketsSetters
@@ -291,7 +254,7 @@ export const DashBoardPage: React.FC = () => {
                                                     sprintInfo={
                                                         sprint as SprintFace
                                                     }
-                                                    key={index}
+                                                    key={`sprintTickets-${index}-${sprint.id}`}
                                                     index={index}
                                                 />
                                             )
@@ -322,7 +285,7 @@ export const DashBoardPage: React.FC = () => {
                             cycle: [new Date(), undefined],
                         });
                     }}
-                    title="add category"
+                    title="add sprint"
                 >
                     <div className="flex flex-col gap-2 mb-6">
                         <div className={inputWrapClass}>

@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { LegacyRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
-import { Draggable } from "react-beautiful-dnd";
 
 import { TicketFace } from "@/interface";
 
@@ -10,11 +9,31 @@ import { renderLabel } from "@/components/Label";
 
 export const TicketStatusRow: React.FC<{
     ticketInfo: TicketFace;
+    innerRef: LegacyRef<HTMLDivElement>;
+    draggableProps: unknown;
+    dragHandleProps: unknown;
+    isDragging: unknown;
     index: number;
-}> = ({ ticketInfo, index }) => {
+}> = ({
+    ticketInfo,
+    innerRef,
+    draggableProps,
+    dragHandleProps,
+    isDragging,
+    index,
+}) => {
     const [dialogActive, setDialogActive] = useState(false);
 
     // style
+    const ticketRowClass = twMerge(
+        classNames(
+            "flex flex-wrap gap-2 justify-between bg-stone-100 hover:px-5 p-2 hover:bg-stone-200/80 transition-all rounded-full relative items-center",
+            {
+                "z-50 shadow-lg w-full !absolute !top-0 !left-0": isDragging,
+            }
+        )
+    );
+
     const ticketStatusLightBg = twMerge(
         classNames(
             "absolute inline-flex h-full w-full rounded-full bg-neutral-400/50 opacity-75",
@@ -72,44 +91,38 @@ export const TicketStatusRow: React.FC<{
 
     return (
         <>
-            <Draggable
-                index={index}
-                draggableId={ticketInfo.ticketID as string}
+            <div
+                ref={innerRef as LegacyRef<HTMLDivElement>}
+                {...(draggableProps as object)}
+                {...(dragHandleProps as object)}
+                onClick={() => {
+                    setDialogActive((prev) => !prev);
+                }}
+                className="w-full"
             >
-                {({ innerRef, draggableProps, dragHandleProps }) => (
-                    <div
-                        ref={innerRef}
-                        {...draggableProps}
-                        {...dragHandleProps}
-                        onClick={() => {
-                            console.log(ticketInfo);
-                            setDialogActive((prev) => !prev);
-                        }}
-                    >
-                        <div className="flex flex-wrap gap-2 md:gap-0 justify-between bg-stone-100 hover:pl-5 p-2 hover:bg-stone-200/80 transition-all rounded-full">
-                            <div className="flex gap-4 items-center">
-                                <span className="relative flex h-3 w-3">
-                                    <span
-                                        className={ticketStatusLightBg}
-                                    ></span>
-                                    <span className={ticketStatusLight}></span>
-                                </span>
+                <div className={ticketRowClass}>
+                    <div className="flex gap-4 items-center flex-1">
+                        <span className="relative flex h-3 w-3">
+                            <span className={ticketStatusLightBg}></span>
+                            <span className={ticketStatusLight}></span>
+                        </span>
 
-                                <span>{ticketInfo.title}</span>
-                            </div>
-                            <div className="flex justify-end gap-2">
-                                <div className={ticketStatusLabel}>
-                                    {getStatusLabel(ticketInfo.status)}
-                                </div>
-                                {renderLabel(ticketInfo.label as object)}
-                                <div className="bg-neutral-300/50 grid place-items-center text-neutral-700 rounded-full px-2 text-sm">
-                                    {ticketInfo.domain}
-                                </div>
-                            </div>
+                        <span className="flex-1 line-clamp-1">
+                            {ticketInfo.title}
+                        </span>
+                    </div>
+                    <div className="flex justify-end gap-2">
+                        <div className={ticketStatusLabel}>
+                            {getStatusLabel(ticketInfo.status)}
+                        </div>
+                        {renderLabel(ticketInfo.label as object)}
+                        <div className="bg-neutral-300/50 grid place-items-center text-neutral-700 rounded-full px-2 text-sm">
+                            {ticketInfo.domain}
                         </div>
                     </div>
-                )}
-            </Draggable>
+                </div>
+            </div>
+
             {dialogActive && (
                 <TicketInfo
                     ticketInfo={ticketInfo}

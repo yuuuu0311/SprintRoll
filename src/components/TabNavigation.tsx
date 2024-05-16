@@ -24,7 +24,7 @@ export const TabNavigation: React.FC<{ children: React.ReactNode }> = ({
 
     const childrenWrapClass = twMerge(
         classNames(
-            "relative max-h-0 overflow-hidden transition-all bg-stone-200 z-50",
+            "relative max-h-0 overflow-y-auto overflow-x-hidden no-scrollbar transition-all bg-stone-200 z-50",
             {
                 "max-h-[999px]": isActive,
             }

@@ -262,7 +262,7 @@ export const removeFromAssigned: (
     });
 };
 
-export const toSprint = async (draggableId: string, index: number) => {
+export const toSprint = async (draggableId: string, id: string) => {
     const ticket = query(
         collectionGroup(db, "tickets"),
         where(documentId(), "==", draggableId)
@@ -273,7 +273,7 @@ export const toSprint = async (draggableId: string, index: number) => {
     tickets.forEach((ticket) => {
         setDoc(ticket.ref, {
             ...ticket.data(),
-            inSprint: index,
+            inSprint: id,
         });
     });
 };
@@ -282,8 +282,6 @@ export const updateTicketInfo = async (
     ticketInfo: TicketFace,
     obj: { target: string; value: string | object }
 ) => {
-    console.log(ticketInfo);
-
     const docRef = doc(
         db,
         `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
@@ -296,8 +294,11 @@ export const updateTicketInfo = async (
     });
 };
 
-export const resetTicketStatus = async (ticketID: string) => {
-    const docRef = doc(db, ticketID);
+export const resetTicketStatus = async (ticketInfo: TicketFace) => {
+    const docRef = doc(
+        db,
+        `collections/${ticketInfo.collectionID}/tickets/${ticketInfo.ticketID}`
+    );
 
     await updateDoc(docRef, {
         inSprint: null,
@@ -314,7 +315,8 @@ export const addSprint = async (sprintInfo: SprintFace) => {
 
 export const toAnotherSprint = async (
     movedTicket: TicketFace,
-    sprintIndex: number
+    // sprintIndex: number
+    sprintID: string
 ) => {
     const ticketRef = doc(
         db,
@@ -322,7 +324,7 @@ export const toAnotherSprint = async (
     );
 
     updateDoc(ticketRef, {
-        inSprint: sprintIndex,
+        inSprint: sprintID,
     });
 };
 
@@ -345,10 +347,79 @@ export const removeCollaborator = async (
     await deleteDoc(doc(db, `projects/${projectID}/collaborators/${uid}`));
 };
 
+export const deleteCollection = async (collectionInfo: CollectionFace) => {
+    const docRef = doc(db, `collections/${collectionInfo.collectionID}`);
+    const ticketsRef = collection(
+        db,
+        `collections/${collectionInfo.collectionID}/tickets`
+    );
+
+    try {
+        const snapshot = await getDocs(ticketsRef);
+        snapshot.forEach((doc) => {
+            deleteDoc(doc.ref);
+        });
+
+        await deleteDoc(docRef);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const deleteAllTickets = async (collectionPath: string) => {
+    const ticketsRef = collection(db, `${collectionPath}/tickets`);
+
+    try {
+        const snapshot = await getDocs(ticketsRef);
+
+        snapshot.forEach((doc) => {
+            deleteDoc(doc.ref);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const deleteAllSprints = async (projectInfo: ProjectFace) => {
+    const sprintsRef = query(
+        collection(db, "sprints"),
+        where("project", "==", projectInfo.name)
+    );
+
+    try {
+        const snapshot = await getDocs(sprintsRef);
+
+        snapshot.forEach((doc) => {
+            deleteDoc(doc.ref);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const deleteAllCollection = async (projectInfo: ProjectFace) => {
+    const collectionRef = query(
+        collection(db, "collections"),
+        where("project", "==", projectInfo.name)
+    );
+
+    try {
+        const snapshot = await getDocs(collectionRef);
+
+        snapshot.forEach((doc) => {
+            deleteDoc(doc.ref);
+            deleteAllTickets(doc.ref.path);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const addCollaborator = async (
     projectID: string | undefined,
     uid: string,
     data: {
+        email: string;
         name: string;
         role: number;
     }
@@ -376,7 +447,7 @@ export const handleDeleteSprint = async (
 ) => {
     const sprintTicketsRef = query(
         collectionGroup(db, "tickets"),
-        where("inSprint", "==", sprintInfo.index),
+        where("inSprint", "==", sprintInfo.id),
         where("project", "==", project)
     );
 

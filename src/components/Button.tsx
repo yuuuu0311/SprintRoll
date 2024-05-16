@@ -17,7 +17,7 @@ interface ButtonProps {
 
 export const Button: React.FC<ButtonProps> = ({ ...props }) => {
     const buttonClass = twMerge(
-        classNames(`px-4 py-2 transition  ${props.addonStyle}`, {
+        classNames(`px-4 py-2 transition capitalize ${props.addonStyle}`, {
             "rounded-md ": props.rounded,
             "bg-neutral-700 text-white": props.primary && !props.link,
             "hover:bg-stone-100 bg-transparent hover:bg-stone-300 active:bg-stone-400":
@@ -28,7 +28,7 @@ export const Button: React.FC<ButtonProps> = ({ ...props }) => {
                 props.danger,
             "text-white bg-lime-500 hover:bg-lime-600 active:bg-lime-500":
                 props.success,
-            "text-neutral-700 hover:bg-neutral-600":
+            "text-neutral-400 hover:bg-neutral-300 hover:text-neutral-600":
                 props.primary && props.link,
         })
     );

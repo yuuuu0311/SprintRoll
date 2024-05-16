@@ -72,7 +72,7 @@ export const useTickets = (id?: string) => {
     return { isLoading, ticketsData, setTicketsData, setIsLoading };
 };
 
-export const useAllTickets = (index?: number) => {
+export const useAllTickets = (index?: number, sprintInfoID?: string) => {
     const { project } = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [allTickets, setAllTickets] = useState<TicketFace[]>();
@@ -101,7 +101,7 @@ export const useAllTickets = (index?: number) => {
             const sprintTicketsCopy = tickets.docs
                 .filter(
                     (ticket) =>
-                        ticket.data().inSprint == index &&
+                        ticket.data().inSprint == sprintInfoID &&
                         ticket.data().project === project
                 )
                 .map((ticket) => ({
@@ -151,7 +151,10 @@ export const useSprint = () => {
                             ...(doc.data() as SprintFace),
                             id: doc.id,
                         }))
-                        .sort((a, b) => a.index - b.index) as SprintFace[]
+                        .sort((a, b) => Number(a.cycle[0]) - Number(b.cycle[0]))
+                        .sort(
+                            (a, b) => Number(a.cycle[1]) - Number(b.cycle[1])
+                        ) as SprintFace[]
             );
         });
 
