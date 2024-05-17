@@ -16,7 +16,7 @@ import { TicketFace, LabelInputFace, LabelFace } from "@/interface";
 
 // components
 import { Button } from "@/components/Button";
-import { Dialog } from "@/components/Dialog";
+import { Dialog } from "@/components/Dialog/";
 
 // icons
 // import { MdManageSearch } from "react-icons/md";

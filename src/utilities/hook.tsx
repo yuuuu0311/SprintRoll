@@ -72,12 +72,10 @@ export const useTickets = (id?: string) => {
     return { isLoading, ticketsData, setTicketsData, setIsLoading };
 };
 
-export const useAllTickets = (index?: number, sprintInfoID?: string) => {
+export const useAllTickets = () => {
     const { project } = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [allTickets, setAllTickets] = useState<TicketFace[]>();
-    const [isTicketLoading, setIsTicketLoading] = useState(false);
-    const [sprintTickets, setSprintTickets] = useState<TicketFace[]>([]);
 
     useEffect(() => {
         const ticketsRef = collectionGroup(db, "tickets");
@@ -98,6 +96,31 @@ export const useAllTickets = (index?: number, sprintInfoID?: string) => {
                     ticketID: ticket.ref.path.split("/")[3],
                 }));
 
+            setAllTickets(allTicketCopy);
+            setIsLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, [project]);
+
+    return {
+        isLoading,
+        allTickets,
+        setAllTickets,
+    };
+};
+
+export const useSprintTickets = (sprintInfoID?: string) => {
+    const { project } = useParams();
+    const [isLoading, setIsLoading] = useState(false);
+    const [sprintTickets, setSprintTickets] = useState<TicketFace[]>([]);
+
+    useEffect(() => {
+        const ticketsRef = collectionGroup(db, "tickets");
+
+        const unsubscribe = onSnapshot(ticketsRef, (tickets) => {
+            setIsLoading(true);
+
             const sprintTicketsCopy = tickets.docs
                 .filter(
                     (ticket) =>
@@ -115,22 +138,17 @@ export const useAllTickets = (index?: number, sprintInfoID?: string) => {
                         parseInt(b.status as string)
                 );
 
-            setAllTickets(allTicketCopy);
             setSprintTickets(sprintTicketsCopy);
             setIsLoading(false);
         });
 
         return () => unsubscribe();
-    }, [index, project]);
+    }, [project, sprintInfoID]);
 
     return {
         isLoading,
-        allTickets,
-        isTicketLoading,
         sprintTickets,
-        setAllTickets,
         setSprintTickets,
-        setIsTicketLoading,
     };
 };
 

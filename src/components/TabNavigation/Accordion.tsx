@@ -16,7 +16,7 @@ import { doc, updateDoc } from "firebase/firestore";
 
 import { Button } from "@/components/Button";
 
-export const TabAccordion: React.FC<{
+export const Accordion: React.FC<{
     projectInfo: ProjectFace;
 }> = ({ projectInfo }) => {
     const { project } = useParams();

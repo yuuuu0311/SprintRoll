@@ -15,10 +15,10 @@ interface ButtonProps {
     children: React.ReactNode | string;
 }
 
-export const Button: React.FC<ButtonProps> = ({ ...props }) => {
+export const Button: React.FC<ButtonProps> = (props) => {
     const buttonClass = twMerge(
         classNames(`px-4 py-2 transition capitalize ${props.addonStyle}`, {
-            "rounded-md ": props.rounded,
+            "rounded-md": props.rounded,
             "bg-neutral-700 text-white": props.primary && !props.link,
             "hover:bg-stone-100 bg-transparent hover:bg-stone-300 active:bg-stone-400":
                 props.link,

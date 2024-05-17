@@ -8,19 +8,7 @@
 
         "paths": {
             "@": ["./src"],
-            "@/*": ["./src/*"],
-            "utilities/": ["./src/utilities"],
-            "utilities/*": ["./src/utilities/*"],
-            "components/": ["./src/components"],
-            "components/*": ["./src/components/*"],
-            "markData/": ["./src/markData"],
-            "markData/*": ["./src/markData/*"],
-            "interface/": ["./src/interface"],
-            "interface/*": ["./src/interface/*"],
-            "pages/": ["./src/pages"],
-            "pages/*": ["./src/pages/*"],
-            "assets/": ["./src/assets"],
-            "assets/*": ["./src/assets/*"]
+            "@/*": ["./src/*"]
         },
 
         /* Bundler mode */
