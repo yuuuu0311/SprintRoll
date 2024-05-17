@@ -6,7 +6,7 @@ import { Timestamp } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 
 // hook
-import { useAllTickets } from "@/utilities/hook";
+import { useSprintTickets } from "@/utilities/hook";
 
 // components
 import { TicketStatusRow } from "./TicketStatusRow";
@@ -56,8 +56,7 @@ export const SprintPanel: React.FC<{
         delete: false,
         edit: false,
     });
-    const { isTicketLoading, sprintTickets, setSprintTickets } = useAllTickets(
-        index,
+    const { isLoading, sprintTickets, setSprintTickets } = useSprintTickets(
         sprintInfo.id
     );
 
@@ -201,7 +200,7 @@ export const SprintPanel: React.FC<{
                                     isDraggingOver
                                 )}
                             >
-                                {isTicketLoading && <div>Loading</div>}
+                                {isLoading && <div>Loading</div>}
                                 {sprintTickets.length === 0 ? (
                                     <div className="text-neutral-300 text-sm">
                                         It's empty, drop some tickets here
