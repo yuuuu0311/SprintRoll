@@ -26,7 +26,7 @@ import { useDialog } from "@/utilities/store";
 
 // interface
 import { DialogState, SprintFace, TicketFace } from "@/interface";
-import { Dialog } from "@/components/Dialog";
+import { Dialog } from "@/components/Dialog/";
 import { twMerge } from "tailwind-merge";
 import classNames from "classnames";
 

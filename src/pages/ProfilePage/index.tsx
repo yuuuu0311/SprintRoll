@@ -2,13 +2,16 @@
 import { Outlet } from "react-router-dom";
 
 // components
+import { Layout } from "@/components/Layout";
 import { TabNavigation } from "@/components/TabNavigation/";
 
 export const ProfilePage = () => {
     return (
-        <div className="flex flex-col md:flex-row items-stretch h-full">
+        <Layout>
             <TabNavigation profile />
-            <Outlet />
-        </div>
+            <main className="relative flex-1 overflow-hidden md:mt-0 mt-[40px]">
+                <Outlet />
+            </main>
+        </Layout>
     );
 };

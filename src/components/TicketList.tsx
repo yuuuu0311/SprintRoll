@@ -9,7 +9,7 @@ import { CollectionFace, TicketFace } from "@/interface";
 // components
 import { Button } from "@/components/Button";
 import { Ticket } from "@/components/Ticket";
-import { Dialog } from "@/components/Dialog";
+import { Dialog } from "@/components/Dialog/";
 import { AddTicketInput } from "@/components/AddTicketInput";
 import { Loader } from "@/components/Loader";
 

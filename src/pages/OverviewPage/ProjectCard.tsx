@@ -18,7 +18,7 @@ import { useCollaborators } from "@/utilities/hook";
 //components
 import { Collaborators } from "./Collaborators";
 import { Button } from "@/components/Button";
-import { Dialog } from "@/components/Dialog";
+import { Dialog } from "@/components/Dialog/";
 
 //interface
 import { UserFace } from "@/interface";

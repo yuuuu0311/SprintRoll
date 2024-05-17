@@ -11,7 +11,7 @@ import { useAllTickets } from "@/utilities/hook";
 // components
 import { TicketStatusRow } from "./TicketStatusRow";
 import { SprintFace, TicketFace } from "@/interface";
-import { Dialog } from "@/components/Dialog";
+import { Dialog } from "@/components/Dialog/";
 import { Button } from "@/components/Button";
 import { DateRangePicker } from "rsuite";
 
