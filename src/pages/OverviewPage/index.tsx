@@ -14,7 +14,7 @@ import { UserFace } from "@/interface";
 import { ProfileCard } from "./ProjectCard";
 import { Button } from "@/components/Button";
 import { Loader } from "@/components/Loader";
-import { SwitchButton } from "@/components/SwitchButton";
+import { SwitchButton } from "@/pages/OverviewPage/SwitchButton";
 
 export const OverviewPage = () => {
     const { uid, email } = useUser<UserFace>((state) => state);
@@ -59,7 +59,9 @@ export const OverviewPage = () => {
         )
     );
     const cardWrapClass = twMerge(
-        classNames("grid gap-3 grid-cols-2 lg:grid-cols-5 xl:grid-cols-6")
+        classNames(
+            "grid gap-3 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xxl:grid-cols-5"
+        )
     );
 
     return (
