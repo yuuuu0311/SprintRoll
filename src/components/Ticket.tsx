@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // dependency
 import { Draggable } from "react-beautiful-dnd";
@@ -128,6 +128,10 @@ export const Ticket: React.FC<{
             value: newTicketTitle.value as string,
         });
     };
+
+    useEffect(() => {
+        console.log(ticketInfo);
+    }, [ticketInfo]);
 
     return (
         <>
