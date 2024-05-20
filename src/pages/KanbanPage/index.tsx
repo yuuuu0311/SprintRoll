@@ -134,7 +134,7 @@ export const KanbanPage: React.FC = () => {
             )}
 
             {collectionsData !== undefined && (
-                <div className="h-full flex flex-col">
+                <div className="h-full flex-1 overflow-auto flex flex-col">
                     <BreadCrumbs />
                     <div className="flex flex-1 gap-2 items-start md:px-12 px-6 md:pb-12 md:pt-0 py-6 overflow-x-auto overflow-y-hidden w-full h-full">
                         <DragDropContext onDragEnd={onDragEnd}>

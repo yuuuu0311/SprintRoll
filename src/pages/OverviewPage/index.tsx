@@ -65,7 +65,7 @@ export const OverviewPage = () => {
     );
 
     return (
-        <div className="flex flex-col gap-6 py-6 md:py-12 px-6 md:px-24 flex-1 mt-[40px] md:mt-0 overflow-auto">
+        <div className="flex flex-col gap-6 py-6 md:py-12 px-6 md:px-24 w-2/3 mt-[40px] md:mt-0 overflow-auto">
             <div className="flex flex-col gap-4 flex-1">
                 <h3 className={titleClass}>owned project</h3>
                 {projectInfo === undefined ? (
