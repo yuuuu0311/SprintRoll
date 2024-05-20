@@ -1,5 +1,5 @@
 import { TicketFace } from "@/interface";
-import { getProgressPercentage } from "./getProgressPercentage";
+import { getProgressPercentage } from "@/utilities";
 import { describe, test, expect } from "@jest/globals";
 
 const mockTicketArray = [

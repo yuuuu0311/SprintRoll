@@ -1,5 +1,8 @@
 import { TicketFace } from "@/interface";
-import { rearange } from "./rearange";
+// import { rearange } from "./rearange";
+import { rearange } from "@/utilities";
+// import { rearange } from "../utilities/index.tsx";
+// import { rearange } from "../../src/utilities/index.tsx";
 import { describe, test, expect } from "@jest/globals";
 
 const mockTicketArray = [
