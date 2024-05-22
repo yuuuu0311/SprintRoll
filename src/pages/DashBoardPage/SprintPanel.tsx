@@ -19,15 +19,11 @@ import { DateRangePicker } from "rsuite";
 import { MdOutlineEdit, MdOutlineDelete } from "react-icons/md";
 
 // utilities
-import { handleDeleteSprint, updateSprint } from "@/utilities";
-
-const getProgressPercentage = (sprintTickets: TicketFace[]) => {
-    const havingStatus = sprintTickets.filter((ticket) => ticket.status !== -1);
-
-    return havingStatus.length === 0 && sprintTickets.length === 0
-        ? 0
-        : Math.floor((havingStatus.length / sprintTickets.length) * 100);
-};
+import {
+    handleDeleteSprint,
+    updateSprint,
+    getProgressPercentage,
+} from "@/utilities";
 
 const getDateString = (date: Timestamp) =>
     new Date(

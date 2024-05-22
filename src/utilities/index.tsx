@@ -490,6 +490,14 @@ export const addCollectionsViaTemplate: (
     }
 };
 
+export const getProgressPercentage = (sprintTickets: TicketFace[]) => {
+    const havingStatus = sprintTickets.filter((ticket) => ticket.status !== -1);
+
+    return havingStatus.length === 0 && sprintTickets.length === 0
+        ? 0
+        : Math.floor((havingStatus.length / sprintTickets.length) * 100);
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = (fn: any, delay: number) => {
     let timer: number;
