@@ -10,8 +10,6 @@ const firebaseConfig = {
     appId: process.env.VITE_APP_ID,
 };
 
-console.log(firebaseConfig);
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
