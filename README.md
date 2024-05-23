@@ -2,13 +2,15 @@
 
 SprintRoll is a project management website designed to help your team work efficiently and stay organized by using a Sprint Dashboard to keep the company on track.
 
+[Demo](https://sprintroll.site/)
 
 ### About
 
-- Create Kanban and Dashboard with nested drag-and-drop functionality by using `React Beautiful DnD`, making project management more efficient
-- Applied Firebase Firestore as database, and Utilized GitHub Actions and Firebase Hosting for CI/CD solutions.
+-   Create Kanban and Dashboard with nested drag-and-drop functionality by using `React Beautiful DnD`, making project management more efficient
+-   Applied Firebase Firestore as database, and Utilized GitHub Actions and Firebase Hosting for CI/CD solutions.
 
 ### Built With
+
 ![React](https://img.shields.io/badge/React-61DAFB.svg?style=for-the-badge&logo=React&logoColor=black)
 ![Tailwind](https://img.shields.io/badge/Tailwind%20CSS-06B6D4.svg?style=for-the-badge&logo=Tailwind-CSS&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28.svg?style=for-the-badge&logo=Firebase&logoColor=black)
@@ -20,22 +22,29 @@ SprintRoll is a project management website designed to help your team work effic
 
 ##### Base
 
-- React app
-- TypeScript
-- Tailwind CSS
-- ESLint
-- Firebase
- 
+-   React app
+-   TypeScript
+-   Tailwind CSS
+-   ESLint
+-   Firebase
+
 ##### Libraries
 
-- react-beautiful-dnd
-- classNames
+-   react-beautiful-dnd
+-   classNames
 
 ##### Build tool
 
-- vite
-- Github Action
+-   vite
+-   Github Action
 
 ### Demo
-1. Created a empty project or Created with four default doamin via template (Front-End, Back-End, Data, iOS) 
 
+1. Created a empty project or Created with four default domain via template (Front-End, Back-End, Data, iOS)
+   ![create_project](./src/assets/create_project.png)
+
+2. Add Tickets in Kanban and arrange them by simply drag and drop feature
+   ![add-tickets](./src/assets/add-tickets.png)
+3. Start Organized your project through adding sprint and drop tickets in any sprint
+   ![dashboard](./src/assets/dashboard.png)
+4. Enjoy your time with Sprintroll !
