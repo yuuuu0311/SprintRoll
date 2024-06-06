@@ -66,7 +66,7 @@ export const TabNavigation: React.FC<{
         } else {
             return;
         }
-    }, [domain, project]);
+    }, [domain, project, isMobileDevice.matches]);
 
     return (
         <div className={wrapperClass}>
