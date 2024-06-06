@@ -49,6 +49,7 @@ const getMovedTicket = (sourceState: TicketFace[], sourceIndex: number) => {
 
 export const DashBoardPage: React.FC = () => {
     const { project } = useParams();
+
     const { allTickets, setAllTickets } = useAllTickets();
     const { isSprintLoading, sprintInfo, setSprintInfo } = useSprint();
     const { isActive, toggleDialog } = useDialog<DialogState>((state) => state);
