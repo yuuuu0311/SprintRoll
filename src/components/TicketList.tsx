@@ -76,9 +76,9 @@ export const TicketList: React.FC<{
                         {...draggableProps}
                         {...dragHandleProps}
                     >
-                        <div className="p-4 bg-neutral-200 max-h-full rounded-lg w-56 shadow-lg flex flex-col">
-                            <div className="flex justify-between items-center">
-                                <h3 className="text-lg text-neutral-700 font-bold capitalize">
+                        <div className="p-4 bg-neutral-200 max-h-full rounded-lg w-56 shadow-lg flex flex-col relative">
+                            <div className="flex justify-between items-center gap-2">
+                                <h3 className="text-lg text-neutral-700 font-bold capitalize flex-1 line-clamp-1 break-words">
                                     {collectionInfo.name}
                                 </h3>
                                 <MdOutlineDelete

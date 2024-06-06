@@ -29,16 +29,16 @@ export const Accordion: React.FC<{
     const navLinkClass = (isActive: boolean) =>
         twMerge(
             classNames(
-                "transition-all text-neutral-400 rounded-md py-2 px-3 bg-neutral-200 hover:pl-5",
+                "transition-all text-neutral-400 opacity-50 rounded-md my-2 px-3 bg-neutral-200 hover:opacity-100 hover:text-neutral-700 line-clamp-1 text-ellipsis break-words cursor-pointer",
                 {
-                    "text-neutral-700": isActive,
+                    "text-neutral-700 opacity-100": isActive,
                 }
             )
         );
 
     const navigationTitleClass = twMerge(
         classNames(
-            "bg-neutral-400/50 text-neutral-500 px-7 py-2 flex justify-between items-center capitalize hover:bg-neutral-400 hover:text-neutral-600 transition",
+            "bg-neutral-400/50 text-neutral-500 px-7 py-2 gap-4 flex justify-between items-center capitalize hover:bg-neutral-400 hover:text-neutral-600 transition sticky top-0 z-10",
             {
                 "bg-neutral-400 text-neutral-600": isActive,
             }
@@ -71,7 +71,9 @@ export const Accordion: React.FC<{
                 onClick={() => setIsActive((prev) => !prev)}
                 className={navigationTitleClass}
             >
-                <span className="line-clamp-1 flex-1">{projectInfo.name}</span>
+                <span className="line-clamp-1 flex-1 break-words text-ellipsis">
+                    {projectInfo.name}
+                </span>
                 <MdExpandMore className={navigationTitleIconClass} />
             </div>
             <ul className={navigationWrapClass}>

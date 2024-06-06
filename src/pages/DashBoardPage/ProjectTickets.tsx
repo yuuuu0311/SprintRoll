@@ -43,14 +43,20 @@ export const ProjectTickets: React.FC<{ allTickets: TicketFace[] }> = ({
                             className={getListWrapClass(isDraggingOver)}
                             ref={innerRef}
                         >
-                            {allTickets?.map((ticket, index) => (
-                                <Ticket
-                                    key={ticket.ticketID}
-                                    ticketInfo={ticket}
-                                    index={index}
-                                    isInCollection={ticket.collectionID}
-                                />
-                            ))}
+                            {allTickets?.length === 0 ? (
+                                <div className="flex flex-1 justify-center items-center px-4 text-sm text-neutral-400 text-center">
+                                    Backlog is empty now !
+                                </div>
+                            ) : (
+                                allTickets?.map((ticket, index) => (
+                                    <Ticket
+                                        key={ticket.ticketID}
+                                        ticketInfo={ticket}
+                                        index={index}
+                                        isInCollection={ticket.collectionID}
+                                    />
+                                ))
+                            )}
                             {placeholder}
                         </div>
                     </>

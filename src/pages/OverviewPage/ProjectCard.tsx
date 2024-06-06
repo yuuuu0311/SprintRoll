@@ -71,7 +71,7 @@ export const ProfileCard: React.FC<{
                     to={`/${projectInfo.name}/all`}
                     className="text-xl flex-1 line-clamp-1"
                 >
-                    <span className="text-xl line-clamp-1">
+                    <span className="text-xl line-clamp-2 break-words">
                         {projectInfo.name}
                     </span>
                 </NavLink>

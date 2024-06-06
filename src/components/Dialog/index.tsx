@@ -21,7 +21,7 @@ export const Dialog: React.FC<{
     );
     const titleClass = twMerge(
         classNames(
-            `px-8 py-6 font-bold text-xl capitalize text-neutral-600 flex justify-between`,
+            `px-8 py-6 font-bold text-xl capitalize text-neutral-600 flex justify-between gap-2 items-center`,
             {
                 "text-rose-500": danger,
             }
@@ -37,7 +37,9 @@ export const Dialog: React.FC<{
             <div className={dialogClass}>
                 {title.length !== 0 && (
                     <div className={titleClass}>
-                        {title}
+                        <span className=" line-clamp-1 text-ellipsis flex-1 break-words">
+                            {title}
+                        </span>
                         <MdClose
                             className="hover:text-neutral-400 transition cursor-pointer"
                             onClick={handleDialogToggle}

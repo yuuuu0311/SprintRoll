@@ -16,7 +16,9 @@ export const ProjectPage = () => {
                 projectInfo={projectInfo}
                 collaborativeProject={collaborativeProject}
             />
-            <Outlet />
+            <div className="mt-[40px] md:mt-0 flex-1 overflow-auto">
+                <Outlet />
+            </div>
         </Layout>
     );
 };

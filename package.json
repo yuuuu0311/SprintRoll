@@ -10,7 +10,8 @@
         "preview": "vite preview",
         "test": "jest",
         "host": "firebase deploy --only hosting:sprintroll-9c8c2",
-        "host-uat": "firebase deploy --only hosting:sprintroll-uat"
+        "host-uat": "firebase deploy --only hosting:sprintroll-uat",
+        "prepare": "husky"
     },
     "dependencies": {
         "@atlaskit/pragmatic-drag-and-drop": "^1.1.3",
@@ -20,6 +21,7 @@
         "firebase": "^10.10.0",
         "firebaseui": "^6.1.0",
         "framer-motion": "^11.1.7",
+        "husky": "^9.0.11",
         "immer": "^10.0.4",
         "localforage": "^1.10.0",
         "match-sorter": "^6.3.4",

@@ -1,8 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-// const apiKey =
-
 const firebaseConfig = {
     apiKey: process.env.VITE_API_KEY,
     authDomain: process.env.VITE_AUTH_DOMAIN,
@@ -11,8 +9,6 @@ const firebaseConfig = {
     messagingSenderId: process.env.VITE_MESSAGING_SENDER_ID,
     appId: process.env.VITE_APP_ID,
 };
-
-console.log(firebaseConfig);
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);

@@ -27,6 +27,19 @@ import {
     mockTicketFace,
 } from "@/interface";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const debounce = (fn: any, delay: number) => {
+    let timer: number;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (...args: any) => {
+        clearTimeout(timer);
+        timer = window.setTimeout(() => {
+            fn(...args);
+        }, delay);
+    };
+};
+
 export const rearange: (
     arr: (CollectionFace | TicketFace | mockTicketFace)[],
     sourceIndex: number,
@@ -43,39 +56,43 @@ export const rearange: (
     return arrCopy;
 };
 
-export const orderCollection = async (
-    sourceIndex: number,
-    destIndex: number,
-    domain: string
-) => {
-    const collectionsRef = collection(db, "collections");
-    const destQuery = query(collectionsRef, where("order", "==", destIndex));
-    const sourceQuery = query(
-        collectionsRef,
-        where("order", "==", sourceIndex)
-    );
+export const orderCollection = debounce(
+    async (sourceIndex: number, destIndex: number, domain: string) => {
+        console.log(1);
 
-    const destQuerySnapshot = await getDocs(destQuery);
-    const sourceQuerySnapshot = await getDocs(sourceQuery);
+        const collectionsRef = collection(db, "collections");
+        const destQuery = query(
+            collectionsRef,
+            where("order", "==", destIndex)
+        );
+        const sourceQuery = query(
+            collectionsRef,
+            where("order", "==", sourceIndex)
+        );
 
-    destQuerySnapshot.docs
-        .filter((doc) => doc.data().domain === domain)
-        .forEach((doc) => {
-            const docRef = doc.ref;
-            updateDoc(docRef, {
-                order: sourceIndex,
+        const destQuerySnapshot = await getDocs(destQuery);
+        const sourceQuerySnapshot = await getDocs(sourceQuery);
+
+        destQuerySnapshot.docs
+            .filter((doc) => doc.data().domain === domain)
+            .forEach((doc) => {
+                const docRef = doc.ref;
+                updateDoc(docRef, {
+                    order: sourceIndex,
+                });
             });
-        });
 
-    sourceQuerySnapshot.docs
-        .filter((doc) => doc.data().domain === domain)
-        .forEach((doc) => {
-            const docRef = doc.ref;
-            updateDoc(docRef, {
-                order: destIndex,
+        sourceQuerySnapshot.docs
+            .filter((doc) => doc.data().domain === domain)
+            .forEach((doc) => {
+                const docRef = doc.ref;
+                updateDoc(docRef, {
+                    order: destIndex,
+                });
             });
-        });
-};
+    },
+    1000
+);
 
 export const orderTicket = async (
     sourceIndex: number,
@@ -496,17 +513,4 @@ export const getProgressPercentage = (sprintTickets: TicketFace[]) => {
     return havingStatus.length === 0 && sprintTickets.length === 0
         ? 0
         : Math.floor((havingStatus.length / sprintTickets.length) * 100);
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const debounce = (fn: any, delay: number) => {
-    let timer: number;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (...args: any) => {
-        clearTimeout(timer);
-        timer = window.setTimeout(() => {
-            fn(...args);
-        }, delay);
-    };
 };

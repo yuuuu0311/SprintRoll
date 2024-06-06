@@ -170,16 +170,14 @@ export const Ticket: React.FC<{
                                         }}
                                     />
                                 </div>
-                                <div className="bg-stone-100 hover:bg-neutral-300 transition flex flex-col gap-1 p-2">
-                                    <div className="flex gap-1 justify-between items-center">
+                                <div className="bg-stone-100 hover:bg-neutral-300 transition relative flex flex-col gap-1 p-2">
+                                    <div className="flex gap-1 justify-between">
                                         {!newTicketTitle.isEdit ? (
-                                            <>
-                                                <span className="flex-1 line-clamp-1">
-                                                    <span>
-                                                        {ticketInfo.title}
-                                                    </span>
-                                                </span>
-                                                <span className="cursor-pointer transition group-hover:opacity-100 opacity-0 ">
+                                            <div className="flex gap-2 w-full">
+                                                <div className="line-clamp-1 flex-1 text-ellipsis break-words">
+                                                    {ticketInfo.title}
+                                                </div>
+                                                <span className="cursor-pointer transition group-hover:opacity-100 opacity-0 flex items-center">
                                                     <MdModeEdit
                                                         onClick={(e) => {
                                                             e.stopPropagation();
@@ -192,7 +190,7 @@ export const Ticket: React.FC<{
                                                         }}
                                                     />
                                                 </span>
-                                            </>
+                                            </div>
                                         ) : (
                                             <>
                                                 <span className="flex-1 line-clamp-1">

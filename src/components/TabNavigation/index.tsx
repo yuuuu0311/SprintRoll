@@ -34,7 +34,7 @@ export const TabNavigation: React.FC<{
 
     const childrenWrapClass = twMerge(
         classNames(
-            "relative max-h-0 overflow-y-auto overflow-x-hidden no-scrollbar transition-all bg-stone-200 z-50",
+            "relative max-h-0 min-h-full overflow-y-auto overflow-x-hidden no-scrollbar transition-all bg-stone-200 z-50",
             {
                 "max-h-[999px]": isActive,
             }
@@ -66,7 +66,7 @@ export const TabNavigation: React.FC<{
         } else {
             return;
         }
-    }, [domain, project]);
+    }, [domain, project, isMobileDevice.matches]);
 
     return (
         <div className={wrapperClass}>
@@ -104,7 +104,7 @@ export const TabNavigation: React.FC<{
                                 />
                             ))}
                         </div>
-                        <div className="mt-auto sticky bottom-0 px-4 py-3 border-t-2 border-t-solid bg-neutral-300 border-t-neutral-300/50 text-neutral-500 hover:bg-neutral-400 transition">
+                        <div className="mt-auto sticky bottom-0 px-4 py-3 border-t-2 border-t-solid bg-neutral-300 border-t-neutral-300/50 text-neutral-500 hover:bg-neutral-400 transition z-10">
                             <NavLink
                                 to={`/profile/overview`}
                                 className="w-full h-full flex justify-between items-center"

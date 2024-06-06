@@ -101,7 +101,7 @@ export const TicketStatusRow: React.FC<{
                 className="w-full"
             >
                 <div className={ticketRowClass}>
-                    <div className="flex gap-4 items-center flex-1">
+                    <div className="flex gap-4 items-center w-full md:w-auto md:flex-1">
                         <span className="relative flex h-3 w-3">
                             <span className={ticketStatusLightBg}></span>
                             <span className={ticketStatusLight}></span>
@@ -111,7 +111,7 @@ export const TicketStatusRow: React.FC<{
                             {ticketInfo.title}
                         </span>
                     </div>
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-2 pl-7 md:pl-0">
                         <div className={ticketStatusLabel}>
                             {getStatusLabel(ticketInfo.status)}
                         </div>

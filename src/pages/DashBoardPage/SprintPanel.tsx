@@ -242,7 +242,7 @@ export const SprintPanel: React.FC<{
                 </Droppable>
                 <div
                     onClick={() => setIsToggle((prev) => (prev ? false : true))}
-                    className="flex justify-center transition hover:bg-neutral-200 py-2 text-neutral-400"
+                    className="flex justify-center transition hover:bg-neutral-200 py-2 text-neutral-400 sticky bottom-0 z-10 bg-stone-100"
                 >
                     {isToggle ? "less" : "more"}
                 </div>
