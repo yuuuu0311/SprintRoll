@@ -38,7 +38,7 @@ export const Accordion: React.FC<{
 
     const navigationTitleClass = twMerge(
         classNames(
-            "bg-neutral-400/50 text-neutral-500 px-7 py-2 flex justify-between items-center capitalize hover:bg-neutral-400 hover:text-neutral-600 transition sticky top-0 z-10",
+            "bg-neutral-400/50 text-neutral-500 px-7 py-2 gap-4 flex justify-between items-center capitalize hover:bg-neutral-400 hover:text-neutral-600 transition sticky top-0 z-10",
             {
                 "bg-neutral-400 text-neutral-600": isActive,
             }

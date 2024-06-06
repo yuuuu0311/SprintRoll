@@ -6,11 +6,13 @@ export const BreadCrumbs: React.FC = () => {
 
     return (
         <div className="px-12 py-4 gap-2 text-neutral-500 hidden md:flex">
-            <span className="line-clamp-1">
+            <span className="line-clamp-1 max-w-72 text-ellipsis break-words">
                 <NavLink to={`/${project}/all`}>{project}</NavLink>
             </span>
             <span>/</span>
-            <span>{domain === undefined ? "all" : domain}</span>
+            <span className="line-clamp-1 max-w-72 text-ellipsis break-words">
+                {domain === undefined ? "all" : domain}
+            </span>
         </div>
     );
 };
