@@ -50,12 +50,9 @@ export const Accordion: React.FC<{
     );
 
     const navigationWrapClass = twMerge(
-        classNames(
-            "flex flex-col gap-2 px-4 py-0 overflow-hidden h-0 transition-all",
-            {
-                "h-500 py-4": isActive,
-            }
-        )
+        classNames("grid grid-rows-[0] px-4 py-0 transition-all", {
+            "grid-rows-1 py-4": isActive,
+        })
     );
 
     const handleAddDomain = async (newDomain: string) => {
@@ -76,68 +73,72 @@ export const Accordion: React.FC<{
                 </span>
                 <MdExpandMore className={navigationTitleIconClass} />
             </div>
-            <ul className={navigationWrapClass}>
-                <li>
-                    <NavLink
-                        to={`/${projectInfo.name.toLocaleLowerCase()}/all`}
-                        className={({ isActive }) => navLinkClass(isActive)}
-                    >
-                        all
-                    </NavLink>
-                </li>
-                {projectInfo.domain.map((label) => (
-                    <li key={`${projectInfo.id}-${label}`}>
+            <div className={navigationWrapClass}>
+                <ul className="flex flex-col gap-2 w-full overflow-hidden ">
+                    <li>
                         <NavLink
-                            to={`/${projectInfo.name.toLocaleLowerCase()}/${label.toLowerCase()}`}
+                            to={`/${projectInfo.name.toLocaleLowerCase()}/all`}
                             className={({ isActive }) => navLinkClass(isActive)}
                         >
-                            {label}
+                            all
                         </NavLink>
                     </li>
-                ))}
-
-                {isAddDomain ? (
-                    <>
-                        <input
-                            className="rounded px-3 py-2 bg-neutral-300 "
-                            type="text"
-                            value={newDomain}
-                            onChange={(e) => setNewDomain(e.target.value)}
-                        />
-
-                        <div className="flex gap-2 mt-auto justify-end">
-                            <Button
-                                rounded
-                                secondary
-                                onClickFun={() => setIsAddDomain(false)}
+                    {projectInfo.domain.map((label) => (
+                        <li key={`${projectInfo.id}-${label}`}>
+                            <NavLink
+                                to={`/${projectInfo.name.toLocaleLowerCase()}/${label.toLowerCase()}`}
+                                className={({ isActive }) =>
+                                    navLinkClass(isActive)
+                                }
                             >
-                                close
-                            </Button>
-                            <Button
-                                rounded
-                                success
-                                onClickFun={() => {
-                                    handleAddDomain(newDomain);
-                                    setIsAddDomain(false);
-                                    setNewDomain("");
-                                }}
-                            >
-                                add
-                            </Button>
-                        </div>
-                    </>
-                ) : (
-                    <Button
-                        rounded
-                        primary
-                        link
-                        onClickFun={() => setIsAddDomain(true)}
-                        addonStyle={"text-left"}
-                    >
-                        + add
-                    </Button>
-                )}
-            </ul>
+                                {label}
+                            </NavLink>
+                        </li>
+                    ))}
+
+                    {isAddDomain ? (
+                        <>
+                            <input
+                                className="rounded px-3 py-2 bg-neutral-300 "
+                                type="text"
+                                value={newDomain}
+                                onChange={(e) => setNewDomain(e.target.value)}
+                            />
+
+                            <div className="flex gap-2 mt-auto justify-end">
+                                <Button
+                                    rounded
+                                    secondary
+                                    onClickFun={() => setIsAddDomain(false)}
+                                >
+                                    close
+                                </Button>
+                                <Button
+                                    rounded
+                                    success
+                                    onClickFun={() => {
+                                        handleAddDomain(newDomain);
+                                        setIsAddDomain(false);
+                                        setNewDomain("");
+                                    }}
+                                >
+                                    add
+                                </Button>
+                            </div>
+                        </>
+                    ) : (
+                        <Button
+                            rounded
+                            primary
+                            link
+                            onClickFun={() => setIsAddDomain(true)}
+                            addonStyle={"text-left"}
+                        >
+                            + add
+                        </Button>
+                    )}
+                </ul>
+            </div>
         </div>
     );
 };

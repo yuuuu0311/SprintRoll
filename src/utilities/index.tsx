@@ -56,43 +56,41 @@ export const rearange: (
     return arrCopy;
 };
 
-export const orderCollection = debounce(
-    async (sourceIndex: number, destIndex: number, domain: string) => {
-        console.log(1);
+export const orderCollection = async (
+    sourceIndex: number,
+    destIndex: number,
+    domain: string
+) => {
+    console.log(1);
 
-        const collectionsRef = collection(db, "collections");
-        const destQuery = query(
-            collectionsRef,
-            where("order", "==", destIndex)
-        );
-        const sourceQuery = query(
-            collectionsRef,
-            where("order", "==", sourceIndex)
-        );
+    const collectionsRef = collection(db, "collections");
+    const destQuery = query(collectionsRef, where("order", "==", destIndex));
+    const sourceQuery = query(
+        collectionsRef,
+        where("order", "==", sourceIndex)
+    );
 
-        const destQuerySnapshot = await getDocs(destQuery);
-        const sourceQuerySnapshot = await getDocs(sourceQuery);
+    const destQuerySnapshot = await getDocs(destQuery);
+    const sourceQuerySnapshot = await getDocs(sourceQuery);
 
-        destQuerySnapshot.docs
-            .filter((doc) => doc.data().domain === domain)
-            .forEach((doc) => {
-                const docRef = doc.ref;
-                updateDoc(docRef, {
-                    order: sourceIndex,
-                });
+    destQuerySnapshot.docs
+        .filter((doc) => doc.data().domain === domain)
+        .forEach((doc) => {
+            const docRef = doc.ref;
+            updateDoc(docRef, {
+                order: sourceIndex,
             });
+        });
 
-        sourceQuerySnapshot.docs
-            .filter((doc) => doc.data().domain === domain)
-            .forEach((doc) => {
-                const docRef = doc.ref;
-                updateDoc(docRef, {
-                    order: destIndex,
-                });
+    sourceQuerySnapshot.docs
+        .filter((doc) => doc.data().domain === domain)
+        .forEach((doc) => {
+            const docRef = doc.ref;
+            updateDoc(docRef, {
+                order: destIndex,
             });
-    },
-    1000
-);
+        });
+};
 
 export const orderTicket = async (
     sourceIndex: number,
